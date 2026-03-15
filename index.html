@@ -1553,6 +1553,10 @@ async function bootApp(username, userData){
 
 // ─── STORAGE ─────────────────────────────────────────
 // ─── STATE ────────────────────────────────────────────
+let activeVideoId = null;
+let _cachedVideos = [];
+function uid(){ return window._currentUser; }
+
 // ─── DATE / TIME ──────────────────────────────────────
 function toBE(date){
   const th = new Intl.DateTimeFormat('th-TH',{

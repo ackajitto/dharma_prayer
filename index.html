@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บูชาพระธรรม – สวดมนต์ทำวัตร</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--gold-glow:rgba(201,168,76,0.18);
+  --cream:#FAF6EF;--cream-dark:#F0E8D8;--cream-mid:#E8DCC8;
+  --maroon:#5C1A1A;--maroon-mid:#7A2828;--maroon-light:#9B3A3A;
+  --saffron:#C4762A;--saffron-light:#E09A5A;
+  --deep:#120800;--deep-mid:#2A1200;--deep-warm:#3D1A00;
+  --text-dark:#1E0C00;--text-mid:#5C3D2E;--text-light:#9B7D60;--text-ghost:#C4AB8E;
+  --white:#FFFFFF;
+  --shadow-gold:rgba(201,168,76,0.15);--shadow-dark:rgba(18,8,0,0.25);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text-dark);min-height:100vh;overflow-x:hidden}
+
+
+/* ══════════════════════════════════════
+   THEMES
+══════════════════════════════════════ */
+/* Default = Maroon Gold (already in :root) */
+
+body.theme-forest{
+  --gold:#7CB87A;--gold-light:#B8DDB6;--gold-dark:#3A6B38;--gold-glow:rgba(124,184,122,0.18);
+  --cream:#F0F5EE;--cream-dark:#D8EBD6;--cream-mid:#C4DCC2;
+  --maroon:#1A4A1E;--maroon-mid:#2A6A2E;--maroon-light:#3A8A3E;
+  --saffron:#4A8A2A;--saffron-light:#7AB85A;
+  --deep:#051005;--deep-mid:#0A200A;--deep-warm:#0F3010;
+  --text-dark:#051005;--text-mid:#1A3A1C;--text-light:#3A6B3C;--text-ghost:#7AAA7C;
+}
+body.theme-ocean{
+  --gold:#5AB4D4;--gold-light:#A8D8EC;--gold-dark:#1A6A8A;--gold-glow:rgba(90,180,212,0.18);
+  --cream:#EEF6FA;--cream-dark:#CEEAF5;--cream-mid:#B4D8EC;
+  --maroon:#0A3A5A;--maroon-mid:#1A5A7A;--maroon-light:#2A7A9A;
+  --saffron:#1A7A9A;--saffron-light:#4AAABA;
+  --deep:#010D14;--deep-mid:#051A28;--deep-warm:#0A2A3A;
+  --text-dark:#010D14;--text-mid:#0A2A3A;--text-light:#1A5A7A;--text-ghost:#5A9AAA;
+}
+body.theme-rose{
+  --gold:#D48AAA;--gold-light:#ECC8D8;--gold-dark:#8A3A5A;--gold-glow:rgba(212,138,170,0.18);
+  --cream:#FAF0F4;--cream-dark:#F0D8E4;--cream-mid:#E4C4D4;
+  --maroon:#5A1A3A;--maroon-mid:#7A2A54;--maroon-light:#9A3A6A;
+  --saffron:#9A3A6A;--saffron-light:#C46A9A;
+  --deep:#140008;--deep-mid:#280014;--deep-warm:#3A001E;
+  --text-dark:#140008;--text-mid:#3A0A1E;--text-light:#7A3A5A;--text-ghost:#B47A9A;
+}
+body.theme-golden{
+  --gold:#D4A820;--gold-light:#F0D870;--gold-dark:#8A6A00;--gold-glow:rgba(212,168,32,0.2);
+  --cream:#FAF6E0;--cream-dark:#F0E8B0;--cream-mid:#E4D880;
+  --maroon:#5A4A00;--maroon-mid:#7A6400;--maroon-light:#9A8000;
+  --saffron:#9A7800;--saffron-light:#C4A820;
+  --deep:#141000;--deep-mid:#281E00;--deep-warm:#3C2E00;
+  --text-dark:#141000;--text-mid:#3C2C00;--text-light:#7A6000;--text-ghost:#B89A40;
+}
+body.theme-night{
+  --gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-glow:rgba(155,155,255,0.18);
+  --cream:#F0F0FA;--cream-dark:#D8D8F0;--cream-mid:#C4C4E4;
+  --maroon:#1A1A5A;--maroon-mid:#2A2A7A;--maroon-light:#3A3A9A;
+  --saffron:#3A3A9A;--saffron-light:#6A6ACA;
+  --deep:#04040E;--deep-mid:#08081C;--deep-warm:#10103A;
+  --text-dark:#04040E;--text-mid:#10103A;--text-light:#3A3A7A;--text-ghost:#7A7AAA;
+}
+
+/* THEME PICKER */
+
+.theme-bar-inline{
+  margin-top:8px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.theme-dots-row{display:flex;gap:6px;flex-wrap:wrap}
+.theme-bar{display:none}
+.theme-bar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 20px 20px;flex-wrap:wrap;
+}
+.theme-bar-label{
+  font-size:12px;color:var(--text-light);margin-right:4px;
+  font-family:'Sarabun',sans-serif;white-space:nowrap;
+}
+.theme-dot{
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:all .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  position:relative;
+}
+.theme-dot:hover{transform:scale(1.15)}
+.theme-dot.active{border-color:var(--text-dark);transform:scale(1.1);box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.theme-dot[data-theme="default"]{background:linear-gradient(135deg,#5C1A1A,#C9A84C)}
+.theme-dot[data-theme="forest"]{background:linear-gradient(135deg,#1A4A1E,#7CB87A)}
+.theme-dot[data-theme="ocean"]{background:linear-gradient(135deg,#0A3A5A,#5AB4D4)}
+.theme-dot[data-theme="rose"]{background:linear-gradient(135deg,#5A1A3A,#D48AAA)}
+.theme-dot[data-theme="golden"]{background:linear-gradient(135deg,#5A4A00,#D4A820)}
+.theme-dot[data-theme="night"]{background:linear-gradient(135deg,#1A1A5A,#9B9BFF)}
+.theme-dot-tip{
+  position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+  font-size:10px;color:var(--text-light);white-space:nowrap;
+  opacity:0;transition:opacity .15s;pointer-events:none;
+}
+.theme-dot:hover .theme-dot-tip{opacity:1}
+/* ══════════════════════════════════════
+   LOGIN
+══════════════════════════════════════ */
+#loginScreen{
+  position:fixed;inset:0;z-index:2000;
+  background:radial-gradient(ellipse at 30% 20%, #3d1a00 0%, #1a0800 40%, #0d0400 100%);
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .4s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+@keyframes count-pop{0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+.login-bg-ornament{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.login-bg-ornament::before{
+  content:'';position:absolute;width:600px;height:600px;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.08);top:-100px;left:-150px;
+}
+.login-bg-ornament::after{
+  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.06);bottom:-80px;right:-80px;
+}
+
+.login-box{
+  position:relative;z-index:1;
+  background:rgba(255,248,235,0.04);
+  border:1px solid rgba(201,168,76,0.25);
+  border-radius:24px;padding:44px 40px;width:400px;max-width:92vw;
+  backdrop-filter:blur(20px);
+  animation:slideUp .5s ease .1s both;
+}
+.login-box::before{
+  content:'';position:absolute;inset:0;border-radius:24px;
+  background:linear-gradient(135deg,rgba(201,168,76,0.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+.login-lotus{
+  font-size:52px;display:block;text-align:center;margin-bottom:10px;
+  animation:float 3s ease-in-out infinite;
+}
+.login-title{
+  font-family:'Noto Serif Thai',serif;
+  text-align:center;font-size:24px;font-weight:700;
+  color:var(--gold-light);letter-spacing:.5px;margin-bottom:4px;
+}
+.login-sub{
+  text-align:center;color:rgba(232,213,163,0.5);font-size:13px;
+  margin-bottom:32px;font-style:italic;
+}
+.form-group{margin-bottom:18px}
+.form-group label{
+  display:block;color:rgba(232,213,163,0.7);font-size:12px;
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;
+}
+.form-group input{
+  width:100%;padding:12px 16px;
+  background:rgba(255,248,235,0.07);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:12px;
+  color:var(--gold-light);font-size:15px;font-family:'Sarabun',sans-serif;
+  outline:none;transition:border-color .2s,background .2s;
+}
+.form-group input:focus{
+  border-color:rgba(201,168,76,0.6);
+  background:rgba(255,248,235,0.1);
+}
+.form-group input::placeholder{color:rgba(232,213,163,0.2)}
+
+.btn-primary{
+  width:100%;margin-top:8px;padding:14px;border-radius:14px;
+  background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold) 50%,var(--saffron-light) 100%);
+  color:var(--text-dark);font-size:16px;font-weight:600;
+  font-family:'Noto Serif Thai',serif;border:none;cursor:pointer;
+  transition:opacity .2s,transform .1s,box-shadow .2s;
+  box-shadow:0 4px 24px rgba(201,168,76,0.3);
+}
+.btn-primary:hover{opacity:.9;box-shadow:0 6px 32px rgba(201,168,76,0.45)}
+.btn-primary:active{transform:scale(.98)}
+
+.login-divider{
+  text-align:center;margin:18px 0 4px;
+  color:rgba(232,213,163,0.35);font-size:13px;
+}
+.login-divider span{color:var(--gold-light);cursor:pointer;text-decoration:underline;opacity:.8}
+.login-divider span:hover{opacity:1}
+.form-error{
+  color:#ffaaaa;font-size:12.5px;margin-top:10px;min-height:16px;text-align:center;
+}
+
+/* ══════════════════════════════════════
+   APP LAYOUT
+══════════════════════════════════════ */
+#app{display:none;min-height:100vh}
+
+/* HEADER */
+.app-header{
+  background:linear-gradient(170deg,var(--deep) 0%,var(--deep-warm) 50%,var(--maroon) 100%);
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 32px rgba(0,0,0,.45);
+}
+.header-inner{
+  max-width:900px;margin:0 auto;padding:16px 20px 0;
+}
+.header-top{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+}
+.brand-lotus{font-size:28px;animation:float 4s ease-in-out infinite}
+.brand-text{
+  font-family:'Noto Serif Thai',serif;
+  font-size:20px;font-weight:700;color:var(--gold-light);
+  letter-spacing:.3px;
+}
+.brand-text small{
+  display:block;font-size:11px;font-weight:300;
+  color:rgba(232,213,163,0.45);letter-spacing:1.5px;
+  font-family:'Sarabun',sans-serif;margin-top:-2px;
+}
+
+.user-section{display:flex;align-items:center;gap:10px}
+.btn-logout{
+  background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);
+  border-radius:8px;padding:5px 12px;color:rgba(232,213,163,0.6);
+  font-size:12px;cursor:pointer;font-family:'Sarabun',sans-serif;
+  transition:all .2s;
+}
+.btn-logout:hover{background:rgba(201,168,76,0.2);color:var(--gold-light)}
+
+
+.btn-record{
+  background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-light) 100%);
+  border:1px solid rgba(201,168,76,0.3);border-radius:12px;
+  padding:8px 14px;color:var(--gold-light);font-size:13px;
+  font-weight:600;cursor:pointer;font-family:'Sarabun',sans-serif;
+  transition:all .2s;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+.btn-record:hover{
+  background:linear-gradient(135deg,var(--maroon-mid) 0%,var(--maroon-light) 100%);
+  border-color:rgba(201,168,76,0.5);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+.btn-record:active{transform:scale(.96)}
+
+/* ══════════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════════ */
+.content{max-width:900px;margin:0 auto;padding:24px 20px 60px}
+
+/* ADD SECTION */
+.add-panel{
+  background:var(--white);border-radius:18px;
+  border:1.5px dashed var(--cream-mid);
+  padding:20px;margin-top:28px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.add-panel:hover{border-color:var(--gold-light);box-shadow:0 4px 20px var(--shadow-gold)}
+.add-panel-title{
+  font-size:13px;color:var(--text-light);font-weight:500;
+  margin-bottom:14px;display:flex;align-items:center;gap:6px;
+}
+.add-panel-title::before{content:'＋';color:var(--gold);font-weight:700}
+.add-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.add-fields-row2{display:flex;gap:10px}
+.add-input, .add-select{
+  width:100%;padding:10px 13px;border-radius:11px;
+  border:1.5px solid var(--cream-mid);
+  background:var(--cream);color:var(--text-dark);
+  font-size:14px;font-family:'Sarabun',sans-serif;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.add-input:focus,.add-select:focus{
+  border-color:var(--gold-light);
+  box-shadow:0 0 0 3px var(--gold-glow);
+}
+.add-select{cursor:pointer;background-color:var(--cream)}
+.btn-add-video{
+  padding:10px 24px;border-radius:11px;border:none;
+  background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-light) 100%);
+  color:var(--cream);font-size:14px;font-weight:600;
+  font-family:'Sarabun',sans-serif;cursor:pointer;
+  white-space:nowrap;transition:all .2s;
+  box-shadow:0 3px 12px rgba(92,26,26,0.3);
+}
+.btn-add-video:hover{
+  background:linear-gradient(135deg,var(--maroon-mid) 0%,#B84444 100%);
+  box-shadow:0 5px 18px rgba(92,26,26,0.4);
+}
+
+
+/* PROFILE CARD */
+.profile-card{
+  background:linear-gradient(145deg,var(--maroon) 0%,var(--deep-warm) 60%,var(--deep) 100%);
+  border-radius:22px;border:1px solid rgba(201,168,76,0.25);
+  padding:24px 24px 20px;margin-bottom:24px;
+  display:flex;align-items:flex-start;gap:22px;
+  box-shadow:0 8px 40px rgba(18,8,0,0.18);
+  position:relative;overflow:hidden;
+}
+.profile-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.profile-photo-wrap{position:relative;flex-shrink:0}
+.profile-photo-ring{
+  width:96px;height:96px;border-radius:50%;
+  padding:3px;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));
+}
+.profile-photo-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,#3d1a00,#5c2a00);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  border:2px solid rgba(18,8,0,0.3);
+}
+.profile-initials{
+  font-family:'Noto Serif Thai',serif;
+  font-size:36px;font-weight:700;color:var(--gold-light);
+  line-height:1;
+}
+.profile-upload-btn{
+  position:absolute;bottom:0;right:0;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--gold-dark);border:2px solid var(--deep);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;cursor:pointer;
+  transition:background .2s;
+}
+.profile-upload-btn:hover{background:var(--gold)}
+
+.profile-info{flex:1;min-width:0}
+.profile-name{
+  font-family:'Noto Serif Thai',serif;
+  font-size:24px;font-weight:700;color:var(--gold-light);
+  letter-spacing:.3px;line-height:1.2;margin-bottom:4px;
+}
+.profile-sub{
+  font-size:13px;color:rgba(232,213,163,0.55);
+  font-style:italic;margin-bottom:14px;
+}
+.profile-stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;
+}
+.pstat-display{
+  background:rgba(0,0,0,0.25);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.pstat-icon{font-size:22px;flex-shrink:0}
+.pstat-text{display:flex;flex-direction:column;gap:1px}
+.pstat-label{font-size:11px;color:rgba(232,213,163,0.5);letter-spacing:.5px;text-transform:uppercase}
+.pstat-count{display:flex;align-items:baseline;gap:3px}
+.pstat-num{
+  font-family:'Noto Serif Thai',serif;
+  font-size:34px;font-weight:700;color:var(--gold);
+  line-height:1;transition:transform .3s;
+}
+.pstat-num.pop{animation:count-pop .35s ease}
+.pstat-unit{font-size:13px;color:rgba(232,213,163,0.45);font-weight:400}
+.profile-record-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.btn-record-big{
+  padding:12px 10px;border-radius:13px;border:none;cursor:pointer;
+  font-size:14px;font-weight:600;font-family:'Sarabun',sans-serif;
+  transition:all .2s;letter-spacing:.2px;
+}
+.btn-record-big.morning{
+  background:linear-gradient(135deg,#7A4200,#C47A20);
+  color:#FFF8E7;
+  box-shadow:0 3px 12px rgba(196,122,32,0.35);
+  border:1px solid rgba(201,168,76,0.3);
+}
+.btn-record-big.morning:hover{background:linear-gradient(135deg,#9A5400,#E09030);box-shadow:0 5px 18px rgba(196,122,32,0.5)}
+.btn-record-big.evening{
+  background:linear-gradient(135deg,#1a1a4a,#2a2a7a);
+  color:#C8D4FF;
+  box-shadow:0 3px 12px rgba(42,42,122,0.4);
+  border:1px solid rgba(150,150,255,0.2);
+}
+.btn-record-big.evening:hover{background:linear-gradient(135deg,#252560,#3535a0);box-shadow:0 5px 18px rgba(42,42,122,0.55)}
+.btn-record-big:active{transform:scale(.97)}
+
+@media(max-width:480px){
+  .profile-card{flex-direction:column;align-items:center;text-align:center;padding:20px 16px}
+  .profile-info{width:100%}
+  .profile-sub{margin-bottom:12px}
+  .pstat-left{justify-content:flex-start}
+}
+
+
+
+/* EDIT NAME */
+.profile-name-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.btn-edit-name{
+  background:none;border:none;cursor:pointer;font-size:16px;
+  opacity:.5;transition:opacity .2s;padding:2px 4px;flex-shrink:0;
+}
+.btn-edit-name:hover{opacity:1}
+.edit-name-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.edit-name-input{
+  flex:1;min-width:120px;padding:7px 12px;border-radius:10px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(201,168,76,0.4);
+  color:var(--gold-light);font-size:15px;font-family:'Sarabun',sans-serif;outline:none;
+}
+.edit-name-input::placeholder{color:rgba(232,213,163,0.3)}
+.edit-name-input:focus{border-color:var(--gold)}
+.btn-save-name{
+  padding:7px 16px;border-radius:10px;border:none;cursor:pointer;
+  background:var(--gold-dark);color:var(--cream);font-size:13px;font-family:'Sarabun',sans-serif;
+  font-weight:600;transition:background .2s;
+}
+.btn-save-name:hover{background:var(--gold)}
+.btn-cancel-name{
+  padding:7px 14px;border-radius:10px;border:1px solid rgba(201,168,76,0.2);cursor:pointer;
+  background:transparent;color:rgba(232,213,163,0.5);font-size:13px;font-family:'Sarabun',sans-serif;
+  transition:all .2s;
+}
+.btn-cancel-name:hover{background:rgba(201,168,76,0.1);color:var(--gold-light)}
+
+/* MEDITATION STAT */
+.pstat-meditation{grid-column:1/-1}
+.profile-stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;
+}
+
+/* MEDITATION RECORD */
+
+.med-input-group{display:flex;align-items:center;gap:5px}
+.med-step-btn{
+  width:26px;height:26px;border-radius:7px;border:1px solid rgba(100,220,180,0.25);
+  background:rgba(100,220,180,0.1);color:rgba(180,255,220,0.8);
+  font-size:14px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;font-family:monospace;
+}
+.med-step-btn:hover{background:rgba(100,220,180,0.25);border-color:rgba(100,220,180,0.5)}
+.med-step-btn:active{transform:scale(.92)}
+.med-input{
+  width:42px;text-align:center;padding:5px 3px;
+  border-radius:7px;border:1px solid rgba(100,220,180,0.3);
+  background:rgba(0,0,0,0.3);color:rgba(180,255,220,0.9);
+  font-size:14px;font-weight:700;font-family:'Noto Serif Thai',serif;
+  outline:none;
+}
+.med-input:focus{border-color:rgba(100,220,180,0.6)}
+.med-input::-webkit-inner-spin-button,.med-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.med-input-label{font-size:12px;color:rgba(180,255,220,0.5);white-space:nowrap}
+
+.btn-record-big.meditation{
+  background:linear-gradient(135deg,#004d3a,#00875f);
+  color:#b4ffdc;
+  box-shadow:0 3px 12px rgba(0,135,95,0.35);
+  border:1px solid rgba(100,220,180,0.25);
+  padding:10px 18px;
+}
+.btn-record-big.meditation:hover{background:linear-gradient(135deg,#006650,#00a875);box-shadow:0 5px 18px rgba(0,135,95,0.5)}
+.med-step-btn.med-evening-btn{border-color:rgba(120,120,255,0.3);color:rgba(180,180,255,0.8)}
+.med-step-btn.med-evening-btn:hover{background:rgba(120,120,255,0.2)}
+.btn-record-big.med-evening-btn-save{
+  background:linear-gradient(135deg,#1a1a5a,#2a2aaa);
+  color:#c8d4ff;border-color:rgba(150,150,255,0.2);
+}
+.btn-record-big.med-evening-btn-save:hover{background:linear-gradient(135deg,#252570,#3535c0)}
+
+@media(max-width:480px){
+  .meditation-inputs{flex-direction:column;align-items:flex-start}
+  .btn-record-big.meditation,.btn-record-big.med-evening-btn-save{width:100%}
+}
+
+/* TWO-COLUMN ZONE */
+.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px}
+.zone{
+  border-radius:14px;padding:11px 10px;
+  display:flex;flex-direction:column;gap:7px;
+}
+.zone-morning{
+  background:rgba(100,50,0,0.3);
+  border:1px solid rgba(201,168,76,0.28);
+}
+.zone-evening{
+  background:rgba(15,15,70,0.4);
+  border:1px solid rgba(120,120,255,0.22);
+}
+.zone-header{
+  font-family:'Noto Serif Thai',serif;
+  font-size:13px;font-weight:700;
+  padding-bottom:7px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.zone-morning .zone-header{color:var(--gold-light)}
+.zone-evening .zone-header{color:#c8d4ff}
+.zone-stat{
+  background:rgba(0,0,0,0.2);border-radius:9px;padding:7px 9px;
+}
+.zone-stat-label{
+  font-size:10px;letter-spacing:.3px;display:block;margin-bottom:1px;
+}
+.zone-morning .zone-stat-label{color:rgba(232,213,163,0.45)}
+.zone-evening .zone-stat-label{color:rgba(180,190,255,0.45)}
+.zone-stat-val{display:flex;align-items:baseline;gap:3px}
+.pstat-num{
+  font-family:'Noto Serif Thai',serif;
+  font-size:26px;font-weight:700;color:var(--gold);
+  line-height:1;transition:transform .3s;
+}
+.pstat-num.pop{animation:count-pop .35s ease}
+.pstat-num-med{font-size:22px}
+.zone-evening .pstat-num{color:#c8d4ff}
+.zone-evening .pstat-num-med{color:#c8d4ff}
+.pstat-unit{font-size:12px;color:rgba(232,213,163,0.4)}
+.zone-evening .pstat-unit{color:rgba(180,190,255,0.4)}
+
+.btn-zone-record{
+  width:100%;padding:8px 6px;border-radius:10px;border:none;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:'Sarabun',sans-serif;
+  transition:all .2s;
+}
+.btn-zone-morning{
+  background:linear-gradient(135deg,#7A4200,#C47A20);
+  color:#FFF8E7;box-shadow:0 2px 10px rgba(196,122,32,0.3);
+  border:1px solid rgba(201,168,76,0.3);
+}
+.btn-zone-morning:hover{background:linear-gradient(135deg,#9A5400,#E09030)}
+.btn-zone-evening{
+  background:linear-gradient(135deg,#1a1a5a,#2a2a8a);
+  color:#c8d4ff;box-shadow:0 2px 10px rgba(42,42,138,0.35);
+  border:1px solid rgba(120,120,255,0.2);
+}
+.btn-zone-evening:hover{background:linear-gradient(135deg,#252575,#3535aa)}
+.btn-zone-record:active{transform:scale(.97)}
+
+.zone-med-row{
+  display:flex;align-items:center;gap:4px;flex-wrap:wrap;
+  background:rgba(0,0,0,0.15);border-radius:9px;padding:7px 8px;
+}
+.med-input-label{font-size:11px;color:rgba(232,213,163,0.4);margin-right:4px}
+.zone-evening .med-input-label{color:rgba(180,190,255,0.4)}
+.btn-zone-med{
+  margin-left:auto;padding:5px 9px;border-radius:8px;border:none;cursor:pointer;
+  font-size:11px;font-weight:600;font-family:'Sarabun',sans-serif;transition:all .2s;
+}
+.btn-zone-morning-med{
+  background:rgba(150,90,0,0.5);color:#ffe0a0;
+  border:1px solid rgba(201,168,76,0.3);
+}
+.btn-zone-morning-med:hover{background:rgba(180,110,0,0.65)}
+.btn-zone-evening-med{
+  background:rgba(40,40,120,0.5);color:#c0c8ff;
+  border:1px solid rgba(120,120,255,0.25);
+}
+.btn-zone-evening-med:hover{background:rgba(60,60,160,0.65)}
+.btn-zone-med:active{transform:scale(.95)}
+
+@media(max-width:500px){
+  .zone-grid{grid-template-columns:1fr 1fr;max-width:100%}
+  .btn-zone-med{margin-left:0;width:100%;margin-top:4px}
+}
+@media(max-width:360px){
+  .zone-grid{grid-template-columns:1fr}
+}
+/* DATE TIME BAR */
+.profile-datetime{
+  display:flex;flex-direction:column;gap:5px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid rgba(201,168,76,0.15);
+  border-radius:12px;padding:10px 13px;
+  margin-bottom:14px;
+}
+.dt-row{display:flex;align-items:center;gap:8px;font-size:13px}
+.dt-icon{font-size:14px;flex-shrink:0;width:18px;text-align:center}
+.dt-label{color:rgba(232,213,163,0.45);min-width:120px;flex-shrink:0}
+.dt-value{color:var(--gold-light);font-weight:500;font-family:'Noto Serif Thai',serif}
+.dt-time{
+  font-size:15px;font-weight:700;color:var(--gold);
+  letter-spacing:.5px;font-family:'Sarabun',sans-serif;
+}
+.dt-start{color:rgba(232,213,163,0.7)}
+
+/* PLAYER */
+.player-section{
+  margin-bottom:28px;
+  animation:slideUp .35s ease;
+}
+.player-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.player-cat-pill{
+  font-size:11px;padding:4px 12px;border-radius:20px;font-weight:600;
+}
+.player-title{
+  font-family:'Noto Serif Thai',serif;
+  font-size:18px;font-weight:600;color:var(--maroon);
+  flex:1;
+}
+.player-frame{
+  border-radius:16px;overflow:hidden;
+  aspect-ratio:16/9;background:#000;
+  border:2px solid var(--gold);
+  box-shadow:0 8px 40px rgba(0,0,0,.25),0 0 0 1px rgba(201,168,76,.1);
+}
+.player-frame iframe{width:100%;height:100%;border:none;display:block}
+
+/* PLAYLIST GROUPS */
+.group-section{margin-bottom:8px}
+.group-label{
+  font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:600;
+  color:var(--maroon);margin:20px 0 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.group-label-line{
+  flex:1;height:1px;
+  background:linear-gradient(to right,var(--cream-mid),transparent);
+}
+.group-label::before{
+  content:'';width:5px;height:20px;
+  background:linear-gradient(to bottom,var(--gold),var(--saffron));
+  border-radius:4px;display:inline-block;flex-shrink:0;
+}
+
+
+/* PLAYLIST ZONES */
+.playlist-zone{
+  margin-bottom:18px;
+  border-radius:16px;overflow:hidden;
+  border:1px solid var(--cream-dark);
+  background:var(--white);
+  box-shadow:0 2px 10px rgba(0,0,0,.04);
+}
+.playlist-zone-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;
+}
+.zone-header-morning{
+  background:linear-gradient(135deg,rgba(92,26,26,0.06),rgba(201,168,76,0.08));
+  border-bottom:1px solid rgba(201,168,76,0.15);
+}
+.zone-header-evening{
+  background:linear-gradient(135deg,rgba(20,20,80,0.06),rgba(100,100,200,0.08));
+  border-bottom:1px solid rgba(100,100,200,0.12);
+}
+.zone-header-special{
+  background:linear-gradient(135deg,rgba(92,26,26,0.04),rgba(150,80,0,0.06));
+  border-bottom:1px solid rgba(150,120,60,0.15);
+}
+.pzh-icon{font-size:18px}
+.pzh-label{
+  font-family:'Noto Serif Thai',serif;
+  font-size:15px;font-weight:700;color:var(--maroon);flex:1;
+}
+.pzh-count{
+  font-size:11px;color:var(--text-ghost);
+  background:var(--cream-dark);border-radius:20px;
+  padding:2px 9px;
+}
+.playlist-zone-body{padding:8px}
+.playlist-sub-label{
+  font-size:12px;color:var(--text-light);font-weight:600;
+  padding:6px 8px 4px;
+  display:flex;align-items:center;gap:6px;
+}
+.playlist-sub-label::before{
+  content:'';width:3px;height:14px;
+  background:var(--gold);border-radius:3px;display:inline-block;
+}
+/* remove old group-section top margin inside zones */
+.playlist-zone .video-item:last-child{margin-bottom:0}
+/* VIDEO CARD */
+.video-item{
+  background:var(--white);border-radius:14px;
+  border:1px solid var(--cream-dark);
+  margin-bottom:8px;
+  display:flex;align-items:stretch;
+  cursor:pointer;overflow:hidden;
+  transition:all .2s;
+}
+.video-item:hover{
+  border-color:rgba(201,168,76,.4);
+  box-shadow:0 4px 20px var(--shadow-gold);
+  transform:translateX(3px);
+}
+.video-item.active{
+  border-color:var(--gold);
+  box-shadow:0 4px 24px rgba(201,168,76,.3);
+  transform:none;
+}
+.vi-num{
+  width:38px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:var(--text-ghost);
+  background:var(--cream);border-right:1px solid var(--cream-dark);
+  transition:all .2s;
+}
+.video-item.active .vi-num{
+  background:linear-gradient(to bottom,var(--gold-dark),var(--gold));
+  color:var(--text-dark);border-color:var(--gold);
+}
+.vi-thumb{
+  width:80px;flex-shrink:0;position:relative;
+  background:#1a1a1a;overflow:hidden;
+}
+.vi-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8;transition:opacity .2s}
+.video-item:hover .vi-thumb img{opacity:1}
+.vi-play{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.2);transition:background .2s;
+}
+.video-item:hover .vi-play,.video-item.active .vi-play{background:rgba(201,168,76,.15)}
+.vi-play svg{width:20px;height:20px;fill:white;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.vi-info{flex:1;padding:11px 13px;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.vi-title{
+  font-size:14px;font-weight:500;color:var(--text-dark);
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.vi-badge{
+  display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;
+  font-weight:600;width:fit-content;
+}
+.cat-morning{background:#FFF8E1;color:#B8860B}
+.cat-evening{background:#E8EAF6;color:#303F9F}
+.cat-lp{background:#FCE4EC;color:#AD1457}
+.cat-grandma{background:#E8F5E9;color:#2E7D32}
+.cat-meditation{background:#E0F2F1;color:#00695C}
+.cat-other{background:#F3E5F5;color:#6A1B9A}
+
+.vi-del{
+  padding:0 14px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;color:var(--text-ghost);
+  font-size:20px;cursor:pointer;line-height:1;
+  transition:color .15s,background .15s;
+  flex-shrink:0;
+}
+.vi-del:hover{color:var(--maroon);background:rgba(92,26,26,.06)}
+
+/* EMPTY */
+.empty-state{
+  text-align:center;padding:40px 20px;color:var(--text-ghost);
+}
+.empty-icon{font-size:36px;display:block;margin-bottom:10px;opacity:.5}
+.empty-text{font-size:14px}
+
+/* ORNAMENT FOOTER */
+.footer-ornament{
+  text-align:center;padding:30px 20px;
+  color:var(--text-ghost);font-size:12px;letter-spacing:1px;
+  border-top:1px solid var(--cream-dark);margin-top:20px;
+}
+
+
+/* SHARE MERIT BUTTON */
+
+.profile-share-btn-wrap{
+  margin-top:4px;
+}
+.btn-share-inline{
+  width:100%;padding:11px 16px !important;border-radius:14px !important;
+  font-size:14px !important;letter-spacing:.2px;
+}
+.btn-share-merit{
+  padding:14px 32px;border-radius:30px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));
+  color:var(--text-dark);font-size:15px;font-weight:700;
+  font-family:'Noto Serif Thai',serif;
+  box-shadow:0 4px 24px rgba(201,168,76,0.35);
+  transition:all .25s;letter-spacing:.3px;
+}
+.btn-share-merit:hover{box-shadow:0 6px 32px rgba(201,168,76,0.55);transform:translateY(-1px)}
+.btn-share-merit:active{transform:scale(.97)}
+
+/* SHARE OVERLAY */
+.share-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);
+  z-index:3000;display:flex;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(4px);
+  animation:fadeIn .2s ease;
+}
+.share-modal{
+  background:var(--cream);border-radius:22px;
+  width:100%;max-width:440px;max-height:90vh;overflow-y:auto;
+  padding:20px;
+  animation:slideUp .25s ease;
+}
+.share-modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.share-modal-title{
+  font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;
+  color:var(--maroon);
+}
+.share-close-btn{
+  background:none;border:none;font-size:18px;cursor:pointer;
+  color:var(--text-light);padding:4px 8px;border-radius:8px;
+  transition:background .15s;
+}
+.share-close-btn:hover{background:var(--cream-dark)}
+
+.share-card-wrap{
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 6px 28px rgba(18,8,0,0.18);
+  margin-bottom:16px;
+  display:flex;justify-content:center;
+  background:#1a0800;
+}
+
+/* ═══ SHARE CARD ═══ */
+.share-card{
+  width:100%;aspect-ratio:4/5;
+  background:radial-gradient(ellipse at 20% 15%,#3d1a00 0%,#1a0800 40%,#0d0400 100%);
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 24px 20px;position:relative;overflow:hidden;
+  font-family:'Sarabun',sans-serif;
+}
+.sc-bg-ornament{
+  position:absolute;inset:0;pointer-events:none;
+}
+.sc-bg-ornament::before{
+  content:'';position:absolute;
+  width:340px;height:340px;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.07);
+  top:-80px;left:-80px;
+}
+.sc-bg-ornament::after{
+  content:'';position:absolute;
+  width:240px;height:240px;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.05);
+  bottom:-60px;right:-60px;
+}
+.sc-lotus{font-size:28px;margin-bottom:4px;position:relative;z-index:1}
+.sc-title{
+  font-family:'Noto Serif Thai',serif;
+  font-size:13px;color:rgba(232,213,163,0.5);
+  letter-spacing:2px;margin-bottom:10px;position:relative;z-index:1;
+}
+.sc-name{
+  font-family:'Noto Serif Thai',serif;
+  font-size:22px;font-weight:700;color:var(--gold-light);
+  margin-bottom:12px;position:relative;z-index:1;text-align:center;
+}
+.sc-photo-wrap{margin-bottom:12px;position:relative;z-index:1}
+.sc-photo-ring{
+  width:72px;height:72px;border-radius:50%;
+  padding:2.5px;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));
+}
+.sc-photo-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,#3d1a00,#5c2a00);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;font-size:26px;font-weight:700;color:var(--gold-light);
+  font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3);
+}
+.sc-date{
+  font-size:11px;color:rgba(232,213,163,0.4);
+  margin-bottom:14px;letter-spacing:.5px;position:relative;z-index:1;
+}
+.sc-stats{
+  width:100%;display:flex;gap:0;
+  background:rgba(201,168,76,0.07);
+  border:1px solid rgba(201,168,76,0.18);
+  border-radius:16px;overflow:hidden;
+  position:relative;z-index:1;margin-bottom:12px;
+}
+.sc-stat{
+  flex:1;padding:14px 12px;display:flex;gap:10px;align-items:flex-start;
+}
+.sc-stat-morning{background:rgba(100,50,0,0.25)}
+.sc-stat-evening{background:rgba(15,15,70,0.3)}
+.sc-stat-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.sc-stat-body{display:flex;flex-direction:column;gap:4px}
+.sc-stat-label{
+  font-size:10px;letter-spacing:.5px;
+  color:rgba(232,213,163,0.5);font-weight:600;
+}
+.sc-stat-num{
+  font-family:'Noto Serif Thai',serif;
+  font-size:26px;font-weight:700;color:var(--gold);line-height:1;
+}
+.sc-stat-num-sm{font-size:18px}
+.sc-stat-evening .sc-stat-num{color:#c8d4ff}
+.sc-stat-row{display:flex;align-items:baseline;gap:3px}
+.sc-stat-unit{font-size:11px;color:rgba(232,213,163,0.4)}
+.sc-stat-evening .sc-stat-unit{color:rgba(180,190,255,0.35)}
+.sc-med{margin-top:2px}
+.sc-med-icon{font-size:12px}
+.sc-divider{width:1px;background:rgba(201,168,76,0.15)}
+.sc-first-date{
+  font-size:10px;color:rgba(232,213,163,0.3);
+  margin-bottom:auto;position:relative;z-index:1;
+}
+.sc-footer{
+  font-family:'Noto Serif Thai',serif;
+  font-size:16px;font-weight:600;color:var(--gold-light);
+  letter-spacing:2px;margin-top:auto;padding-top:12px;
+  position:relative;z-index:1;opacity:.7;
+}
+
+.share-actions{display:flex;gap:10px;margin-bottom:10px}
+.btn-download-card{
+  flex:1;padding:12px;border-radius:13px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--maroon),var(--maroon-light));
+  color:var(--gold-light);font-size:15px;font-weight:600;
+  font-family:'Noto Serif Thai',serif;
+  box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;
+}
+.btn-download-card:hover{box-shadow:0 5px 20px rgba(92,26,26,0.45)}
+.share-hint{text-align:center;font-size:12px;color:var(--text-light);font-style:italic}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--maroon);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold-light);padding:10px 24px;border-radius:30px;
+  font-size:13px;font-weight:500;
+  opacity:0;transition:all .3s;z-index:9999;pointer-events:none;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:560px){
+  .add-fields{grid-template-columns:1fr}
+  .counters-row{gap:8px}
+  .header-inner{padding:14px 14px 0}
+  .content{padding:16px 14px 50px}
+  .btn-record{font-size:12px;padding:7px 11px}
+  .brand-text{font-size:17px}
+  .login-box{padding:32px 24px}
+}
+@media(max-width:360px){
+  .add-fields-row2{flex-direction:column}
+  .btn-add-video{width:100%}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen">
+  <div class="login-bg-ornament"></div>
+  <div class="login-box">
+    <span class="login-lotus">🪷</span>
+    <div class="login-title">บูชาพระธรรม</div>
+    <div class="login-sub">เข้าสู่ระบบเพื่อบันทึกการปฏิบัติธรรมของท่าน</div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label>ชื่อผู้ใช้</label>
+        <input id="loginUser" type="text" placeholder="กรอกชื่อผู้ใช้" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <input id="loginPass" type="password" placeholder="กรอกรหัสผ่าน" autocomplete="current-password">
+      </div>
+      <div class="form-error" id="loginErr"></div>
+      <button class="btn-primary" onclick="doLogin()">🙏 เข้าสู่ระบบ</button>
+      <div class="login-divider">ยังไม่มีบัญชี? <span onclick="toggleAuthMode(true)">สมัครสมาชิก</span></div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" style="display:none">
+      <div class="form-group">
+        <label>ชื่อแสดง</label>
+        <input id="regName" type="text" placeholder="ชื่อของท่าน (เช่น สุชาติ)">
+      </div>
+      <div class="form-group">
+        <label>ชื่อผู้ใช้</label>
+        <input id="regUser" type="text" placeholder="กำหนดชื่อผู้ใช้" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <input id="regPass" type="password" placeholder="กำหนดรหัสผ่าน (4 ตัวขึ้นไป)" autocomplete="new-password">
+      </div>
+      <div class="form-error" id="regErr"></div>
+      <button class="btn-primary" onclick="doRegister()">✨ สมัครสมาชิก</button>
+      <div class="login-divider">มีบัญชีแล้ว? <span onclick="toggleAuthMode(false)">เข้าสู่ระบบ</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="brand">
+          <span class="brand-lotus">🪷</span>
+          <div class="brand-text">
+            บูชาพระธรรม
+            <small>DHARMA PRAYER</small>
+          </div>
+        </div>
+        <div class="user-section">
+          <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+      <div class="profile-photo-wrap">
+        <div class="profile-photo-ring">
+          <div class="profile-photo-inner" id="profilePhotoInner">
+            <span class="profile-initials" id="profileInitials">ก</span>
+            <img id="profileImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+          </div>
+        </div>
+        <label class="profile-upload-btn" title="เปลี่ยนรูปโปรไฟล์">
+          📷
+          <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
+        </label>
+      </div>
+      <div class="profile-info">
+        <div class="profile-name-row">
+          <div class="profile-name" id="profileName">ผู้ใช้</div>
+          <button class="btn-edit-name" onclick="openEditName()" title="แก้ไขชื่อ">✏️</button>
+        </div>
+        <!-- EDIT NAME INLINE -->
+        <div id="editNameRow" style="display:none" class="edit-name-row">
+          <input id="editNameInput" class="edit-name-input" type="text" placeholder="ชื่อใหม่ของท่าน">
+          <button class="btn-save-name" onclick="saveEditName()">บันทึก</button>
+          <button class="btn-cancel-name" onclick="closeEditName()">ยกเลิก</button>
+        </div>
+        <div class="profile-sub" id="profileSub">กำลังสวดมนต์ปฏิบัติธรรม 🙏</div>
+
+        <!-- DATE TIME INFO -->
+        <div class="profile-datetime">
+          <div class="dt-row">
+            <span class="dt-icon">📅</span>
+            <span class="dt-label">วันที่ปัจจุบัน</span>
+            <span class="dt-value" id="dtToday"></span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-icon">🕐</span>
+            <span class="dt-label">เวลา</span>
+            <span class="dt-value dt-time" id="dtTime"></span>
+          </div>
+          <div class="dt-row" id="dtStartRow" style="display:none">
+            <span class="dt-icon">🌱</span>
+            <span class="dt-label">เริ่มบันทึกครั้งแรก</span>
+            <span class="dt-value dt-start" id="dtStart"></span>
+          </div>
+        </div>
+
+        <!-- TWO-COLUMN ZONE LAYOUT -->
+        <div class="zone-grid">
+          <!-- ═══ MORNING ZONE ═══ -->
+          <div class="zone zone-morning">
+            <div class="zone-header">🌅 ทำวัตรเช้า</div>
+            <!-- stat: count -->
+            <div class="zone-stat">
+              <span class="zone-stat-label">จำนวนครั้ง</span>
+              <div class="zone-stat-val"><span class="pstat-num" id="countMorning">0</span><span class="pstat-unit"> ครั้ง</span></div>
+            </div>
+            <!-- stat: meditation -->
+            <div class="zone-stat">
+              <span class="zone-stat-label">🧘 สมาธิสะสม</span>
+              <div class="zone-stat-val"><span class="pstat-num pstat-num-med" id="meditMorningMin">0</span><span class="pstat-unit"> นาที</span></div>
+            </div>
+            <!-- record count -->
+            <button class="btn-zone-record btn-zone-morning" onclick="recordCount('morning')">+ บันทึกทำวัตร</button>
+            <!-- record meditation -->
+            <div class="zone-med-row">
+              <button class="med-step-btn" onclick="stepMed('morningMin',-5)">−</button>
+              <input id="medInputMorningMin" class="med-input" type="number" value="0" min="0" max="999" placeholder="0">
+              <button class="med-step-btn" onclick="stepMed('morningMin',5)">＋</button>
+              <span class="med-input-label">นาที</span>
+              <button class="btn-zone-med btn-zone-morning-med" onclick="recordMeditation('morning')">+ บันทึกสมาธิ</button>
+            </div>
+          </div>
+
+          <!-- ═══ EVENING ZONE ═══ -->
+          <div class="zone zone-evening">
+            <div class="zone-header">🌙 ทำวัตรเย็น</div>
+            <!-- stat: count -->
+            <div class="zone-stat">
+              <span class="zone-stat-label">จำนวนครั้ง</span>
+              <div class="zone-stat-val"><span class="pstat-num" id="countEvening">0</span><span class="pstat-unit"> ครั้ง</span></div>
+            </div>
+            <!-- stat: meditation -->
+            <div class="zone-stat">
+              <span class="zone-stat-label">🧘 สมาธิสะสม</span>
+              <div class="zone-stat-val"><span class="pstat-num pstat-num-med" id="meditEveningMin">0</span><span class="pstat-unit"> นาที</span></div>
+            </div>
+            <!-- record count -->
+            <button class="btn-zone-record btn-zone-evening" onclick="recordCount('evening')">+ บันทึกทำวัตร</button>
+            <!-- record meditation -->
+            <div class="zone-med-row">
+              <button class="med-step-btn med-evening-btn" onclick="stepMed('eveningMin',-5)">−</button>
+              <input id="medInputEveningMin" class="med-input" type="number" value="0" min="0" max="999" placeholder="0">
+              <button class="med-step-btn med-evening-btn" onclick="stepMed('eveningMin',5)">＋</button>
+              <span class="med-input-label">นาที</span>
+              <button class="btn-zone-med btn-zone-evening-med" onclick="recordMeditation('evening')">+ บันทึกสมาธิ</button>
+            </div>
+          </div>
+        </div>
+        <!-- SHARE BUTTON inside profile card -->
+        <div class="profile-share-btn-wrap">
+          <button class="btn-share-merit btn-share-inline" onclick="openShareModal()">📸 แบ่งปันบุญ</button>
+        </div>
+        <!-- THEME PICKER -->
+        <div class="theme-bar-inline">
+          <span class="theme-bar-label">🎨 ธีมสี</span>
+          <div class="theme-dots-row">
+            <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"><span class="theme-dot-tip">แดงทอง</span></div>
+            <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"><span class="theme-dot-tip">ป่าไม้</span></div>
+            <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"><span class="theme-dot-tip">มหาสมุทร</span></div>
+            <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"><span class="theme-dot-tip">กุหลาบ</span></div>
+            <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"><span class="theme-dot-tip">ทองสุก</span></div>
+            <div class="theme-dot" data-theme="night" onclick="setTheme('night')"><span class="theme-dot-tip">ราตรี</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYER -->
+    <div id="playerSection" class="player-section" style="display:none">
+      <div class="player-header">
+        <span class="vi-badge player-cat-pill" id="playerCatBadge"></span>
+        <span class="player-title" id="playerTitleText"></span>
+      </div>
+      <div class="player-frame">
+        <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+    <!-- PLAYLIST -->
+    <div id="playlistRoot"></div>
+
+    <!-- ADD VIDEO PANEL -->
+    <div class="add-panel">
+      <div class="add-panel-title">เพิ่มลิงก์ยูทูปใหม่</div>
+      <div class="add-fields">
+        <input id="addTitle" class="add-input" placeholder="ชื่อบทสวด / หัวข้อ">
+        <input id="addUrl" class="add-input" placeholder="https://youtube.com/watch?v=...">
+      </div>
+      <div class="add-fields-row2">
+        <select id="addCat" class="add-select">
+          <optgroup label="🌅 ทำวัตรเช้า">
+            <option value="morning">🌅 ทำวัตรเช้า</option>
+          </optgroup>
+          <optgroup label="🌙 ทำวัตรเย็น">
+            <option value="evening">🌙 ทำวัตรเย็น</option>
+          </optgroup>
+          <optgroup label="🙏 บทสวดพิเศษ">
+            <option value="lp">🙏 สรรเสริญหลวงปู่สด</option>
+            <option value="grandma">💛 สรรเสริญคุณยาย</option>
+            <option value="meditation">🧘 นั่งสมาธิ</option>
+            <option value="other">✨ อื่นๆ</option>
+          </optgroup>
+        </select>
+        <button class="btn-add-video" onclick="addVideo()">เพิ่มรายการ</button>
+      </div>
+    </div>
+
+  </main>
+
+    <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>
+
+  <!-- SHARE MODAL -->
+  <div id="shareModal" style="display:none" class="share-overlay">
+    <div class="share-modal">
+      <div class="share-modal-header">
+        <span class="share-modal-title">🙏 แบ่งปันบุญ</span>
+        <button class="share-close-btn" onclick="closeShareModal()">✕</button>
+      </div>
+      <!-- CARD PREVIEW -->
+      <div class="share-card-wrap">
+        <div id="shareCard" style="
+          width:360px;min-height:480px;
+          background:#1a0800;
+          display:flex;flex-direction:column;align-items:center;
+          padding:28px 22px 22px;position:relative;
+          font-family:'Sarabun',sans-serif;
+          box-sizing:border-box;
+        ">
+          <!-- bg circles -->
+          <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(201,168,76,0.08);top:-70px;left:-70px;pointer-events:none"></div>
+          <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,168,76,0.05);bottom:-50px;right:-50px;pointer-events:none"></div>
+
+          <div style="font-size:26px;margin-bottom:4px;position:relative;z-index:1">🪷</div>
+          <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;color:#E8D5A3;letter-spacing:.5px;margin-bottom:2px;position:relative;z-index:1;text-align:center">ขอถวายเป็นพุทธบูชา</div>
+          <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.55);letter-spacing:.3px;margin-bottom:2px;position:relative;z-index:1;text-align:center">บูชาธรรมมหาปูชนียาจารย์</div>
+          <div data-sc="divbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.5),transparent);margin:6px 0 8px;position:relative;z-index:1"></div>
+          <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;margin-bottom:10px;position:relative;z-index:1;text-align:center">ผู้ใช้</div>
+
+          <div style="margin-bottom:10px;position:relative;z-index:1">
+            <div style="width:64px;height:64px;border-radius:50%;padding:2px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A)">
+              <div id="scPhotoInner" style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:24px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3)">
+                <span id="scInitials">ก</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="scDate" style="font-size:11px;color:rgba(232,213,163,0.4);margin-bottom:14px;letter-spacing:.4px;position:relative;z-index:1;text-align:center"></div>
+
+          <!-- STATS BOX -->
+          <div data-sc="statsbox" style="width:100%;display:flex;border-radius:14px;overflow:hidden;border:1px solid rgba(201,168,76,0.2);margin-bottom:10px;position:relative;z-index:1">
+
+            <!-- MORNING COL -->
+            <div data-sc="morning" style="flex:1;padding:12px 10px;background:rgba(100,50,0,0.35);display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:18px;text-align:center">🌅</div>
+              <div style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:.5px;font-weight:600;text-align:center" data-sc="mlabel">สวดมนต์ทำวัตรเช้า</div>
+              <!-- count -->
+              <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
+                <div style="font-size:9px;color:rgba(232,213,163,0.4);margin-bottom:2px">จำนวนครั้ง</div>
+                <div style="display:flex;align-items:baseline;justify-content:center;gap:3px">
+                  <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:#C9A84C;line-height:1">0</span>
+                  <span style="font-size:11px;color:rgba(232,213,163,0.4)">ครั้ง</span>
+                </div>
+              </div>
+              <!-- meditation -->
+              <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
+                <div style="font-size:9px;color:rgba(232,213,163,0.4);margin-bottom:2px">🧘 นั่งสมาธิ</div>
+                <div style="display:flex;align-items:baseline;justify-content:center;gap:3px">
+                  <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1">0</span>
+                  <span style="font-size:11px;color:rgba(232,213,163,0.4)">นาที</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DIVIDER -->
+            <div data-sc="divider" style="width:1px;background:rgba(201,168,76,0.15)"></div>
+
+            <!-- EVENING COL -->
+            <div data-sc="evening" style="flex:1;padding:12px 10px;background:rgba(15,15,70,0.4);display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:18px;text-align:center">🌙</div>
+              <div style="font-size:10px;color:rgba(180,190,255,0.5);letter-spacing:.5px;font-weight:600;text-align:center" data-sc="elabel">สวดมนต์ทำวัตรเย็น</div>
+              <!-- count -->
+              <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
+                <div style="font-size:9px;color:rgba(180,190,255,0.35);margin-bottom:2px">จำนวนครั้ง</div>
+                <div style="display:flex;align-items:baseline;justify-content:center;gap:3px">
+                  <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:#c8d4ff;line-height:1">0</span>
+                  <span style="font-size:11px;color:rgba(180,190,255,0.35)">ครั้ง</span>
+                </div>
+              </div>
+              <!-- meditation -->
+              <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
+                <div style="font-size:9px;color:rgba(180,190,255,0.35);margin-bottom:2px">🧘 นั่งสมาธิ</div>
+                <div style="display:flex;align-items:baseline;justify-content:center;gap:3px">
+                  <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1">0</span>
+                  <span style="font-size:11px;color:rgba(180,190,255,0.35)">นาที</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="scFirstDate" style="font-size:10px;color:rgba(232,213,163,0.3);margin-bottom:10px;position:relative;z-index:1;text-align:center"></div>
+          <div data-sc="footerbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px 0 6px;position:relative;z-index:1"></div>
+          <div style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;color:rgba(232,213,163,0.65);letter-spacing:1.5px;position:relative;z-index:1;text-align:center">สาธุ  สาธุ  สาธุ</div>
+          <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.35);letter-spacing:.5px;margin-top:3px;position:relative;z-index:1;text-align:center;font-style:italic">ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
+        </div>
+      </div>
+      <div class="share-actions">
+        <button class="btn-download-card" onclick="downloadCard()">⬇️ บันทึกเป็นรูปภาพ</button>
+      </div>
+      <div class="share-hint">กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONSTANTS ───────────────────────────────────────
+const CAT_LABELS = {
+  morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
+  lp:'สรรเสริญหลวงปู่สด วาจาสิทธิ์',
+  grandma:'สรรเสริญคุณยายอาจารย์', meditation:'นั่งสมาธิ', other:'อื่นๆ'
+};
+const CAT_ICONS = {morning:'🌅',evening:'🌙',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
+const CAT_ORDER = ['morning','lp','grandma','meditation','evening','other'];
+
+// Zone groupings for playlist display
+const ZONE_GROUPS = [
+  {
+    id: 'zone_morning',
+    label: 'ทำวัตรเช้า',
+    icon: '🌅',
+    color: 'zone-header-morning',
+    cats: ['morning']
+  },
+  {
+    id: 'zone_evening',
+    label: 'ทำวัตรเย็น',
+    icon: '🌙',
+    color: 'zone-header-evening',
+    cats: ['evening']
+  },
+  {
+    id: 'zone_special',
+    label: 'บทสวดพิเศษ',
+    icon: '🙏',
+    color: 'zone-header-special',
+    cats: ['lp','grandma','meditation','other']
+  },
+];
+const DEFAULT_VIDEOS = [
+  {id:'dv1',title:'ทำวัตรเช้า – บทสวดทำวัตรเช้า',url:'https://www.youtube.com/watch?v=_y_V0x8RDeU',cat:'morning'},
+  {id:'dv2',title:'สรรเสริญหลวงปู่สด วาจาสิทธิ์',url:'https://www.youtube.com/watch?v=x6xv3gM7c0c',cat:'lp'},
+  {id:'dv3',title:'สรรเสริญคุณยายอาจารย์มหารัตนอุบาสิกาจันทร์',url:'https://www.youtube.com/watch?v=ioqvP6HOYXQ',cat:'grandma'},
+  {id:'dv4',title:'นั่งสมาธิ – เพลงสมาธิ',url:'https://www.youtube.com/watch?v=bG_Ya_NzRKw',cat:'meditation'},
+  {id:'dv5',title:'ทำวัตรเย็น – บทสวดทำวัตรเย็น',url:'https://www.youtube.com/watch?v=8_g5jqCpMOI',cat:'evening'},
+];
+
+// ─── STORAGE ─────────────────────────────────────────
+const S = {
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+};
+
+// ─── STATE ────────────────────────────────────────────
+let currentUser = null;
+let activeVideoId = null;
+
+// ─── AUTH ─────────────────────────────────────────────
+function getUsers(){return S.get('dh_users',{})}
+function saveUsers(u){S.set('dh_users',u)}
+
+function toggleAuthMode(showReg){
+  document.getElementById('loginForm').style.display = showReg?'none':'block';
+  document.getElementById('registerForm').style.display = showReg?'block':'none';
+  document.getElementById('loginErr').textContent='';
+  document.getElementById('regErr').textContent='';
+}
+
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(!u||!p){document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ';return}
+  const users=getUsers();
+  if(!users[u]||users[u].pass!==p){document.getElementById('loginErr').textContent='ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';return}
+  currentUser=u;
+  S.set('dh_session',u);
+  bootApp();
+}
+
+function doRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const u=document.getElementById('regUser').value.trim();
+  const p=document.getElementById('regPass').value;
+  if(!name||!u||!p){document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ';return}
+  if(p.length<4){document.getElementById('regErr').textContent='รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร';return}
+  const users=getUsers();
+  if(users[u]){document.getElementById('regErr').textContent='ชื่อผู้ใช้นี้มีผู้ใช้แล้ว';return}
+  users[u]={pass:p,name};
+  saveUsers(users);
+  currentUser=u;
+  S.set('dh_session',u);
+  bootApp();
+}
+
+function doLogout(){
+  currentUser=null;
+  activeVideoId=null;
+  S.set('dh_session',null);
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+  document.getElementById('ytIframe').src='';
+  document.getElementById('playerSection').style.display='none';
+  if(window._dtTimer) clearInterval(window._dtTimer);
+}
+
+// ─── USER DATA ────────────────────────────────────────
+function uKey(k){return 'dh_'+currentUser+'_'+k}
+function uGet(k,d){return S.get(uKey(k),d)}
+function uSet(k,v){S.set(uKey(k),v)}
+function getVideos(){
+  if(!S.get(uKey('init'),false)){
+    uSet('videos',DEFAULT_VIDEOS);
+    S.set(uKey('init'),true);
+  }
+  return uGet('videos',[]);
+}
+
+// ─── BOOT APP ─────────────────────────────────────────
+function bootApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  const users=getUsers();
+  const displayName=users[currentUser]?.name||currentUser;
+  document.getElementById('profileName').textContent=displayName;
+  document.getElementById('profileInitials').textContent=displayName.charAt(0).toUpperCase();
+  // load saved photo
+  const savedPhoto=uGet('photo',null);
+  if(savedPhoto){
+    const img=document.getElementById('profileImg');
+    img.src=savedPhoto;img.style.display='block';
+    document.getElementById('profileInitials').style.display='none';
+  } else {
+    document.getElementById('profileImg').style.display='none';
+    document.getElementById('profileInitials').style.display='block';
+  }
+  refreshCounters();
+  refreshMeditation();
+  renderPlaylist();
+  loadTheme();
+  // init first-record date
+  if(!uGet('first_record_date',null) && (uGet('cnt_morning',0)>0||uGet('cnt_evening',0)>0)){
+    uSet('first_record_date', new Date().toISOString());
+  }
+  updateDateTime();
+  if(window._dtTimer) clearInterval(window._dtTimer);
+  window._dtTimer = setInterval(updateDateTime, 1000);
+}
+
+// ─── DATE / TIME ──────────────────────────────────────
+function toBE(date){
+  const th = new Intl.DateTimeFormat('th-TH',{
+    year:'numeric',month:'long',day:'numeric',
+    weekday:'long',timeZone:'Asia/Bangkok'
+  }).format(date);
+  return th;
+}
+function toBEShort(date){
+  const th = new Intl.DateTimeFormat('th-TH',{
+    year:'numeric',month:'short',day:'numeric',
+    timeZone:'Asia/Bangkok'
+  }).format(date);
+  return th;
+}
+function updateDateTime(){
+  const now = new Date();
+  document.getElementById('dtToday').textContent = toBE(now);
+  const timeStr = new Intl.DateTimeFormat('th-TH',{
+    hour:'2-digit',minute:'2-digit',second:'2-digit',
+    hour12:false,timeZone:'Asia/Bangkok'
+  }).format(now);
+  document.getElementById('dtTime').textContent = timeStr + ' น.';
+  // first record date
+  const firstDate = uGet('first_record_date',null);
+  const row = document.getElementById('dtStartRow');
+  if(firstDate){
+    row.style.display='flex';
+    document.getElementById('dtStart').textContent = toBEShort(new Date(firstDate));
+  } else {
+    row.style.display='none';
+  }
+}
+
+// ─── PROFILE PHOTO ────────────────────────────────────
+function handleProfilePhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>4*1024*1024){showToast('⚠️ รูปต้องไม่เกิน 4MB');return}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    uSet('photo',data);
+    const img=document.getElementById('profileImg');
+    img.src=data;img.style.display='block';
+    document.getElementById('profileInitials').style.display='none';
+    showToast('✅ บันทึกรูปโปรไฟล์แล้ว');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── COUNTERS ─────────────────────────────────────────
+function refreshCounters(){
+  document.getElementById('countMorning').textContent = uGet('cnt_morning',0);
+  document.getElementById('countEvening').textContent = uGet('cnt_evening',0);
+}
+
+function recordCount(type){
+  const el=document.getElementById(type==='morning'?'countMorning':'countEvening');
+  const cur=uGet('cnt_'+type,0);
+  uSet('cnt_'+type,cur+1);
+  el.textContent=cur+1;
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  // save first record date
+  if(!uGet('first_record_date',null)){
+    uSet('first_record_date', new Date().toISOString());
+    updateDateTime();
+  }
+  showToast(type==='morning'?'🌅 บันทึกทำวัตรเช้าแล้ว':'🌙 บันทึกทำวัตรเย็นแล้ว');
+}
+
+// ─── MEDITATION ──────────────────────────────────────
+function refreshMeditation(){
+  document.getElementById('meditMorningMin').textContent = uGet('med_morning_min',0);
+  document.getElementById('meditEveningMin').textContent = uGet('med_evening_min',0);
+}
+function stepMed(field, delta){
+  const ids = {morningMin:'medInputMorningMin', eveningMin:'medInputEveningMin'};
+  const el = document.getElementById(ids[field]);
+  if(!el) return;
+  let v = parseInt(el.value)||0;
+  v = Math.max(0, v+delta);
+  el.value = v;
+}
+function recordMeditation(session){
+  const inputId = session==='morning'?'medInputMorningMin':'medInputEveningMin';
+  const storeKey = session==='morning'?'med_morning_min':'med_evening_min';
+  const label = session==='morning'?'สมาธิเช้า':'สมาธิเย็น';
+  const mn = parseInt(document.getElementById(inputId).value)||0;
+  if(mn<=0){showToast('⚠️ กรุณาใส่จำนวนนาที');return}
+  const cur = uGet(storeKey,0);
+  uSet(storeKey, cur+mn);
+  if(!uGet('first_record_date',null)){
+    uSet('first_record_date',new Date().toISOString());
+    updateDateTime();
+  }
+  document.getElementById(inputId).value=0;
+  refreshMeditation();
+  showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+(cur+mn)+' นาที)');
+}
+
+// ─── EDIT NAME ────────────────────────────────────────
+function openEditName(){
+  const cur = document.getElementById('profileName').textContent;
+  document.getElementById('editNameInput').value = cur;
+  document.getElementById('editNameRow').style.display='flex';
+  document.getElementById('editNameInput').focus();
+}
+function closeEditName(){
+  document.getElementById('editNameRow').style.display='none';
+}
+function saveEditName(){
+  const newName = document.getElementById('editNameInput').value.trim();
+  if(!newName){showToast('⚠️ กรุณากรอกชื่อ');return}
+  const users = getUsers();
+  users[currentUser].name = newName;
+  saveUsers(users);
+  document.getElementById('profileName').textContent = newName;
+  document.getElementById('profileInitials').textContent = newName.charAt(0).toUpperCase();
+  closeEditName();
+  showToast('✅ บันทึกชื่อใหม่แล้ว: '+newName);
+}
+
+// ─── YOUTUBE UTILS ────────────────────────────────────
+function getYTId(url){
+  try{
+    const u=new URL(url);
+    if(u.hostname.includes('youtu.be'))return u.pathname.slice(1).split('?')[0];
+    return u.searchParams.get('v')||'';
+  }catch{return ''}
+}
+function thumbUrl(ytid){return ytid?'https://img.youtube.com/vi/'+ytid+'/mqdefault.jpg':''}
+
+// ─── ADD VIDEO ────────────────────────────────────────
+function addVideo(){
+  const title=document.getElementById('addTitle').value.trim();
+  const url=document.getElementById('addUrl').value.trim();
+  const cat=document.getElementById('addCat').value;
+  if(!title){showToast('⚠️ กรุณากรอกชื่อบทสวด');return}
+  if(!url){showToast('⚠️ กรุณากรอกลิงก์ยูทูป');return}
+  const ytid=getYTId(url);
+  if(!ytid){showToast('⚠️ ลิงก์ยูทูปไม่ถูกต้อง');return}
+  const videos=getVideos();
+  videos.push({id:'v'+Date.now(),title,url,cat});
+  uSet('videos',videos);
+  document.getElementById('addTitle').value='';
+  document.getElementById('addUrl').value='';
+  renderPlaylist();
+  showToast('✅ เพิ่มรายการสำเร็จ');
+}
+
+// ─── DELETE VIDEO ─────────────────────────────────────
+function deleteVideo(id,e){
+  e.stopPropagation();
+  if(!confirm('ลบรายการนี้ออกจากเพลย์ลิสต์?'))return;
+  let videos=getVideos().filter(v=>v.id!==id);
+  uSet('videos',videos);
+  if(activeVideoId===id){
+    activeVideoId=null;
+    document.getElementById('ytIframe').src='';
+    document.getElementById('playerSection').style.display='none';
+  }
+  renderPlaylist();
+  showToast('🗑️ ลบรายการแล้ว');
+}
+
+// ─── PLAY VIDEO ───────────────────────────────────────
+function playVideo(v){
+  const ytid=getYTId(v.url);
+  if(!ytid){showToast('⚠️ ลิงก์ไม่ถูกต้อง');return}
+  activeVideoId=v.id;
+  const ps=document.getElementById('playerSection');
+  ps.style.display='block';
+  document.getElementById('ytIframe').src='https://www.youtube.com/embed/'+ytid+'?autoplay=1&rel=0';
+  document.getElementById('playerTitleText').textContent=v.title;
+  const badge=document.getElementById('playerCatBadge');
+  badge.textContent=CAT_ICONS[v.cat]+' '+CAT_LABELS[v.cat];
+  badge.className='vi-badge player-cat-pill cat-'+v.cat;
+  ps.scrollIntoView({behavior:'smooth',block:'start'});
+  renderPlaylist();
+}
+
+// ─── RENDER PLAYLIST ──────────────────────────────────
+function videoCardHtml(v){
+  const ytid=getYTId(v.url);
+  const thumb=thumbUrl(ytid);
+  const isActive=v.id===activeVideoId;
+  const vJson=JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat}).replace(/"/g,'&quot;');
+  return `<div class="video-item${isActive?' active':''}" onclick="playVideo(${vJson})">
+    <div class="vi-num">${v._idx}</div>
+    <div class="vi-thumb">${thumb?`<img src="${thumb}" loading="lazy" alt="">`:''}
+      <div class="vi-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    </div>
+    <div class="vi-info">
+      <div class="vi-title">${v.title}</div>
+      <span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>
+    </div>
+    <button class="vi-del" onclick="deleteVideo('${v.id}',event)" title="ลบรายการ">×</button>
+  </div>`;
+}
+
+function renderPlaylist(){
+  const videos=getVideos();
+  const root=document.getElementById('playlistRoot');
+  if(!videos.length){
+    root.innerHTML='<div class="empty-state"><span class="empty-icon">📿</span><div class="empty-text">ยังไม่มีรายการ กรุณาเพิ่มลิงก์ยูทูป</div></div>';
+    return;
+  }
+  const groups={};
+  CAT_ORDER.forEach(c=>groups[c]=[]);
+  let globalIdx=0;
+  videos.forEach(v=>{
+    globalIdx++;
+    const cat=groups[v.cat]!==undefined?v.cat:'other';
+    groups[cat].push({...v,_idx:globalIdx});
+  });
+  let html='';
+  ZONE_GROUPS.forEach(zone=>{
+    const zoneVideos=[];
+    zone.cats.forEach(c=>(groups[c]||[]).forEach(v=>zoneVideos.push(v)));
+    if(!zoneVideos.length)return;
+    html+=`<div class="playlist-zone">
+      <div class="playlist-zone-header ${zone.color}">
+        <span class="pzh-icon">${zone.icon}</span>
+        <span class="pzh-label">${zone.label}</span>
+        <span class="pzh-count">${zoneVideos.length} รายการ</span>
+      </div>
+      <div class="playlist-zone-body">`;
+    if(zone.cats.length>1){
+      zone.cats.forEach(cat=>{
+        const list=groups[cat]||[];
+        if(!list.length)return;
+        html+=`<div class="playlist-sub-label">${CAT_ICONS[cat]} ${CAT_LABELS[cat]}</div>`;
+        list.forEach(v=>{html+=videoCardHtml(v);});
+      });
+    } else {
+      zoneVideos.forEach(v=>{html+=videoCardHtml(v);});
+    }
+    html+=`</div></div>`;
+  });
+  root.innerHTML=html;
+}
+
+// ─── SHARE MERIT ──────────────────────────────────────
+
+const THEME_PALETTES = {
+  default: {
+    bg:'#1a0800', deep:'#0d0400',
+    gold:'#C9A84C', goldLight:'#E8D5A3', goldDark:'#8B6914',
+    accentMorning:'rgba(100,50,0,0.35)', accentEvening:'rgba(15,15,70,0.4)',
+    textMain:'#E8D5A3', textSub:'rgba(232,213,163,0.55)',
+    numMorning:'#C9A84C', numEvening:'#c8d4ff',
+    unitMorning:'rgba(232,213,163,0.4)', unitEvening:'rgba(180,190,255,0.35)',
+    labelMorning:'rgba(232,213,163,0.5)', labelEvening:'rgba(180,190,255,0.5)',
+    divider:'rgba(201,168,76,0.15)', statBorder:'rgba(201,168,76,0.2)',
+    firstDate:'rgba(232,213,163,0.3)', footer:'rgba(232,213,163,0.6)',
+    ornamenta:'rgba(201,168,76,0.08)', ornamentb:'rgba(201,168,76,0.05)',
+    photoRing:'linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A)',
+    photoInner:'linear-gradient(135deg,#3d1a00,#5c2a00)',
+    dividerBar:'rgba(201,168,76,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+  forest: {
+    bg:'#051005', deep:'#010801',
+    gold:'#7CB87A', goldLight:'#B8DDB6', goldDark:'#3A6B38',
+    accentMorning:'rgba(20,80,20,0.4)', accentEvening:'rgba(5,40,10,0.5)',
+    textMain:'#B8DDB6', textSub:'rgba(184,221,182,0.55)',
+    numMorning:'#7CB87A', numEvening:'#A0E0A0',
+    unitMorning:'rgba(184,221,182,0.4)', unitEvening:'rgba(160,224,160,0.35)',
+    labelMorning:'rgba(184,221,182,0.5)', labelEvening:'rgba(160,224,160,0.5)',
+    divider:'rgba(124,184,122,0.2)', statBorder:'rgba(124,184,122,0.25)',
+    firstDate:'rgba(184,221,182,0.3)', footer:'rgba(184,221,182,0.6)',
+    ornamenta:'rgba(124,184,122,0.07)', ornamentb:'rgba(124,184,122,0.04)',
+    photoRing:'linear-gradient(135deg,#3A6B38,#7CB87A,#A8D8A6)',
+    photoInner:'linear-gradient(135deg,#051005,#0A2010)',
+    dividerBar:'rgba(124,184,122,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+  ocean: {
+    bg:'#010D14', deep:'#000608',
+    gold:'#5AB4D4', goldLight:'#A8D8EC', goldDark:'#1A6A8A',
+    accentMorning:'rgba(10,60,100,0.4)', accentEvening:'rgba(5,20,60,0.5)',
+    textMain:'#A8D8EC', textSub:'rgba(168,216,236,0.55)',
+    numMorning:'#5AB4D4', numEvening:'#90D0F0',
+    unitMorning:'rgba(168,216,236,0.4)', unitEvening:'rgba(144,208,240,0.35)',
+    labelMorning:'rgba(168,216,236,0.5)', labelEvening:'rgba(144,208,240,0.5)',
+    divider:'rgba(90,180,212,0.2)', statBorder:'rgba(90,180,212,0.25)',
+    firstDate:'rgba(168,216,236,0.3)', footer:'rgba(168,216,236,0.6)',
+    ornamenta:'rgba(90,180,212,0.07)', ornamentb:'rgba(90,180,212,0.04)',
+    photoRing:'linear-gradient(135deg,#1A6A8A,#5AB4D4,#88CCE8)',
+    photoInner:'linear-gradient(135deg,#010D14,#051A28)',
+    dividerBar:'rgba(90,180,212,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+  rose: {
+    bg:'#140008', deep:'#0A0005',
+    gold:'#D48AAA', goldLight:'#ECC8D8', goldDark:'#8A3A5A',
+    accentMorning:'rgba(100,20,60,0.4)', accentEvening:'rgba(60,5,40,0.5)',
+    textMain:'#ECC8D8', textSub:'rgba(236,200,216,0.55)',
+    numMorning:'#D48AAA', numEvening:'#F0A8C8',
+    unitMorning:'rgba(236,200,216,0.4)', unitEvening:'rgba(240,168,200,0.35)',
+    labelMorning:'rgba(236,200,216,0.5)', labelEvening:'rgba(240,168,200,0.5)',
+    divider:'rgba(212,138,170,0.2)', statBorder:'rgba(212,138,170,0.25)',
+    firstDate:'rgba(236,200,216,0.3)', footer:'rgba(236,200,216,0.6)',
+    ornamenta:'rgba(212,138,170,0.07)', ornamentb:'rgba(212,138,170,0.04)',
+    photoRing:'linear-gradient(135deg,#8A3A5A,#D48AAA,#ECA8C8)',
+    photoInner:'linear-gradient(135deg,#140008,#280014)',
+    dividerBar:'rgba(212,138,170,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+  golden: {
+    bg:'#141000', deep:'#080800',
+    gold:'#D4A820', goldLight:'#F0D870', goldDark:'#8A6A00',
+    accentMorning:'rgba(100,80,0,0.4)', accentEvening:'rgba(60,50,0,0.5)',
+    textMain:'#F0D870', textSub:'rgba(240,216,112,0.55)',
+    numMorning:'#D4A820', numEvening:'#F0CC40',
+    unitMorning:'rgba(240,216,112,0.4)', unitEvening:'rgba(240,204,64,0.35)',
+    labelMorning:'rgba(240,216,112,0.5)', labelEvening:'rgba(240,204,64,0.5)',
+    divider:'rgba(212,168,32,0.2)', statBorder:'rgba(212,168,32,0.25)',
+    firstDate:'rgba(240,216,112,0.3)', footer:'rgba(240,216,112,0.6)',
+    ornamenta:'rgba(212,168,32,0.08)', ornamentb:'rgba(212,168,32,0.05)',
+    photoRing:'linear-gradient(135deg,#8A6A00,#D4A820,#F0CC40)',
+    photoInner:'linear-gradient(135deg,#141000,#281E00)',
+    dividerBar:'rgba(212,168,32,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+  night: {
+    bg:'#04040E', deep:'#020209',
+    gold:'#9B9BFF', goldLight:'#C8C8FF', goldDark:'#4A4AAA',
+    accentMorning:'rgba(30,30,100,0.4)', accentEvening:'rgba(10,10,60,0.5)',
+    textMain:'#C8C8FF', textSub:'rgba(200,200,255,0.55)',
+    numMorning:'#9B9BFF', numEvening:'#B8B8FF',
+    unitMorning:'rgba(200,200,255,0.4)', unitEvening:'rgba(184,184,255,0.35)',
+    labelMorning:'rgba(200,200,255,0.5)', labelEvening:'rgba(184,184,255,0.5)',
+    divider:'rgba(155,155,255,0.2)', statBorder:'rgba(155,155,255,0.25)',
+    firstDate:'rgba(200,200,255,0.3)', footer:'rgba(200,200,255,0.6)',
+    ornamenta:'rgba(155,155,255,0.07)', ornamentb:'rgba(155,155,255,0.04)',
+    photoRing:'linear-gradient(135deg,#4A4AAA,#9B9BFF,#C0C0FF)',
+    photoInner:'linear-gradient(135deg,#04040E,#08081C)',
+    dividerBar:'rgba(155,155,255,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
+  },
+};
+
+function applyThemeToCard(p){
+  const card = document.getElementById("shareCard");
+  card.style.background = p.bg;
+  // bg circles
+  const circles = card.querySelectorAll('div[style*="border-radius:50%"][style*="position:absolute"]');
+  if(circles[0]) circles[0].style.borderColor = p.ornamenta;
+  if(circles[1]) circles[1].style.borderColor = p.ornamentb;
+  // title texts
+  const allDivs = card.querySelectorAll('div,span');
+  // title "ขอถวายเป็นพุทธบูชา"
+  const titleEl = card.querySelector('[data-sc="title"]');
+  const subEl   = card.querySelector('[data-sc="sub"]');
+  const divBar  = card.querySelector('[data-sc="divbar"]');
+  const nameEl  = document.getElementById("scName");
+  const dateEl  = document.getElementById("scDate");
+  const photoInner = document.getElementById("scPhotoInner");
+  const photoRing  = photoInner?.parentElement;
+  const statsBox   = card.querySelector('[data-sc="statsbox"]');
+  const morningCol = card.querySelector('[data-sc="morning"]');
+  const eveningCol = card.querySelector('[data-sc="evening"]');
+  const dividerEl  = card.querySelector('[data-sc="divider"]');
+  const firstDateEl = document.getElementById("scFirstDate");
+  const footerEl   = card.querySelector('[data-sc="footer"]');
+  const footerSub  = card.querySelector('[data-sc="footersub"]');
+  const footerBar  = card.querySelector('[data-sc="footerbar"]');
+
+  if(titleEl) titleEl.style.color = p.textMain;
+  if(subEl)   subEl.style.color   = p.textSub;
+  if(divBar)  divBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
+  if(nameEl)  nameEl.style.color  = p.textMain;
+  if(dateEl)  dateEl.style.color  = p.unitMorning;
+  if(photoRing) photoRing.style.background = p.photoRing;
+  if(photoInner){ photoInner.style.background = p.photoInner; photoInner.style.color = p.textMain; }
+  if(statsBox){ statsBox.style.borderColor = p.statBorder; statsBox.style.background = 'rgba(0,0,0,0.08)'; }
+  if(morningCol){ morningCol.style.background = p.accentMorning; }
+  if(eveningCol){ eveningCol.style.background = p.accentEvening; }
+  if(dividerEl) dividerEl.style.background = p.divider;
+  // stat nums
+  const scCntM = document.getElementById("scCountMorning"); if(scCntM) scCntM.style.color = p.numMorning;
+  const scCntE = document.getElementById("scCountEvening"); if(scCntE) scCntE.style.color = p.numEvening;
+  const scMedM = document.getElementById("scMeditMorning"); if(scMedM) scMedM.style.color = p.numMorning;
+  const scMedE = document.getElementById("scMeditEvening"); if(scMedE) scMedE.style.color = p.numEvening;
+  // labels
+  morningCol?.querySelectorAll('[data-sc="mlabel"]').forEach(e=>e.style.color=p.labelMorning);
+  eveningCol?.querySelectorAll('[data-sc="elabel"]').forEach(e=>e.style.color=p.labelEvening);
+  morningCol?.querySelectorAll('[data-sc="munit"]').forEach(e=>e.style.color=p.unitMorning);
+  eveningCol?.querySelectorAll('[data-sc="eunit"]').forEach(e=>e.style.color=p.unitEvening);
+  if(firstDateEl) firstDateEl.style.color = p.firstDate;
+  if(footerEl)    footerEl.style.color    = p.footer;
+  if(footerSub)   footerSub.style.color   = 'rgba(232,213,163,0.35)';
+  if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
+}
+
+function openShareModal(){
+  const users = getUsers();
+  const displayName = users[currentUser]?.name || currentUser;
+  document.getElementById('scName').textContent = displayName;
+  document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
+  // Apply current theme to share card
+  const themeName = currentUser ? uGet('theme','default') : S.get('dh_theme_global','default');
+  const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
+  applyThemeToCard(p);
+  // photo
+  const savedPhoto = uGet('photo',null);
+  const inner = document.getElementById('scPhotoInner');
+  inner.innerHTML = '';
+  if(savedPhoto){
+    const img = document.createElement('img');
+    img.src = savedPhoto;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+    inner.appendChild(img);
+  } else {
+    inner.textContent = displayName.charAt(0).toUpperCase();
+  }
+  // stats
+  document.getElementById('scCountMorning').textContent = uGet('cnt_morning',0);
+  document.getElementById('scCountEvening').textContent = uGet('cnt_evening',0);
+  document.getElementById('scMeditMorning').textContent = uGet('med_morning_min',0);
+  document.getElementById('scMeditEvening').textContent = uGet('med_evening_min',0);
+  // date
+  const now = new Date();
+  const dateStr = new Intl.DateTimeFormat('th-TH',{
+    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
+  }).format(now);
+  document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
+  // first record
+  const first = uGet('first_record_date',null);
+  const firstEl = document.getElementById('scFirstDate');
+  if(first){
+    firstEl.textContent = '🌱 เริ่มบันทึกตั้งแต่ ' + new Intl.DateTimeFormat('th-TH',{
+      year:'numeric',month:'short',day:'numeric',timeZone:'Asia/Bangkok'
+    }).format(new Date(first));
+  } else { firstEl.textContent = ''; }
+  document.getElementById('shareModal').style.display = 'flex';
+}
+function closeShareModal(){
+  document.getElementById('shareModal').style.display = 'none';
+}
+function downloadCard(){
+  const card = document.getElementById('shareCard');
+  const btn = document.querySelector('.btn-download-card');
+  btn.textContent = '⏳ กำลังสร้างภาพ...';
+  btn.disabled = true;
+  html2canvas(card, {
+    scale: 3,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: null,
+    logging: false
+  }).then(canvas => {
+    const users = getUsers();
+    const name = users[currentUser]?.name || currentUser;
+    const link = document.createElement('a');
+    link.download = 'แบ่งปันบุญ_' + name + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btn.textContent = '⬇️ บันทึกเป็นรูปภาพ';
+    btn.disabled = false;
+    showToast('✅ บันทึกภาพสำเร็จ 🙏');
+  }).catch(()=>{
+    btn.textContent = '⬇️ บันทึกเป็นรูปภาพ';
+    btn.disabled = false;
+    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
+  });
+}
+
+// ─── THEME ────────────────────────────────────────────
+const THEMES = ['default','forest','ocean','rose','golden','night'];
+function setTheme(name){
+  THEMES.forEach(t => document.body.classList.remove('theme-'+t));
+  if(name !== 'default') document.body.classList.add('theme-'+name);
+  document.querySelectorAll('.theme-dot').forEach(d=>{
+    d.classList.toggle('active', d.dataset.theme === name);
+  });
+  if(currentUser) uSet('theme', name);
+  S.set('dh_theme_global', name);
+}
+function loadTheme(){
+  const saved = currentUser ? uGet('theme','default') : S.get('dh_theme_global','default');
+  setTheme(saved);
+}
+
+// ─── TOAST ────────────────────────────────────────────
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+// ─── ENTER KEY SUPPORT ────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    if(document.getElementById('loginForm').style.display!=='none'&&
+       document.getElementById('loginScreen').style.display!=='none'){doLogin()}
+    else if(document.getElementById('registerForm').style.display==='block'&&
+            document.getElementById('loginScreen').style.display!=='none'){doRegister()}
+  }
+});
+
+// ─── AUTO LOGIN ───────────────────────────────────────
+(function init(){
+  const sess=S.get('dh_session',null);
+  if(sess){
+    const users=getUsers();
+    if(users[sess]){currentUser=sess;bootApp();return}
+  }
+  document.getElementById('loginScreen').style.display='flex';
+})();
+</script>
+</body>
+</html>

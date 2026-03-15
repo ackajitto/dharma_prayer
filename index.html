@@ -1337,6 +1337,76 @@ body.theme-night{
 // ══════════════════════════════════════════════════════
 //  FIREBASE HELPERS (username/password — no Auth SDK)
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════════════════════
+
+// ─── CONSTANTS ───────────────────────────────────────
+const CAT_LABELS = {
+  morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
+  lp:'สรรเสริญหลวงปู่สด วาจาสิทธิ์',
+  grandma:'สรรเสริญคุณยายอาจารย์', meditation:'นั่งสมาธิ', other:'อื่นๆ'
+};
+const CAT_ICONS = {morning:'🌅',evening:'🌙',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
+const CAT_ORDER = ['morning','lp','grandma','meditation','evening','other'];
+
+// Zone groupings for playlist display
+const ZONE_GROUPS = [
+  {
+    id: 'zone_morning',
+    label: 'ทำวัตรเช้า',
+    icon: '🌅',
+    color: 'zone-header-morning',
+    cats: ['morning']
+  },
+  {
+    id: 'zone_evening',
+    label: 'ทำวัตรเย็น',
+    icon: '🌙',
+    color: 'zone-header-evening',
+    cats: ['evening']
+  },
+  {
+    id: 'zone_special',
+    label: 'บทสวดพิเศษ',
+    icon: '🙏',
+    color: 'zone-header-special',
+    cats: ['lp','grandma','meditation','other']
+  },
+];
+// ═══════════════════════════════════════════════════
+//  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
+//  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
+// ═══════════════════════════════════════════════════
+const DEFAULT_VIDEOS = [
+  // ── ทำวัตรเช้า ──────────────────────────────────
+  {id:'dv1', title:'ทำวัตรเช้า',
+   url:'https://youtu.be/RvxnE9dY9nc', cat:'morning'},
+
+  // ── ทำวัตรเย็น ──────────────────────────────────
+  {id:'dv2', title:'ทำวัตรเย็น',
+   url:'https://youtu.be/Z0Ccuq1IY74', cat:'evening'},
+
+  // ── บทสวดพิเศษ ──────────────────────────────────
+  {id:'dv3', title:'บทสวดสรรเสริญพระมงคลเทพมุนี',
+   url:'https://youtu.be/dCfhbasEmtQ', cat:'lp'},
+
+  {id:'dv4', title:'บทสรรเสริญคุณยายอาจารย์ มหารัตนอุบาสิกาจันทร์ ขนนกยูง',
+   url:'https://youtu.be/q2oDyeaapZE', cat:'grandma'},
+
+  {id:'dv5', title:'บทสวดสรรเสริญพระธรรมกาย',
+   url:'https://youtu.be/ZfxHwPCrcso', cat:'lp'},
+
+  {id:'dv6', title:'บทสวดธัมมจักกัปปวัตตนสูตร - Dhammacakkappavattana Sutta',
+   url:'https://youtu.be/sSZI1ewkEFc', cat:'lp'},
+
+  {id:'dv7', title:'นำนั่งสมาธิ',
+   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'meditation'},
+];
+// ═══════════════════════════════════════════════════
+
+
+
 // แปลงอีเมลเป็น Firebase key (ลบอักขระต้องห้าม)
 function emailToKey(email){
   return email.toLowerCase()
@@ -1480,74 +1550,6 @@ async function bootApp(username, userData){
 
   renderPlaylist();
 }
-
-// ══════════════════════════════════════════════════════
-//  CONSTANTS
-// ══════════════════════════════════════════════════════
-
-// ─── CONSTANTS ───────────────────────────────────────
-const CAT_LABELS = {
-  morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
-  lp:'สรรเสริญหลวงปู่สด วาจาสิทธิ์',
-  grandma:'สรรเสริญคุณยายอาจารย์', meditation:'นั่งสมาธิ', other:'อื่นๆ'
-};
-const CAT_ICONS = {morning:'🌅',evening:'🌙',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
-const CAT_ORDER = ['morning','lp','grandma','meditation','evening','other'];
-
-// Zone groupings for playlist display
-const ZONE_GROUPS = [
-  {
-    id: 'zone_morning',
-    label: 'ทำวัตรเช้า',
-    icon: '🌅',
-    color: 'zone-header-morning',
-    cats: ['morning']
-  },
-  {
-    id: 'zone_evening',
-    label: 'ทำวัตรเย็น',
-    icon: '🌙',
-    color: 'zone-header-evening',
-    cats: ['evening']
-  },
-  {
-    id: 'zone_special',
-    label: 'บทสวดพิเศษ',
-    icon: '🙏',
-    color: 'zone-header-special',
-    cats: ['lp','grandma','meditation','other']
-  },
-];
-// ═══════════════════════════════════════════════════
-//  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
-//  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
-// ═══════════════════════════════════════════════════
-const DEFAULT_VIDEOS = [
-  // ── ทำวัตรเช้า ──────────────────────────────────
-  {id:'dv1', title:'ทำวัตรเช้า',
-   url:'https://youtu.be/RvxnE9dY9nc', cat:'morning'},
-
-  // ── ทำวัตรเย็น ──────────────────────────────────
-  {id:'dv2', title:'ทำวัตรเย็น',
-   url:'https://youtu.be/Z0Ccuq1IY74', cat:'evening'},
-
-  // ── บทสวดพิเศษ ──────────────────────────────────
-  {id:'dv3', title:'บทสวดสรรเสริญพระมงคลเทพมุนี',
-   url:'https://youtu.be/dCfhbasEmtQ', cat:'lp'},
-
-  {id:'dv4', title:'บทสรรเสริญคุณยายอาจารย์ มหารัตนอุบาสิกาจันทร์ ขนนกยูง',
-   url:'https://youtu.be/q2oDyeaapZE', cat:'grandma'},
-
-  {id:'dv5', title:'บทสวดสรรเสริญพระธรรมกาย',
-   url:'https://youtu.be/ZfxHwPCrcso', cat:'lp'},
-
-  {id:'dv6', title:'บทสวดธัมมจักกัปปวัตตนสูตร - Dhammacakkappavattana Sutta',
-   url:'https://youtu.be/sSZI1ewkEFc', cat:'lp'},
-
-  {id:'dv7', title:'นำนั่งสมาธิ',
-   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'meditation'},
-];
-// ═══════════════════════════════════════════════════
 
 // ─── STORAGE ─────────────────────────────────────────
 // ─── STATE ────────────────────────────────────────────

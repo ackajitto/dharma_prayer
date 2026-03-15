@@ -985,6 +985,7 @@ const db = getDatabase(firebaseApp);
 window._fb = { auth, db, ref, set, get, update, onValue, off,
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
   signOut, onAuthStateChanged, updateProfile };
+window._fbReady = true;
 
 // ── Auth state observer ────────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
@@ -2026,7 +2027,8 @@ async function uSet(key, val){
 }
 
 // ── wait for firebase init ─────────────────────────────
-window._onLogin = function(user){ bootApp(user); };
+window._fbReady = false;
+window._onLogin = function(user){ window._fbReady=true; bootApp(user); };
 window._onLogout = function(){
   document.getElementById('app').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
@@ -2050,6 +2052,7 @@ async function doLogin(){
   const email = document.getElementById('loginUser').value.trim();
   const pass  = document.getElementById('loginPass').value;
   if(!email||!pass){ document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(!window._fb){ document.getElementById('loginErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่แล้วลองใหม่'; return; }
   document.getElementById('loginErr').textContent = '⏳ กำลังเข้าสู่ระบบ...';
   try {
     await fb().signInWithEmailAndPassword(fb().auth, email, pass);
@@ -2071,6 +2074,7 @@ async function doRegister(){
   const pass  = document.getElementById('regPass').value;
   if(!name||!email||!pass){ document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
   if(pass.length<6){ document.getElementById('regErr').textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; return; }
+  if(!window._fb){ document.getElementById('regErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่แล้วลองใหม่'; return; }
   document.getElementById('regErr').textContent = '⏳ กำลังสร้างบัญชี...';
   try {
     const cred = await fb().createUserWithEmailAndPassword(fb().auth, email, pass);
@@ -2768,6 +2772,27 @@ document.addEventListener('keydown',e=>{
 });
 
 // Auth state handled by Firebase onAuthStateChanged above
+
+
+// ── expose all onclick handlers to global scope ───────
+window.doLogin = doLogin;
+window.doRegister = doRegister;
+window.doLogout = doLogout;
+window.toggleAuthMode = toggleAuthMode;
+window.recordCount = recordCount;
+window.recordMeditation = recordMeditation;
+window.stepMed = stepMed;
+window.addVideo = addVideo;
+window.deleteVideo = deleteVideo;
+window.playVideo = playVideo;
+window.openEditName = openEditName;
+window.closeEditName = closeEditName;
+window.saveEditName = saveEditName;
+window.handleProfilePhoto = handleProfilePhoto;
+window.setTheme = setTheme;
+window.openShareModal = openShareModal;
+window.closeShareModal = closeShareModal;
+window.downloadCard = downloadCard;
 
 </script>
 </body>

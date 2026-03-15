@@ -964,8 +964,7 @@ body.theme-night{
 <!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getDatabase, ref, set, get, update, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBW_KT7TJAThSg29gedQurkXhcTv5ACOmg",
@@ -978,28 +977,16 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
 const db = getDatabase(firebaseApp);
 
-// ── expose to global scope for non-module scripts ──────────────────────────
-window._fb = { auth, db, ref, set, get, update, onValue, off,
-  createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  signOut, onAuthStateChanged, updateProfile };
+window._db = db;
+window._dbRef = ref;
+window._dbSet = set;
+window._dbGet = get;
+window._dbChild = child;
 window._fbReady = true;
 
-// ── Auth state observer ────────────────────────────────────────────────────
-onAuthStateChanged(auth, user => {
-  if (user) {
-    window._currentUser = user;
-    if (typeof window._onLogin === 'function') window._onLogin(user);
-  } else {
-    window._currentUser = null;
-    if (typeof window._onLogout === 'function') window._onLogout();
-  }
-  // hide loading overlay once Firebase has resolved auth state
-  const lo = document.getElementById('appLoading');
-  if (lo) { lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
-});
+// loading handled by main script
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -1017,13 +1004,13 @@ onAuthStateChanged(auth, user => {
   <div class="login-box">
     <span class="login-lotus">🪷</span>
     <div class="login-title">บูชาพระธรรม</div>
-    <div class="login-sub">เข้าสู่ระบบเพื่อบันทึกการปฏิบัติธรรมของท่าน</div>
+    <div class="login-sub">เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน</div>
 
     <!-- Login Form -->
     <div id="loginForm">
       <div class="form-group">
-        <label>ชื่อผู้ใช้</label>
-        <input id="loginUser" type="text" placeholder="กรอกชื่อผู้ใช้" autocomplete="username">
+        <label>อีเมล</label>
+        <input id="loginUser" type="email" placeholder="กรอกอีเมล เช่น name@gmail.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label>รหัสผ่าน</label>
@@ -1041,12 +1028,12 @@ onAuthStateChanged(auth, user => {
         <input id="regName" type="text" placeholder="ชื่อของท่าน (เช่น สุชาติ)">
       </div>
       <div class="form-group">
-        <label>ชื่อผู้ใช้</label>
-        <input id="regUser" type="text" placeholder="กำหนดชื่อผู้ใช้" autocomplete="username">
+        <label>อีเมล</label>
+        <input id="regUser" type="email" placeholder="กรอกอีเมล เช่น name@gmail.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label>รหัสผ่าน</label>
-        <input id="regPass" type="password" placeholder="กำหนดรหัสผ่าน (6 ตัวขึ้นไป)" autocomplete="new-password">
+        <input id="regPass" type="password" placeholder="รหัสผ่าน อย่างน้อย 6 ตัวอักษร" autocomplete="new-password">
       </div>
       <div class="form-error" id="regErr"></div>
       <button class="btn-primary" onclick="doRegister()">✨ สมัครสมาชิก</button>
@@ -1348,23 +1335,19 @@ onAuthStateChanged(auth, user => {
 
 <script>
 // ══════════════════════════════════════════════════════
-//  FIREBASE HELPERS
+//  FIREBASE HELPERS (username/password — no Auth SDK)
 // ══════════════════════════════════════════════════════
-function fb(){ return window._fb; }
-function uid(){ return window._currentUser?.uid; }
-
 async function dbGet(path){
-  const snap = await fb().get(fb().ref(fb().db, path));
-  return snap.exists() ? snap.val() : null;
+  try {
+    const snap = await window._dbGet(window._dbRef(window._db, path));
+    return snap.exists() ? snap.val() : null;
+  } catch(e){ console.error('dbGet',e); return null; }
 }
 async function dbSet(path, val){
-  await fb().set(fb().ref(fb().db, path), val);
+  try { await window._dbSet(window._dbRef(window._db, path), val); }
+  catch(e){ console.error('dbSet',e); }
 }
-async function dbUpdate(path, val){
-  await fb().update(fb().ref(fb().db, path), val);
-}
-function userPath(key){ return `users/${uid()}/${key}`; }
-
+function userPath(key){ return `users/${window._currentUser}/${key}`; }
 async function uGet(key, def){
   const v = await dbGet(userPath(key));
   return v !== null ? v : def;
@@ -1373,20 +1356,8 @@ async function uSet(key, val){
   await dbSet(userPath(key), val);
 }
 
-// ── wait for firebase init ─────────────────────────────
-window._fbReady = false;
-window._onLogin = function(user){ window._fbReady=true; bootApp(user); };
-window._onLogout = function(){
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  if(window._dtTimer) clearInterval(window._dtTimer);
-  document.getElementById('ytIframe').src = '';
-  document.getElementById('playerSection').style.display = 'none';
-  document.getElementById('loginErr').textContent = '';
-};
-
 // ══════════════════════════════════════════════════════
-//  AUTH
+//  AUTH (username + password — Firebase Realtime DB)
 // ══════════════════════════════════════════════════════
 function toggleAuthMode(showReg){
   document.getElementById('loginForm').style.display = showReg?'none':'block';
@@ -1396,39 +1367,39 @@ function toggleAuthMode(showReg){
 }
 
 async function doLogin(){
-  const email = document.getElementById('loginUser').value.trim();
-  const pass  = document.getElementById('loginPass').value;
-  if(!email||!pass){ document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
-  if(!window._fb){ document.getElementById('loginErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่แล้วลองใหม่'; return; }
-  document.getElementById('loginErr').textContent = '⏳ กำลังเข้าสู่ระบบ...';
+  const username = document.getElementById('loginUser').value.trim().toLowerCase();
+  const pass     = document.getElementById('loginPass').value;
+  if(!username||!pass){ document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(!window._fbReady){ document.getElementById('loginErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่'; return; }
+  document.getElementById('loginErr').textContent = '⏳ กำลังตรวจสอบ...';
   try {
-    await fb().signInWithEmailAndPassword(fb().auth, email, pass);
-  } catch(e) {
-    const msg = {
-      'auth/user-not-found':'ไม่พบบัญชีนี้',
-      'auth/wrong-password':'รหัสผ่านไม่ถูกต้อง',
-      'auth/invalid-credential':'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-      'auth/invalid-email':'รูปแบบอีเมลไม่ถูกต้อง',
-      'auth/too-many-requests':'ลองใหม่ภายหลัง (พยายามเข้าระบบมากเกินไป)',
-    }[e.code] || 'เกิดข้อผิดพลาด: '+e.message;
-    document.getElementById('loginErr').textContent = msg;
+    const userData = await dbGet('users/'+username);
+    if(!userData){ document.getElementById('loginErr').textContent='ไม่พบชื่อผู้ใช้นี้'; return; }
+    if(userData._pass !== btoa(pass)){ document.getElementById('loginErr').textContent='รหัสผ่านไม่ถูกต้อง'; return; }
+    window._currentUser = username;
+    // save session
+    try { sessionStorage.setItem('dh_user', username); } catch(e){}
+    bootApp(username, userData);
+  } catch(e){
+    document.getElementById('loginErr').textContent = 'เกิดข้อผิดพลาด: '+e.message;
   }
 }
 
 async function doRegister(){
-  const name  = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regUser').value.trim();
-  const pass  = document.getElementById('regPass').value;
-  if(!name||!email||!pass){ document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
-  if(pass.length<6){ document.getElementById('regErr').textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; return; }
-  if(!window._fb){ document.getElementById('regErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่แล้วลองใหม่'; return; }
+  const name     = document.getElementById('regName').value.trim();
+  const username = document.getElementById('regUser').value.trim().toLowerCase();
+  const pass     = document.getElementById('regPass').value;
+  if(!name||!username||!pass){ document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(pass.length<4){ document.getElementById('regErr').textContent='รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร'; return; }
+  if(!/^[a-z0-9_]+$/.test(username)){ document.getElementById('regErr').textContent='ชื่อผู้ใช้ใช้ได้เฉพาะ a-z, 0-9, _'; return; }
+  if(!window._fbReady){ document.getElementById('regErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่'; return; }
   document.getElementById('regErr').textContent = '⏳ กำลังสร้างบัญชี...';
   try {
-    const cred = await fb().createUserWithEmailAndPassword(fb().auth, email, pass);
-    await fb().updateProfile(cred.user, { displayName: name });
-    // init user data
-    await dbSet(`users/${cred.user.uid}`, {
-      name, email,
+    const existing = await dbGet('users/'+username+'/_pass');
+    if(existing){ document.getElementById('regErr').textContent='ชื่อผู้ใช้นี้มีผู้ใช้แล้ว'; return; }
+    await dbSet('users/'+username, {
+      _pass: btoa(pass),
+      name, username,
       cnt_morning:0, cnt_evening:0,
       med_morning_min:0, med_evening_min:0,
       videos: DEFAULT_VIDEOS,
@@ -1436,19 +1407,24 @@ async function doRegister(){
       first_record_date: null,
       photo: null,
     });
-  } catch(e) {
-    const msg = {
-      'auth/email-already-in-use':'อีเมลนี้มีผู้ใช้แล้ว',
-      'auth/invalid-email':'รูปแบบอีเมลไม่ถูกต้อง',
-      'auth/weak-password':'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
-    }[e.code] || 'เกิดข้อผิดพลาด: '+e.message;
-    document.getElementById('regErr').textContent = msg;
+    window._currentUser = username;
+    try { sessionStorage.setItem('dh_user', username); } catch(e){}
+    const userData = await dbGet('users/'+username);
+    bootApp(username, userData);
+  } catch(e){
+    document.getElementById('regErr').textContent = 'เกิดข้อผิดพลาด: '+e.message;
   }
 }
 
 async function doLogout(){
   activeVideoId = null;
-  await fb().signOut(fb().auth);
+  window._currentUser = null;
+  try { sessionStorage.removeItem('dh_user'); } catch(e){}
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  if(window._dtTimer) clearInterval(window._dtTimer);
+  document.getElementById('ytIframe').src = '';
+  document.getElementById('playerSection').style.display = 'none';
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
 }
@@ -1456,13 +1432,12 @@ async function doLogout(){
 // ══════════════════════════════════════════════════════
 //  BOOT APP
 // ══════════════════════════════════════════════════════
-async function bootApp(user){
+async function bootApp(username, userData){
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
 
-  // load all user data in one read
-  const data = await dbGet(`users/${user.uid}`) || {};
-  const displayName = data.name || user.displayName || user.email;
+  const data = userData || await dbGet('users/'+username) || {};
+  const displayName = data.name || username;
 
   document.getElementById('profileName').textContent = displayName;
   document.getElementById('profileInitials').textContent = displayName.charAt(0).toUpperCase();
@@ -1490,7 +1465,7 @@ async function bootApp(user){
   setTheme(data.theme || 'default');
 
   // datetime
-  updateDateTime(data.first_record_date);
+  updateDateTime(data.first_record_date || null);
   if(window._dtTimer) clearInterval(window._dtTimer);
   window._dtTimer = setInterval(()=>updateDateTime(null), 1000);
 
@@ -2029,7 +2004,24 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// Auth state handled by Firebase onAuthStateChanged above
+// ── Auto-login from sessionStorage ───────────────────
+window.addEventListener('load', async () => {
+  // wait for Firebase module to init
+  let tries = 0;
+  while(!window._fbReady && tries++ < 20){ await new Promise(r=>setTimeout(r,100)); }
+  try {
+    const saved = sessionStorage.getItem('dh_user');
+    if(saved){
+      window._currentUser = saved;
+      const userData = await dbGet('users/'+saved);
+      if(userData && userData._pass){ bootApp(saved, userData); return; }
+      sessionStorage.removeItem('dh_user');
+    }
+  } catch(e){ console.error('auto-login',e); }
+  // hide loading if not logged in
+  const lo = document.getElementById('appLoading');
+  if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
+});
 
 
 // ── expose all onclick handlers to global scope ───────

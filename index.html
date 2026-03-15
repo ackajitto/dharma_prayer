@@ -220,6 +220,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .cat-lp{background:#FCE4EC;color:#AD1457}
 .cat-grandma{background:#E8F5E9;color:#2E7D32}
 .cat-meditation{background:#E0F2F1;color:#00695C}
+.cat-special{background:#FFF8E7;color:#8B6914}
 .cat-other{background:#F3E5F5;color:#6A1B9A}
 
 /* PLAYER */
@@ -688,11 +689,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 // ─── CONSTANTS ───────────────────────────────────────
 const CAT_LABELS = {
   morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
-  lp:'สรรเสริญหลวงปู่สด วาจาสิทธิ์',
-  grandma:'สรรเสริญคุณยายอาจารย์', meditation:'นั่งสมาธิ', other:'อื่นๆ'
+  special:'บทสวดพิเศษ',
+  lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย',
+  meditation:'นั่งสมาธิ', other:'อื่นๆ'
 };
-const CAT_ICONS = {morning:'🌅',evening:'🌙',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
-const CAT_ORDER = ['morning','lp','grandma','meditation','evening','other'];
+const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
+const CAT_ORDER = ['morning','special','lp','grandma','meditation','evening','other'];
 
 // Zone groupings for playlist display
 const ZONE_GROUPS = [
@@ -715,7 +717,7 @@ const ZONE_GROUPS = [
     label: 'บทสวดพิเศษ',
     icon: '🙏',
     color: 'zone-header-special',
-    cats: ['lp','grandma','meditation','other'],
+    cats: ['special'],
     noSubGroup: true
   },
 ];
@@ -733,20 +735,20 @@ const DEFAULT_VIDEOS = [
    url:'https://youtu.be/Z0Ccuq1IY74', cat:'evening'},
 
   // ── บทสวดพิเศษ ──────────────────────────────────
-  {id:'dv3', title:'บทสวดสรรเสริญพระมงคลเทพมุนี',
-   url:'https://youtu.be/dCfhbasEmtQ', cat:'lp'},
+  {id:'dv3', title:'สรรเสริญพระมงคลเทพมุนี',
+   url:'https://youtu.be/dCfhbasEmtQ', cat:'special'},
 
-  {id:'dv4', title:'บทสรรเสริญคุณยายอาจารย์ มหารัตนอุบาสิกาจันทร์ ขนนกยูง',
-   url:'https://youtu.be/q2oDyeaapZE', cat:'grandma'},
+  {id:'dv5', title:'สรรเสริญพระธรรมกาย',
+   url:'https://youtu.be/ZfxHwPCrcso', cat:'special'},
 
-  {id:'dv5', title:'บทสวดสรรเสริญพระธรรมกาย',
-   url:'https://youtu.be/ZfxHwPCrcso', cat:'lp'},
+  {id:'dv6', title:'ธัมมจักกัปปวัตตนสูตร',
+   url:'https://youtu.be/sSZI1ewkEFc', cat:'special'},
 
-  {id:'dv6', title:'บทสวดธัมมจักกัปปวัตตนสูตร - Dhammacakkappavattana Sutta',
-   url:'https://youtu.be/sSZI1ewkEFc', cat:'lp'},
+  {id:'dv4', title:'สรรเสริญคุณยายอาจารย์ ขนนกยูง',
+   url:'https://youtu.be/q2oDyeaapZE', cat:'special'},
 
   {id:'dv7', title:'นำนั่งสมาธิ',
-   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'meditation'},
+   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'special'},
 ];
 // ═══════════════════════════════════════════════════
 
@@ -1061,7 +1063,7 @@ function videoCardHtml(v){
     </div>
     <div class="vi-info">
       <div class="vi-title">${v.title}</div>
-      <span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>
+      ${v.cat==='special'?'':`<span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>`}
     </div>
 
   </div>`;

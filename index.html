@@ -474,6 +474,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
 
+      <!-- Special Stats -->
+      <div id="specialStatsCard" style="background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+        <div style="font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:12px;">🙏 บันทึกบทสวดพิเศษ</div>
+        <div id="specialStatsRoot"><div style="color:var(--text-ghost);font-size:15px;text-align:center;padding:10px">ยังไม่มีการบันทึก</div></div>
+      </div>
+
       <button class="btn-share-today" onclick="openShareModal()">📸 แบ่งปันบุญวันนี้</button>
     </div>
   </div>
@@ -489,6 +495,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <div class="player-frame">
           <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
+        <button id="playerRecordBtn" style="display:none;width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:17px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;">
+          🙏 บันทึกการสวดบทนี้
+        </button>
       </div>
       <div id="playlistRoot"></div>
       <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>
@@ -823,14 +832,17 @@ async function doRegister(){
   try {
     const existing = await dbGet('users/'+username+'/_pass');
     if(existing){ document.getElementById('regErr').textContent='ชื่อผู้ใช้นี้มีผู้ใช้แล้ว'; return; }
+    const joinedDate = new Date().toISOString();
     await dbSet('users/'+username, {
       _pass: btoa(pass),
       name, username, email: emailRaw,
       cnt_morning:0, cnt_evening:0,
       med_morning_min:0, med_evening_min:0,
+      cnt_special:{},
       videos: DEFAULT_VIDEOS,
       theme:'default',
       first_record_date: null,
+      joined_date: joinedDate,
       photo: null,
     });
     window._currentUser = username;
@@ -891,15 +903,17 @@ async function bootApp(username, userData){
   setTheme(data.theme || 'default');
 
   // datetime
-  updateDateTime(data.first_record_date || null);
+  updateDateTime(data.first_record_date || null, data.joined_date || null);
   // update profile totals after data loads
   setTimeout(updateProfileTotals, 100);
   if(window._dtTimer) clearInterval(window._dtTimer);
-  window._dtTimer = setInterval(()=>updateDateTime(null), 1000);
+  const _joinedDate = data.joined_date || null;
+  window._dtTimer = setInterval(()=>updateDateTime(null, _joinedDate), 1000);
 
   renderPlaylist();
   refreshStreakAndCalendar();
   updateProfileTotals();
+  loadSpecialStats();
 }
 
 // ─── STORAGE ─────────────────────────────────────────
@@ -923,7 +937,7 @@ function toBEShort(date){
   }).format(date);
   return th;
 }
-function updateDateTime(firstDate){
+function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
@@ -935,7 +949,11 @@ function updateDateTime(firstDate){
   const row = document.getElementById('dtStartRow');
   if(row){ if(firstDate){row.style.display='flex';const ds=document.getElementById('dtStart');if(ds)ds.textContent=toBEShort(new Date(firstDate));}else{row.style.display='none';}}
   const tst = document.getElementById('todayStartText');
-  if(tst) tst.textContent = firstDate ? ('🌱 ปฏิบัติธรรมตั้งแต่ '+toBEShort(new Date(firstDate))) : '';
+  if(tst){
+    const jd = joinedDate || window._joinedDateCache;
+    if(jd){ window._joinedDateCache = jd; tst.textContent = '🌱 เริ่มใช้งานตั้งแต่ '+toBEShort(new Date(jd)); }
+    else { tst.textContent = ''; }
+  }
 }
 
 // ─── PROFILE PHOTO ────────────────────────────────────
@@ -1000,6 +1018,49 @@ async function recordMeditation(session){
   showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+next+' นาที)');
 }
 
+// ─── SPECIAL BOTTO RECORDING ────────────────────────
+let _currentSpecialVideo = null; // track which special video is playing
+
+async function recordSpecial(videoId, videoTitle){
+  if(!window._currentUser) return;
+  const key = 'cnt_special';
+  const current = await dbGet('users/'+window._currentUser+'/'+key) || {};
+  const safeId = videoId.replace(/[.#$[\]]/g,'_');
+  if(!current[safeId]) current[safeId] = {title: videoTitle, count: 0};
+  current[safeId].count = (current[safeId].count || 0) + 1;
+  current[safeId].title = videoTitle;
+  current[safeId].lastDate = new Date().toISOString();
+  await dbSet('users/'+window._currentUser+'/'+key, current);
+  // update display
+  renderSpecialStats(current);
+  showToast('🙏 บันทึก '+videoTitle+' ครั้งที่ '+current[safeId].count);
+}
+
+function renderSpecialStats(stats){
+  const el = document.getElementById('specialStatsRoot');
+  if(!el) return;
+  if(!stats || !Object.keys(stats).length){
+    el.innerHTML = '<div style="color:var(--text-ghost);font-size:15px;text-align:center;padding:10px">ยังไม่มีการบันทึก</div>';
+    return;
+  }
+  let html = '';
+  Object.values(stats).forEach(s=>{
+    html += `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--cream-dark);">
+      <div>
+        <div style="font-size:16px;font-weight:500;color:var(--text-dark)">${s.title}</div>
+        ${s.lastDate ? '<div style="font-size:12px;color:var(--text-ghost);margin-top:2px">ล่าสุด: '+toBEShort(new Date(s.lastDate))+'</div>' : ''}
+      </div>
+      <div style="font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:var(--gold);min-width:48px;text-align:right">${s.count}<span style="font-size:13px;color:var(--text-ghost)"> ครั้ง</span></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+async function loadSpecialStats(){
+  const stats = await dbGet('users/'+window._currentUser+'/cnt_special') || {};
+  renderSpecialStats(stats);
+}
+
 // ─── EDIT NAME ────────────────────────────────────────
 function openEditName(){
   const cur = document.getElementById('profileName').textContent;
@@ -1046,6 +1107,16 @@ function playVideo(v){
   const badge=document.getElementById('playerCatBadge');
   badge.textContent=CAT_ICONS[v.cat]+' '+CAT_LABELS[v.cat];
   badge.className='vi-badge player-cat-pill cat-'+v.cat;
+  // Show record button for special cat
+  const recBtn = document.getElementById('playerRecordBtn');
+  if(recBtn){
+    if(v.cat==='special'||v.cat==='lp'||v.cat==='grandma'||v.cat==='meditation'){
+      recBtn.style.display='block';
+      recBtn.onclick = ()=>recordSpecial(v.id, v.title);
+    } else {
+      recBtn.style.display='none';
+    }
+  }
   ps.scrollIntoView({behavior:'smooth',block:'start'});
   renderPlaylist();
 }
@@ -1435,6 +1506,7 @@ window.openChangePassword = openChangePassword;
 window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
 window.downloadCard = downloadCard;
+window.recordSpecial = recordSpecial;
 
 
 // ── TAB NAVIGATION ────────────────────────────────────

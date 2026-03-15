@@ -1505,8 +1505,21 @@ async function bootApp(username, userData){
   document.getElementById('meditMorningMin').textContent = data.med_morning_min || 0;
   document.getElementById('meditEveningMin').textContent = data.med_evening_min || 0;
 
-  // videos
-  _cachedVideos = data.videos || DEFAULT_VIDEOS;
+  // videos - Firebase stores arrays as objects {0:{...}, 1:{...}}
+  let rawVideos = data.videos;
+  if(rawVideos && typeof rawVideos === 'object' && !Array.isArray(rawVideos)){
+    rawVideos = Object.values(rawVideos);
+  }
+  if(Array.isArray(rawVideos)){
+    _cachedVideos = rawVideos.filter(v => v && v.id && v.url);
+  } else {
+    _cachedVideos = [];
+  }
+  // ถ้าไม่มีรายการเลย ใส่ DEFAULT_VIDEOS และบันทึกลง Firebase
+  if(!_cachedVideos.length){
+    _cachedVideos = DEFAULT_VIDEOS;
+    await dbSet('users/'+window._currentUser+'/videos', DEFAULT_VIDEOS);
+  }
 
   // theme
   setTheme(data.theme || 'default');
@@ -1701,7 +1714,7 @@ async function addVideo(){
   const ytid=getYTId(url);
   if(!ytid){showToast('⚠️ ลิงก์ยูทูปไม่ถูกต้อง');return}
   _cachedVideos.push({id:'v'+Date.now(),title,url,cat});
-  await uSet('videos',_cachedVideos);
+  await dbSet('users/'+window._currentUser+'/videos', _cachedVideos);
   document.getElementById('addTitle').value='';
   document.getElementById('addUrl').value='';
   renderPlaylist();
@@ -1713,7 +1726,7 @@ async function deleteVideo(id,e){
   e.stopPropagation();
   if(!confirm('ลบรายการนี้ออกจากเพลย์ลิสต์?'))return;
   _cachedVideos = _cachedVideos.filter(v=>v.id!==id);
-  await uSet('videos',_cachedVideos);
+  await dbSet('users/'+window._currentUser+'/videos', _cachedVideos);
   if(activeVideoId===id){
     activeVideoId=null;
     document.getElementById('ytIframe').src='';

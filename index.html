@@ -1091,6 +1091,7 @@ body.theme-night{
         <div class="profile-name-row">
           <div class="profile-name" id="profileName">ผู้ใช้</div>
           <button class="btn-edit-name" onclick="openEditName()" title="แก้ไขชื่อ">✏️</button>
+          <button class="btn-edit-name" onclick="openChangePassword()" title="เปลี่ยนรหัสผ่าน" style="font-size:15px">🔑</button>
         </div>
         <!-- EDIT NAME INLINE -->
         <div id="editNameRow" style="display:none" class="edit-name-row">
@@ -1233,6 +1234,36 @@ body.theme-night{
   </main>
 
     <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>
+
+  <!-- CHANGE PASSWORD MODAL -->
+  <div id="changePwModal" style="display:none" class="share-overlay">
+    <div class="share-modal" style="max-width:360px">
+      <div class="share-modal-header">
+        <span class="share-modal-title">🔑 เปลี่ยนรหัสผ่าน</span>
+        <button class="share-close-btn" onclick="closeChangePassword()">✕</button>
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label style="display:block;font-size:13px;color:var(--text-mid);margin-bottom:6px">รหัสผ่านปัจจุบัน</label>
+        <input id="cpOldPass" type="password" placeholder="กรอกรหัสผ่านเดิม"
+          style="width:100%;padding:10px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:14px;font-family:'Sarabun',sans-serif;outline:none">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label style="display:block;font-size:13px;color:var(--text-mid);margin-bottom:6px">รหัสผ่านใหม่</label>
+        <input id="cpNewPass" type="password" placeholder="รหัสผ่านใหม่ (อย่างน้อย 4 ตัว)"
+          style="width:100%;padding:10px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:14px;font-family:'Sarabun',sans-serif;outline:none">
+      </div>
+      <div class="form-group" style="margin-bottom:18px">
+        <label style="display:block;font-size:13px;color:var(--text-mid);margin-bottom:6px">ยืนยันรหัสผ่านใหม่</label>
+        <input id="cpConfirmPass" type="password" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
+          style="width:100%;padding:10px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:14px;font-family:'Sarabun',sans-serif;outline:none">
+      </div>
+      <div id="cpErr" style="color:#c0392b;font-size:13px;min-height:18px;margin-bottom:12px;text-align:center"></div>
+      <button onclick="doChangePassword()"
+        style="width:100%;padding:12px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:15px;font-weight:600;font-family:'Noto Serif Thai',serif;transition:all .2s">
+        🔑 บันทึกรหัสผ่านใหม่
+      </button>
+    </div>
+  </div>
 
   <!-- SHARE MODAL -->
   <div id="shareModal" style="display:none" class="share-overlay">
@@ -2038,6 +2069,41 @@ window.addEventListener('load', async () => {
 });
 
 
+// ─── CHANGE PASSWORD ─────────────────────────────────
+function openChangePassword(){
+  document.getElementById('cpOldPass').value = '';
+  document.getElementById('cpNewPass').value = '';
+  document.getElementById('cpConfirmPass').value = '';
+  document.getElementById('cpErr').textContent = '';
+  document.getElementById('changePwModal').style.display = 'flex';
+}
+function closeChangePassword(){
+  document.getElementById('changePwModal').style.display = 'none';
+}
+async function doChangePassword(){
+  const oldPass    = document.getElementById('cpOldPass').value;
+  const newPass    = document.getElementById('cpNewPass').value;
+  const confirmPass= document.getElementById('cpConfirmPass').value;
+  const errEl      = document.getElementById('cpErr');
+
+  if(!oldPass||!newPass||!confirmPass){ errEl.textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(newPass.length<4){ errEl.textContent='รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัวอักษร'; return; }
+  if(newPass !== confirmPass){ errEl.textContent='รหัสผ่านใหม่ไม่ตรงกัน'; return; }
+
+  errEl.textContent = '⏳ กำลังตรวจสอบ...';
+  try {
+    // verify old password
+    const storedPass = await dbGet('users/'+window._currentUser+'/_pass');
+    if(storedPass !== btoa(oldPass)){ errEl.textContent='รหัสผ่านเดิมไม่ถูกต้อง'; return; }
+    // save new password
+    await dbSet('users/'+window._currentUser+'/_pass', btoa(newPass));
+    closeChangePassword();
+    showToast('✅ เปลี่ยนรหัสผ่านสำเร็จ 🔑');
+  } catch(e){
+    errEl.textContent = 'เกิดข้อผิดพลาด: '+e.message;
+  }
+}
+
 // ── expose all onclick handlers to global scope ───────
 window.doLogin = doLogin;
 window.doRegister = doRegister;
@@ -2056,6 +2122,9 @@ window.handleProfilePhoto = handleProfilePhoto;
 window.setTheme = setTheme;
 window.openShareModal = openShareModal;
 window.closeShareModal = closeShareModal;
+window.openChangePassword = openChangePassword;
+window.closeChangePassword = closeChangePassword;
+window.doChangePassword = doChangePassword;
 window.downloadCard = downloadCard;
 
 </script>

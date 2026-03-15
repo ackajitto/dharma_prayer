@@ -1344,6 +1344,14 @@ body.theme-night{
 // ══════════════════════════════════════════════════════
 //  FIREBASE HELPERS (username/password — no Auth SDK)
 // ══════════════════════════════════════════════════════
+// แปลงอีเมลเป็น Firebase key (ลบอักขระต้องห้าม)
+function emailToKey(email){
+  return email.toLowerCase()
+    .replace(/\./g, '_dot_')
+    .replace(/@/g, '_at_')
+    .replace(/[#$\[\]]/g, '_');
+}
+
 async function dbGet(path){
   try {
     const snap = await window._dbReadOnce(path);
@@ -1374,10 +1382,11 @@ function toggleAuthMode(showReg){
 }
 
 async function doLogin(){
-  const username = document.getElementById('loginUser').value.trim().toLowerCase();
+  const emailRaw = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass     = document.getElementById('loginPass').value;
-  if(!username||!pass){ document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(!emailRaw||!pass){ document.getElementById('loginErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
   if(!window._fbReady){ document.getElementById('loginErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่'; return; }
+  const username = emailToKey(emailRaw);
   document.getElementById('loginErr').textContent = '⏳ กำลังตรวจสอบ...';
   try {
     const userData = await dbGet('users/'+username);
@@ -1394,19 +1403,19 @@ async function doLogin(){
 
 async function doRegister(){
   const name     = document.getElementById('regName').value.trim();
-  const username = document.getElementById('regUser').value.trim().toLowerCase();
+  const emailRaw = document.getElementById('regUser').value.trim().toLowerCase();
   const pass     = document.getElementById('regPass').value;
-  if(!name||!username||!pass){ document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
+  if(!name||!emailRaw||!pass){ document.getElementById('regErr').textContent='กรุณากรอกข้อมูลให้ครบ'; return; }
   if(pass.length<4){ document.getElementById('regErr').textContent='รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร'; return; }
-  if(!/^[a-z0-9_]+$/.test(username)){ document.getElementById('regErr').textContent='ชื่อผู้ใช้ใช้ได้เฉพาะ a-z, 0-9, _'; return; }
   if(!window._fbReady){ document.getElementById('regErr').textContent='⏳ กำลังโหลด กรุณารอสักครู่'; return; }
+  const username = emailToKey(emailRaw);
   document.getElementById('regErr').textContent = '⏳ กำลังสร้างบัญชี...';
   try {
     const existing = await dbGet('users/'+username+'/_pass');
     if(existing){ document.getElementById('regErr').textContent='ชื่อผู้ใช้นี้มีผู้ใช้แล้ว'; return; }
     await dbSet('users/'+username, {
       _pass: btoa(pass),
-      name, username,
+      name, username, email: emailRaw,
       cnt_morning:0, cnt_evening:0,
       med_morning_min:0, med_evening_min:0,
       videos: DEFAULT_VIDEOS,

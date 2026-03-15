@@ -441,15 +441,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             <span class="rz-stat-label">🧘 สมาธิสะสม</span>
             <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditMorningMin">0</span><span class="rz-unit"> นาที</span></div>
           </div>
-          <button class="btn-record-primary btn-record-morning" onclick="recordCount('morning')">+ บันทึกทำวัตร</button>
-          <div class="med-zone-row">
-            <span class="med-zone-label">🧘</span>
-            <button class="med-step-btn" onclick="stepMed('morningMin',-5)">−</button>
-            <input id="medInputMorningMin" class="med-input" type="number" value="0" min="0" max="999">
-            <button class="med-step-btn" onclick="stepMed('morningMin',5)">＋</button>
-            <span class="med-zone-label" style="font-size:12px">นาที</span>
-            <button class="btn-med-save btn-med-morning" onclick="recordMeditation('morning')">+ บันทึก</button>
-          </div>
         </div>
         <!-- EVENING -->
         <div class="record-zone-card rz-evening">
@@ -461,15 +452,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <div class="rz-stat">
             <span class="rz-stat-label">🧘 สมาธิสะสม</span>
             <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditEveningMin">0</span><span class="rz-unit"> นาที</span></div>
-          </div>
-          <button class="btn-record-primary btn-record-evening" onclick="recordCount('evening')">+ บันทึกทำวัตร</button>
-          <div class="med-zone-row">
-            <span class="med-zone-label">🧘</span>
-            <button class="med-step-btn eve" onclick="stepMed('eveningMin',-5)">−</button>
-            <input id="medInputEveningMin" class="med-input" type="number" value="0" min="0" max="999">
-            <button class="med-step-btn eve" onclick="stepMed('eveningMin',5)">＋</button>
-            <span class="med-zone-label" style="font-size:12px">นาที</span>
-            <button class="btn-med-save btn-med-evening" onclick="recordMeditation('evening')">+ บันทึก</button>
           </div>
         </div>
       </div>
@@ -495,6 +477,35 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <div class="player-frame">
           <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
+        <!-- MORNING record -->
+        <div id="playerRecordMorning" style="display:none;margin-top:10px;">
+          <button style="width:100%;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,#7A4200,#C47A20);color:#FFF8E7;font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(196,122,32,0.4);margin-bottom:8px;transition:all .2s;" onclick="recordCount('morning')">
+            🌅 บันทึกทำวัตรเช้า
+          </button>
+          <div class="med-zone-row" style="background:rgba(100,50,0,0.15);border:1px solid rgba(201,168,76,0.2);border-radius:11px;">
+            <span class="med-zone-label">🧘 สมาธิ</span>
+            <button class="med-step-btn" onclick="stepMed('morningMin',-5)">−</button>
+            <input id="medInputMorningMin" class="med-input" type="number" value="0" min="0" max="999">
+            <button class="med-step-btn" onclick="stepMed('morningMin',5)">＋</button>
+            <span class="med-zone-label" style="font-size:12px">นาที</span>
+            <button class="btn-med-save btn-med-morning" onclick="recordMeditation('morning')">+ บันทึก</button>
+          </div>
+        </div>
+        <!-- EVENING record -->
+        <div id="playerRecordEvening" style="display:none;margin-top:10px;">
+          <button style="width:100%;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,#1a1a5a,#2a2a8a);color:#c8d4ff;font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(42,42,138,0.4);margin-bottom:8px;transition:all .2s;" onclick="recordCount('evening')">
+            🌙 บันทึกทำวัตรเย็น
+          </button>
+          <div class="med-zone-row" style="background:rgba(15,15,70,0.2);border:1px solid rgba(120,120,255,0.2);border-radius:11px;">
+            <span class="med-zone-label" style="color:rgba(180,190,255,0.5)">🧘 สมาธิ</span>
+            <button class="med-step-btn eve" onclick="stepMed('eveningMin',-5)">−</button>
+            <input id="medInputEveningMin" class="med-input" type="number" value="0" min="0" max="999">
+            <button class="med-step-btn eve" onclick="stepMed('eveningMin',5)">＋</button>
+            <span class="med-zone-label" style="font-size:12px;color:rgba(180,190,255,0.4)">นาที</span>
+            <button class="btn-med-save btn-med-evening" onclick="recordMeditation('evening')">+ บันทึก</button>
+          </div>
+        </div>
+        <!-- SPECIAL record -->
         <button id="playerRecordBtn" style="display:none;width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:17px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;">
           🙏 บันทึกการสวดบทนี้
         </button>
@@ -1107,15 +1118,18 @@ function playVideo(v){
   const badge=document.getElementById('playerCatBadge');
   badge.textContent=CAT_ICONS[v.cat]+' '+CAT_LABELS[v.cat];
   badge.className='vi-badge player-cat-pill cat-'+v.cat;
-  // Show record button for special cat
+  // Show record buttons based on cat
   const recBtn = document.getElementById('playerRecordBtn');
-  if(recBtn){
-    if(v.cat==='special'||v.cat==='lp'||v.cat==='grandma'||v.cat==='meditation'){
-      recBtn.style.display='block';
-      recBtn.onclick = ()=>recordSpecial(v.id, v.title);
-    } else {
-      recBtn.style.display='none';
-    }
+  const recMorning = document.getElementById('playerRecordMorning');
+  const recEvening = document.getElementById('playerRecordEvening');
+  if(recBtn) recBtn.style.display='none';
+  if(recMorning) recMorning.style.display='none';
+  if(recEvening) recEvening.style.display='none';
+  if(v.cat==='morning' && recMorning) recMorning.style.display='block';
+  else if(v.cat==='evening' && recEvening) recEvening.style.display='block';
+  else if(recBtn && (v.cat==='special'||v.cat==='lp'||v.cat==='grandma'||v.cat==='meditation')){
+    recBtn.style.display='block';
+    recBtn.onclick = ()=>recordSpecial(v.id, v.title);
   }
   ps.scrollIntoView({behavior:'smooth',block:'start'});
   renderPlaylist();

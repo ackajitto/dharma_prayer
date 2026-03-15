@@ -263,13 +263,7 @@ body.theme-night{
 .content{max-width:900px;margin:0 auto;padding:24px 20px 60px}
 
 /* ADD SECTION */
-.add-panel{
-  background:var(--white);border-radius:18px;
-  border:1.5px dashed var(--cream-mid);
-  padding:20px;margin-top:28px;
-  transition:border-color .2s,box-shadow .2s;
-}
-.add-panel:hover{border-color:var(--gold-light);box-shadow:0 4px 20px var(--shadow-gold)}
+.add-panel{display:none}
 .add-panel-title{
   font-size:13px;color:var(--text-light);font-weight:500;
   margin-bottom:14px;display:flex;align-items:center;gap:6px;
@@ -741,14 +735,6 @@ body.theme-night{
 .cat-meditation{background:#E0F2F1;color:#00695C}
 .cat-other{background:#F3E5F5;color:#6A1B9A}
 
-.vi-del{
-  padding:0 14px;display:flex;align-items:center;justify-content:center;
-  background:none;border:none;color:var(--text-ghost);
-  font-size:20px;cursor:pointer;line-height:1;
-  transition:color .15s,background .15s;
-  flex-shrink:0;
-}
-.vi-del:hover{color:var(--maroon);background:rgba(92,26,26,.06)}
 
 /* EMPTY */
 .empty-state{
@@ -1205,31 +1191,7 @@ body.theme-night{
     <!-- PLAYLIST -->
     <div id="playlistRoot"></div>
 
-    <!-- ADD VIDEO PANEL -->
-    <div class="add-panel">
-      <div class="add-panel-title">เพิ่มลิงก์ยูทูปใหม่</div>
-      <div class="add-fields">
-        <input id="addTitle" class="add-input" placeholder="ชื่อบทสวด / หัวข้อ">
-        <input id="addUrl" class="add-input" placeholder="https://youtube.com/watch?v=...">
-      </div>
-      <div class="add-fields-row2">
-        <select id="addCat" class="add-select">
-          <optgroup label="🌅 ทำวัตรเช้า">
-            <option value="morning">🌅 ทำวัตรเช้า</option>
-          </optgroup>
-          <optgroup label="🌙 ทำวัตรเย็น">
-            <option value="evening">🌙 ทำวัตรเย็น</option>
-          </optgroup>
-          <optgroup label="🙏 บทสวดพิเศษ">
-            <option value="lp">🙏 สรรเสริญหลวงปู่สด</option>
-            <option value="grandma">💛 สรรเสริญคุณยาย</option>
-            <option value="meditation">🧘 นั่งสมาธิ</option>
-            <option value="other">✨ อื่นๆ</option>
-          </optgroup>
-        </select>
-        <button class="btn-add-video" onclick="addVideo()">เพิ่มรายการ</button>
-      </div>
-    </div>
+    <!-- รายการสวดมนต์กำหนดโดยผู้ดูแลระบบในโค้ด DEFAULT_VIDEOS -->
 
   </main>
 
@@ -1505,21 +1467,8 @@ async function bootApp(username, userData){
   document.getElementById('meditMorningMin').textContent = data.med_morning_min || 0;
   document.getElementById('meditEveningMin').textContent = data.med_evening_min || 0;
 
-  // videos - Firebase stores arrays as objects {0:{...}, 1:{...}}
-  let rawVideos = data.videos;
-  if(rawVideos && typeof rawVideos === 'object' && !Array.isArray(rawVideos)){
-    rawVideos = Object.values(rawVideos);
-  }
-  if(Array.isArray(rawVideos)){
-    _cachedVideos = rawVideos.filter(v => v && v.id && v.url);
-  } else {
-    _cachedVideos = [];
-  }
-  // ถ้าไม่มีรายการเลย ใส่ DEFAULT_VIDEOS และบันทึกลง Firebase
-  if(!_cachedVideos.length){
-    _cachedVideos = DEFAULT_VIDEOS;
-    await dbSet('users/'+window._currentUser+'/videos', DEFAULT_VIDEOS);
-  }
+  // รายการวิดีโอกำหนดจากโค้ด DEFAULT_VIDEOS เสมอ (ผู้ดูแลระบบจัดการ)
+  _cachedVideos = DEFAULT_VIDEOS;
 
   // theme
   setTheme(data.theme || 'default');
@@ -1569,15 +1518,36 @@ const ZONE_GROUPS = [
     cats: ['lp','grandma','meditation','other']
   },
 ];
+// ═══════════════════════════════════════════════════
+//  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
+//  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
+// ═══════════════════════════════════════════════════
 const DEFAULT_VIDEOS = [
-  {id:'dv1',title:'ทำวัตรเช้า',url:'https://youtu.be/RvxnE9dY9nc',cat:'morning'},
-  {id:'dv2',title:'ทำวัตรเย็น',url:'https://youtu.be/Z0Ccuq1IY74',cat:'evening'},
-  {id:'dv3',title:'บทสวดสรรเสริญพระมงคลเทพมุนี (หลวงปู่สด)',url:'https://youtu.be/dCfhbasEmtQ',cat:'lp'},
-  {id:'dv4',title:'บทสรรเสริญคุณยายอาจารย์ มหารัตนอุบาสิกาจันทร์ ขนนกยูง',url:'https://youtu.be/q2oDyeaapZE',cat:'grandma'},
-  {id:'dv5',title:'บทสวดสรรเสริญพระธรรมกาย',url:'https://youtu.be/ZfxHwPCrcso',cat:'lp'},
-  {id:'dv6',title:'บทสวดธัมมจักกัปปวัตตนสูตร',url:'https://youtu.be/sSZI1ewkEFc',cat:'lp'},
-  {id:'dv7',title:'นั่งสมาธิ',url:'https://youtu.be/E3cCZcGqf-c',cat:'meditation'},
+  // ── ทำวัตรเช้า ──────────────────────────────────
+  {id:'dv1', title:'ทำวัตรเช้า',
+   url:'https://youtu.be/RvxnE9dY9nc', cat:'morning'},
+
+  // ── ทำวัตรเย็น ──────────────────────────────────
+  {id:'dv2', title:'ทำวัตรเย็น',
+   url:'https://youtu.be/Z0Ccuq1IY74', cat:'evening'},
+
+  // ── บทสวดพิเศษ ──────────────────────────────────
+  {id:'dv3', title:'บทสวดสรรเสริญพระมงคลเทพมุนี',
+   url:'https://youtu.be/dCfhbasEmtQ', cat:'lp'},
+
+  {id:'dv4', title:'บทสรรเสริญคุณยายอาจารย์ มหารัตนอุบาสิกาจันทร์ ขนนกยูง',
+   url:'https://youtu.be/q2oDyeaapZE', cat:'grandma'},
+
+  {id:'dv5', title:'บทสวดสรรเสริญพระธรรมกาย',
+   url:'https://youtu.be/ZfxHwPCrcso', cat:'lp'},
+
+  {id:'dv6', title:'บทสวดธัมมจักกัปปวัตตนสูตร - Dhammacakkappavattana Sutta',
+   url:'https://youtu.be/sSZI1ewkEFc', cat:'lp'},
+
+  {id:'dv7', title:'นำนั่งสมาธิ',
+   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'meditation'},
 ];
+// ═══════════════════════════════════════════════════
 
 // ─── STORAGE ─────────────────────────────────────────
 // ─── STATE ────────────────────────────────────────────
@@ -1705,36 +1675,8 @@ function getYTId(url){
 function thumbUrl(ytid){return ytid?'https://img.youtube.com/vi/'+ytid+'/mqdefault.jpg':''}
 
 // ─── ADD VIDEO ────────────────────────────────────────
-async function addVideo(){
-  const title=document.getElementById('addTitle').value.trim();
-  const url=document.getElementById('addUrl').value.trim();
-  const cat=document.getElementById('addCat').value;
-  if(!title){showToast('⚠️ กรุณากรอกชื่อบทสวด');return}
-  if(!url){showToast('⚠️ กรุณากรอกลิงก์ยูทูป');return}
-  const ytid=getYTId(url);
-  if(!ytid){showToast('⚠️ ลิงก์ยูทูปไม่ถูกต้อง');return}
-  _cachedVideos.push({id:'v'+Date.now(),title,url,cat});
-  await dbSet('users/'+window._currentUser+'/videos', _cachedVideos);
-  document.getElementById('addTitle').value='';
-  document.getElementById('addUrl').value='';
-  renderPlaylist();
-  showToast('✅ เพิ่มรายการสำเร็จ');
-}
 
 // ─── DELETE VIDEO ─────────────────────────────────────
-async function deleteVideo(id,e){
-  e.stopPropagation();
-  if(!confirm('ลบรายการนี้ออกจากเพลย์ลิสต์?'))return;
-  _cachedVideos = _cachedVideos.filter(v=>v.id!==id);
-  await dbSet('users/'+window._currentUser+'/videos', _cachedVideos);
-  if(activeVideoId===id){
-    activeVideoId=null;
-    document.getElementById('ytIframe').src='';
-    document.getElementById('playerSection').style.display='none';
-  }
-  renderPlaylist();
-  showToast('🗑️ ลบรายการแล้ว');
-}
 
 // ─── PLAY VIDEO ───────────────────────────────────────
 function playVideo(v){
@@ -1767,7 +1709,7 @@ function videoCardHtml(v){
       <div class="vi-title">${v.title}</div>
       <span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>
     </div>
-    <button class="vi-del" onclick="deleteVideo('${v.id}',event)" title="ลบรายการ">×</button>
+
   </div>`;
 }
 
@@ -2125,8 +2067,6 @@ window.toggleAuthMode = toggleAuthMode;
 window.recordCount = recordCount;
 window.recordMeditation = recordMeditation;
 window.stepMed = stepMed;
-window.addVideo = addVideo;
-window.deleteVideo = deleteVideo;
 window.playVideo = playVideo;
 window.openEditName = openEditName;
 window.closeEditName = closeEditName;

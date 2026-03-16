@@ -386,6 +386,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
+    <div style="background:rgba(0,0,0,0.35);border-bottom:1px solid rgba(201,168,76,0.2);padding:6px 20px;text-align:center;">
+      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:15px;color:var(--gold-light);letter-spacing:.3px;font-weight:500;"></span>
+    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
@@ -914,6 +917,8 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
+  const hd = document.getElementById('headerDate');
+  if(hd) hd.textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'

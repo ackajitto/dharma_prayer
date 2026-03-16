@@ -392,7 +392,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span class="brand-lotus">🪷</span>
           <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
         </div>
-        <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-logout" onclick="openChangePassword()" style="font-size:13px;">🔑 รหัสผ่าน</button>
+          <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+        </div>
       </div>
     </div>
   </header>
@@ -466,16 +469,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
           </div>
         </div>
-        <div class="settings-row">
-          <span class="settings-icon">🔑</span>
-          <span class="settings-label">เปลี่ยนรหัสผ่าน</span>
-          <button class="settings-btn" onclick="openChangePassword()">เปลี่ยน</button>
-        </div>
-        <div class="settings-row">
-          <span class="settings-icon">📸</span>
-          <span class="settings-label">แบ่งปันบุญ</span>
-          <button class="settings-btn" onclick="openShareModal()">เปิด</button>
-        </div>
+
       </div>
 
       <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>

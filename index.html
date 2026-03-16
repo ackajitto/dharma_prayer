@@ -455,6 +455,26 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
               <span class="pst-num" id="totalMedEvening">0</span>
               <span class="pst-unit"> นาที</span>
             </div>
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv3')" title="สรรเสริญพระมงคลเทพมุนี">
+              <span class="pst-label">🙏 สรรเสริญพระมงคลเทพมุนี</span>
+              <span class="pst-num" id="totalSpecial_dv3">0</span>
+              <span class="pst-unit"> ครั้ง</span>
+            </div>
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv5')" title="สรรเสริญพระธรรมกาย">
+              <span class="pst-label">🙏 สรรเสริญพระธรรมกาย</span>
+              <span class="pst-num" id="totalSpecial_dv5">0</span>
+              <span class="pst-unit"> ครั้ง</span>
+            </div>
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv6')" title="ธัมมจักกัปปวัตตนสูตร">
+              <span class="pst-label">🙏 ธัมมจักกัปปวัตตนสูตร</span>
+              <span class="pst-num" id="totalSpecial_dv6">0</span>
+              <span class="pst-unit"> ครั้ง</span>
+            </div>
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv4')" title="สรรเสริญคุณยายอาจารย์ ขนนกยูง">
+              <span class="pst-label">💛 สรรเสริญคุณยายอาจารย์</span>
+              <span class="pst-num" id="totalSpecial_dv4">0</span>
+              <span class="pst-unit"> ครั้ง</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1056,6 +1076,11 @@ async function recordSpecial(videoId, videoTitle){
   await dbSet('users/'+window._currentUser+'/'+key, current);
   // update display
   renderSpecialStats(current);
+  // refresh pst-card counters
+  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+    const el = document.getElementById('totalSpecial_'+id);
+    if(el){ const s = current[id.replace(/[.#$[\]]/g,'_')]; el.textContent = s ? s.count : 0; }
+  });
   showToast('🙏 บันทึก '+videoTitle+' ครั้งที่ '+current[safeId].count);
 }
 
@@ -1082,6 +1107,15 @@ function renderSpecialStats(stats){
 async function loadSpecialStats(){
   const stats = await dbGet('users/'+window._currentUser+'/cnt_special') || {};
   renderSpecialStats(stats);
+  // update pst-card counters for special videos
+  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+    const el = document.getElementById('totalSpecial_'+id);
+    if(el){
+      // find matching stat by video id
+      const safeId = id.replace(/[.#$[\]]/g,'_');
+      el.textContent = (stats[safeId] && stats[safeId].count) ? stats[safeId].count : 0;
+    }
+  });
 }
 
 // ─── EDIT NAME ────────────────────────────────────────
@@ -1562,27 +1596,20 @@ async function savePasswordFromSettings(){
 
 // ─── SCROLL TO VIDEO ZONE ─────────────────────────────
 function scrollToVideo(type){
-  // Find the video in DEFAULT_VIDEOS matching the type
   let targetVideo = null;
   if(type === 'morning'){
     targetVideo = _cachedVideos.find(v => v.cat === 'morning');
   } else if(type === 'evening'){
     targetVideo = _cachedVideos.find(v => v.cat === 'evening');
   } else if(type === 'meditation'){
-    // scroll to นำนั่งสมาธิ (dv7)
     targetVideo = _cachedVideos.find(v => v.id === 'dv7' || v.cat === 'meditation');
+  } else {
+    // direct video ID lookup (dv3, dv4, dv5, dv6...)
+    targetVideo = _cachedVideos.find(v => v.id === type);
   }
-
-  // Scroll to playlist section first
   const playlistEl = document.getElementById('playlistRoot');
-  if(playlistEl){
-    playlistEl.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-
-  // Then play the video after short delay
-  if(targetVideo){
-    setTimeout(()=>{ playVideo(targetVideo); }, 400);
-  }
+  if(playlistEl) playlistEl.scrollIntoView({behavior:'smooth', block:'start'});
+  if(targetVideo) setTimeout(()=>{ playVideo(targetVideo); }, 400);
 }
 
 // ── expose all onclick handlers to global scope ───────

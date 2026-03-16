@@ -556,7 +556,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
     </div>
     <!-- ══ บทสวดมนต์ ══ -->
-<div id="playerSection" class="player-section" style="display:none">
+<div id="playerSection" class="player-section" style="display:none;scroll-margin-top:80px;">
         <div class="player-header">
           <span class="vi-badge player-cat-pill" id="playerCatBadge"></span>
           <span class="player-title" id="playerTitleText"></span>
@@ -1946,13 +1946,14 @@ function scrollToVideo(type){
 }
 
 function scrollToPlayer(){
+  const ps = document.getElementById('playerSection');
+  if(!ps) return;
+  ps.style.display = 'block';
+  // double rAF: first frame shows the element, second frame has correct layout
   requestAnimationFrame(()=>{
-    const ps = document.getElementById('playerSection');
-    if(!ps) return;
-    ps.style.display = 'block';
-    const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
-    const top = ps.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
-    window.scrollTo({top, behavior:'smooth'});
+    requestAnimationFrame(()=>{
+      ps.scrollIntoView({behavior:'smooth', block:'start'});
+    });
   });
 }
 

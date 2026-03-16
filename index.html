@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>บูชาพระธรรม – สวดมนต์ทำวัตร</title>
+<title>พุทธบูชา – สวดมนต์ทำวัตร</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -386,11 +386,14 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
+    <div style="background:rgba(0,0,0,0.35);border-bottom:1px solid rgba(201,168,76,0.2);padding:6px 20px;text-align:center;">
+      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:15px;color:var(--gold-light);letter-spacing:.3px;font-weight:500;"></span>
+    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
           <span class="brand-lotus">🪷</span>
-          <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
+          <div class="brand-text">พุทธบูชา<small>DHARMA PRAYER</small></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <button class="btn-logout" onclick="openSettingsModal()" style="font-size:20px;padding:6px 10px;">⚙️</button>
@@ -478,10 +481,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
     </div>
 
-
-
-      <!-- Streak -->
-      <div class="streak-card">
+      <!-- Streak - hidden -->
+      <div class="streak-card" style="display:none">
         <div class="streak-flame">🔥</div>
         <div class="streak-info">
           <div class="streak-num" id="streakCount">0</div>
@@ -490,7 +491,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
 
-      <!-- Weekly Calendar -->
       <!-- Record Zones -->
       <div class="record-zone">
         <!-- MORNING -->
@@ -960,6 +960,8 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
+  const hd = document.getElementById('headerDate');
+  if(hd) hd.textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'
@@ -1662,6 +1664,4 @@ function updateProfileTotals(){
 
 </script>
 </body>
-<input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
-</body>
-</html>
+</html>>

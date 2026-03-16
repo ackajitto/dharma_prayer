@@ -539,8 +539,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
       <!-- Share button -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('today')">📅 ยอดวันนี้</button>
-        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('total')">📊 ยอดรวมทั้งหมด</button>
+        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('today')">📅 แชร์ยอดวันนี้</button>
+        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('total')">📊 แชร์ยอดรวมทั้งหมด</button>
       </div>
 
       <!-- Theme bar inline -->
@@ -1762,17 +1762,14 @@ function applyThemeToCard(p){
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
 
-async function openShareModal(mode){
-  mode = mode || 'total';
+function openShareModal(mode){
+  mode = mode || 'today';
 
-  // Show modal immediately with loading indicator
+  // Switch to the requested tab first so DOM has correct values
+  if(mode !== _statsMode) switchStatsMode(mode);
+
+  // Show modal immediately — read values from DOM (already up-to-date)
   document.getElementById('shareModal').style.display = 'flex';
-
-  // Show loading on all stat numbers
-  const statIds = ['scCountMorning','scCountEvening','scMeditMorning','scMeditEvening',
-                   'scSpecial_dv3','scSpecial_dv5','scSpecial_dv6','scSpecial_dv4'];
-  statIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='...'; });
-  document.getElementById('scCardLabel').textContent = '⏳ กำลังโหลด...';
 
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;
@@ -1799,58 +1796,31 @@ async function openShareModal(mode){
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
 
-  // Single fetch of whole user node — much faster than multiple calls
-  const uid = window._currentUser;
-  const userData = await dbGet('users/'+uid) || {};
-  const special = userData.cnt_special || {};
-  const joinedDate = userData.joined_date || null;
-
-  // Use local override if user just edited (overrides stale Firebase cache)
-  const cntM = 'cnt_morning'     in _countOverrides ? _countOverrides['cnt_morning']     : (userData.cnt_morning     || 0);
-  const cntE = 'cnt_evening'     in _countOverrides ? _countOverrides['cnt_evening']     : (userData.cnt_evening     || 0);
-  const medM = 'med_morning_min' in _countOverrides ? _countOverrides['med_morning_min'] : (userData.med_morning_min || 0);
-  const medE = 'med_evening_min' in _countOverrides ? _countOverrides['med_evening_min'] : (userData.med_evening_min || 0);
-  // For specials, merge overrides into sp
-  let sp = {...special};
-  ['dv3','dv5','dv6','dv4'].forEach(id=>{
-    if(id in _countOverrides){
-      if(!sp[id]) sp[id] = {count:0};
-      sp[id].count = _countOverrides[id];
-    }
-  });
+  // Read values directly from DOM (pst-card numbers already correct)
+  const getNum = id => document.getElementById(id)?.textContent || '0';
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
     document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
-    const key = todayKey();
-    const todayData = await dbGet('users/'+uid+'/history/'+key) || {};
-    const todaySpecial = todayData.special || {};
-    document.getElementById('scCountMorning').textContent = todayData.cntM || 0;
-    document.getElementById('scCountEvening').textContent = todayData.cntE || 0;
-    document.getElementById('scMeditMorning').textContent = todayData.medM || 0;
-    document.getElementById('scMeditEvening').textContent = todayData.medE || 0;
-    ['dv3','dv5','dv6','dv4'].forEach(id=>{
-      const el = document.getElementById('scSpecial_'+id);
-      if(el) el.textContent = todaySpecial[id] || 0;
-    });
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = '';
   } else {
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
     document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
-    document.getElementById('scCountMorning').textContent = cntM || 0;
-    document.getElementById('scCountEvening').textContent = cntE || 0;
-    document.getElementById('scMeditMorning').textContent = medM || 0;
-    document.getElementById('scMeditEvening').textContent = medE || 0;
-    ['dv3','dv5','dv6','dv4'].forEach(id=>{
-      const el = document.getElementById('scSpecial_'+id);
-      if(el) el.textContent = (sp[id] && sp[id].count) ? sp[id].count : 0;
-    });
+    const jd = window._joinedDateCache;
     const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = joinedDate
-      ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(joinedDate))
-      : '';
+    if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
   }
+
+  // Fill stats from DOM
+  document.getElementById('scCountMorning').textContent = getNum('totalMorning');
+  document.getElementById('scCountEvening').textContent = getNum('totalEvening');
+  document.getElementById('scMeditMorning').textContent = getNum('totalMedMorning');
+  document.getElementById('scMeditEvening').textContent = getNum('totalMedEvening');
+  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+    const el = document.getElementById('scSpecial_'+id);
+    if(el) el.textContent = getNum('totalSpecial_'+id);
+  });
 }
 function closeShareModal(){
   document.getElementById('shareModal').style.display = 'none';

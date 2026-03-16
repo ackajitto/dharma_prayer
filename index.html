@@ -193,6 +193,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .zone-header-morning{background:linear-gradient(135deg,rgba(92,26,26,0.06),rgba(201,168,76,0.08));border-bottom:1px solid rgba(201,168,76,0.15);}
 .zone-header-evening{background:linear-gradient(135deg,rgba(20,20,80,0.06),rgba(100,100,200,0.08));border-bottom:1px solid rgba(100,100,200,0.12);}
 .zone-header-special{background:linear-gradient(135deg,rgba(92,26,26,0.04),rgba(150,80,0,0.06));border-bottom:1px solid rgba(150,120,60,0.15);}
+.zone-header-live{background:linear-gradient(135deg,rgba(180,0,0,0.08),rgba(220,50,50,0.12));border-bottom:1px solid rgba(220,80,80,0.2);}
 .pzh-icon{font-size:20px}
 .pzh-label{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);flex:1;}
 .pzh-count{font-size:12px;color:var(--text-ghost);background:var(--cream-dark);border-radius:20px;padding:3px 10px;}
@@ -384,6 +385,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 </head>
 <body>
 
@@ -622,8 +624,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span class="vi-badge player-cat-pill" id="playerCatBadge"></span>
           <span class="player-title" id="playerTitleText"></span>
         </div>
-        <div class="player-frame">
+        <div class="player-frame" id="playerFrameYT">
           <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="player-frame" id="playerFrameHLS" style="display:none;">
+          <video id="hlsVideo" controls autoplay style="width:100%;height:100%;display:block;background:#000;" playsinline></video>
         </div>
         <!-- MORNING record -->
         <div id="playerRecordMorning" style="display:none;margin-top:10px;">
@@ -951,10 +956,10 @@ const CAT_LABELS = {
   morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
   special:'บทสวดพิเศษ',
   lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย',
-  meditation:'นั่งสมาธิ', other:'อื่นๆ'
+  meditation:'นั่งสมาธิ', live:'ถ่ายทอดสด', other:'อื่นๆ'
 };
-const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',other:'✨'};
-const CAT_ORDER = ['morning','special','lp','grandma','meditation','evening','other'];
+const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',live:'📺',other:'✨'};
+const CAT_ORDER = ['morning','special','lp','grandma','meditation','evening','live','other'];
 
 // Zone groupings for playlist display
 const ZONE_GROUPS = [
@@ -979,6 +984,15 @@ const ZONE_GROUPS = [
     color: 'zone-header-special',
     cats: ['special'],
     noSubGroup: true
+  },
+  {
+    id: 'zone_live',
+    label: 'ถ่ายทอดสด GBN',
+    icon: '📺',
+    color: 'zone-header-live',
+    cats: ['live'],
+    noSubGroup: true,
+    isLive: true
   },
 ];
 // ═══════════════════════════════════════════════════
@@ -1009,6 +1023,13 @@ const DEFAULT_VIDEOS = [
 
   {id:'dv7', title:'นำนั่งสมาธิ',
    url:'https://youtu.be/r_Bo9LpQ2-E', cat:'special'},
+
+  // ── ถ่ายทอดสด GBN ──────────────────────────────────
+  {id:'gbn_sd1', title:'SD1 – ช่องหลัก',        url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',    cat:'live', isM3u8:true},
+  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_hd/playlist.m3u8',     cat:'live', isM3u8:true},
+  {id:'gbn_en',  title:'EN – English Channel',   url:'https://us.gbnus.com/live/en_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  {id:'gbn_ch',  title:'CH – Chinese Channel',   url:'https://us.gbnus.com/live/cn_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  {id:'gbn_th',  title:'TH – Thai Channel',      url:'https://us.gbnus.com/live/th_low/playlist.m3u8',        cat:'live', isM3u8:true},
 ];
 // ═══════════════════════════════════════════════════
 
@@ -1134,6 +1155,8 @@ async function doLogout(){
   document.getElementById('loginScreen').style.display = 'flex';
   if(window._dtTimer) clearInterval(window._dtTimer);
   document.getElementById('ytIframe').src = '';
+  if(window._hls){ window._hls.destroy(); window._hls = null; }
+  document.getElementById('hlsVideo').src = '';
   document.getElementById('playerSection').style.display = 'none';
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
@@ -1519,11 +1542,49 @@ function thumbUrl(ytid){return ytid?'https://img.youtube.com/vi/'+ytid+'/mqdefau
 
 // ─── PLAY VIDEO ───────────────────────────────────────
 function playVideo(v){
-  const ytid=getYTId(v.url);
-  if(!ytid){showToast('⚠️ ลิงก์ไม่ถูกต้อง');return}
   activeVideoId=v.id;
   const ps=document.getElementById('playerSection');
   ps.style.display='block';
+
+  const frameYT  = document.getElementById('playerFrameYT');
+  const frameHLS = document.getElementById('playerFrameHLS');
+  const hlsVideo = document.getElementById('hlsVideo');
+
+  // HLS live stream
+  if(v.isM3u8 || v.url.includes('.m3u8')){
+    frameYT.style.display  = 'none';
+    frameHLS.style.display = 'block';
+    document.getElementById('ytIframe').src = '';
+  if(window._hls){ window._hls.destroy(); window._hls = null; }
+  document.getElementById('hlsVideo').src = '';
+    if(window._hls){ window._hls.destroy(); window._hls = null; }
+    if(Hls.isSupported()){
+      const hls = new Hls();
+      hls.loadSource(v.url);
+      hls.attachMedia(hlsVideo);
+      hls.on(Hls.Events.MANIFEST_PARSED, ()=>hlsVideo.play());
+      hls.on(Hls.Events.ERROR, (e,d)=>{
+        if(d.fatal) showToast('⚠️ ไม่สามารถโหลดช่องนี้ได้ ลองใหม่อีกครั้ง');
+      });
+      window._hls = hls;
+    } else if(hlsVideo.canPlayType('application/vnd.apple.mpegurl')){
+      // Safari native HLS
+      hlsVideo.src = v.url;
+      hlsVideo.play();
+    } else {
+      showToast('⚠️ Browser ไม่รองรับ HLS stream');
+    }
+    scrollToPlayer();
+    renderPlaylist();
+    return;
+  }
+
+  // YouTube
+  frameYT.style.display  = 'block';
+  frameHLS.style.display = 'none';
+  if(window._hls){ window._hls.destroy(); window._hls = null; }
+  const ytid=getYTId(v.url);
+  if(!ytid){showToast('⚠️ ลิงก์ไม่ถูกต้อง');return}
   document.getElementById('ytIframe').src='https://www.youtube.com/embed/'+ytid+'?autoplay=1&rel=0';
   document.getElementById('playerTitleText').textContent=v.title;
   const badge=document.getElementById('playerCatBadge');
@@ -1555,6 +1616,25 @@ function playVideo(v){
 
 // ─── RENDER PLAYLIST ──────────────────────────────────
 function videoCardHtml(v){
+  // Special card for live streams — open in new tab
+  if(v.cat === 'live'){
+    const isYT = v.url.includes('youtu');
+    const ytid = isYT ? getYTId(v.url) : '';
+    const thumb = ytid ? thumbUrl(ytid) : '';
+    return `<div class="video-item" style="cursor:pointer;" onclick="playVideo(${JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat,isM3u8:!!v.isM3u8}).replace(/"/g,'&quot;')})">
+      <div class="vi-num" style="background:linear-gradient(to bottom,#8B0000,#cc2222);color:#fff;">📺</div>
+      <div class="vi-thumb" style="background:#1a0808;">${thumb?`<img src="${thumb}" loading="lazy" alt="">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;">📺</div>'}
+        <div class="vi-play" style="background:rgba(200,0,0,0.2);"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="red"/></svg></div>
+      </div>
+      <div class="vi-info">
+        <div class="vi-title">${v.title}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#ff4444;font-weight:700;"><span style="width:7px;height:7px;border-radius:50%;background:#ff2222;display:inline-block;box-shadow:0 0 6px #ff2222;"></span>LIVE</span>
+          <span onclick="event.stopPropagation()" style="display:inline-block;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;">▶ รับชมสด</span>
+        </div>
+      </div>
+    </div>`;
+  }
   const ytid=getYTId(v.url);
   const thumb=thumbUrl(ytid);
   const isActive=v.id===activeVideoId;
@@ -1568,7 +1648,6 @@ function videoCardHtml(v){
       <div class="vi-title">${v.title}</div>
       ${v.cat==='special'?'':`<span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>`}
     </div>
-
   </div>`;
 }
 

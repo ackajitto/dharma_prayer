@@ -320,6 +320,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- Firebase via jsDelivr (CSP-safe, no eval) -->
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-database-compat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-auth-compat.min.js"></script>
 <script>
 (function(){
   const cfg = {
@@ -339,6 +340,38 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   // helpers used by main script
   window._dbReadOnce = function(path){ return db.ref(path).once('value'); };
   window._dbWrite    = function(path, val){ return db.ref(path).set(val); };
+  // Firebase Auth
+  const auth = firebase.auth();
+  window._auth = auth;
+  auth.onAuthStateChanged(async (user)=>{
+    if(user && !window._currentUser){
+      // Google sign-in success — auto-boot
+      const key = emailToKey(user.email);
+      window._currentUser = key;
+      try { sessionStorage.setItem('dh_user', key); } catch(e){}
+      let userData = await window._dbReadOnce('users/'+key).then(s=>s.exists()?s.val():null);
+      if(!userData){
+        // First time Google login — create profile
+        const joinedDate = new Date().toISOString();
+        const newUser = {
+          _pass: '_google_',
+          name: user.displayName || user.email.split('@')[0],
+          username: key,
+          email: user.email,
+          cnt_morning:0, cnt_evening:0,
+          med_morning_min:0, med_evening_min:0,
+          cnt_special:{},
+          theme:'default',
+          first_record_date: null,
+          joined_date: joinedDate,
+          photo: user.photoURL || null,
+        };
+        await window._dbWrite('users/'+key, newUser);
+        userData = newUser;
+      }
+      bootApp(key, userData);
+    }
+  });
 
   // hide loading overlay
   function hideLoading(){
@@ -367,6 +400,15 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
     <div class="login-title">สวดมนต์ถวายเป็นพุทธบูชา</div>
     <div class="login-sub">เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน</div>
     <div id="loginForm">
+      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid rgba(201,168,76,0.25);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;backdrop-filter:blur(4px);" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+        เข้าสู่ระบบด้วย Google
+      </button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+        <span style="color:rgba(232,213,163,0.35);font-size:13px;">หรือใช้อีเมล</span>
+        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+      </div>
       <div class="form-group"><label>อีเมล</label><input id="loginUser" type="email" placeholder="name@gmail.com" autocomplete="email"></div>
       <div class="form-group"><label>รหัสผ่าน</label><input id="loginPass" type="password" placeholder="กรอกรหัสผ่าน" autocomplete="current-password"></div>
       <div class="form-error" id="loginErr"></div>
@@ -374,6 +416,15 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="login-divider">ยังไม่มีบัญชี? <span onclick="toggleAuthMode(true)">สมัครสมาชิก</span></div>
     </div>
     <div id="registerForm" style="display:none">
+      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid rgba(201,168,76,0.25);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+        สมัครด้วย Google
+      </button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+        <span style="color:rgba(232,213,163,0.35);font-size:13px;">หรือสมัครด้วยอีเมล</span>
+        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+      </div>
       <div class="form-group"><label>ชื่อแสดง</label><input id="regName" type="text" placeholder="ชื่อของท่าน"></div>
       <div class="form-group"><label>อีเมล</label><input id="regUser" type="email" placeholder="name@gmail.com" autocomplete="email"></div>
       <div class="form-group"><label>รหัสผ่าน</label><input id="regPass" type="password" placeholder="อย่างน้อย 4 ตัวอักษร" autocomplete="new-password"></div>
@@ -991,6 +1042,27 @@ function toggleAuthMode(showReg){
   document.getElementById('registerForm').style.display = showReg?'block':'none';
   document.getElementById('loginErr').textContent = '';
   document.getElementById('regErr').textContent = '';
+}
+
+async function doGoogleLogin(){
+  if(!window._auth){ showLoginErr('⏳ กำลังโหลด กรุณารอสักครู่'); return; }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:'select_account'});
+  try {
+    document.getElementById('loginErr').textContent = '⏳ กำลังเชื่อมต่อ Google...';
+    await window._auth.signInWithPopup(provider);
+    // onAuthStateChanged handles the rest
+  } catch(e){
+    const msg = e.code === 'auth/popup-closed-by-user' ? 'ปิดหน้าต่าง Google แล้ว' :
+                e.code === 'auth/popup-blocked' ? '⚠️ Popup ถูกบล็อก กรุณาอนุญาต Popup' :
+                'เกิดข้อผิดพลาด: '+e.message;
+    document.getElementById('loginErr').textContent = msg;
+  }
+}
+
+function showLoginErr(msg){
+  const el = document.getElementById('loginErr');
+  if(el) el.textContent = msg;
 }
 
 async function doLogin(){
@@ -1987,6 +2059,7 @@ function scrollToPlayer(){
 
 // ── expose all onclick handlers to global scope ───────
 window.doLogin = doLogin;
+window.doGoogleLogin = doGoogleLogin;
 window.doRegister = doRegister;
 window.doLogout = doLogout;
 window.toggleAuthMode = toggleAuthMode;

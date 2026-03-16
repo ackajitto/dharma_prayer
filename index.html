@@ -1753,8 +1753,14 @@ function applyThemeToCard(p){
 async function openShareModal(mode){
   mode = mode || 'total';
 
-  // Show modal first so user sees it opening
+  // Show modal immediately with loading indicator
   document.getElementById('shareModal').style.display = 'flex';
+
+  // Show loading on all stat numbers
+  const statIds = ['scCountMorning','scCountEvening','scMeditMorning','scMeditEvening',
+                   'scSpecial_dv3','scSpecial_dv5','scSpecial_dv6','scSpecial_dv4'];
+  statIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='...'; });
+  document.getElementById('scCardLabel').textContent = '⏳ กำลังโหลด...';
 
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;

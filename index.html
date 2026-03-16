@@ -2007,6 +2007,12 @@ async function adjustCount(key, delta){
     if(pstEl) pstEl.textContent = next;
     // reload special stats display
     renderSpecialStats(special);
+    // sync today's history for special
+    const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
+    const todayRec = await dbGet(todayPath) || {};
+    if(!todayRec.special) todayRec.special = {};
+    todayRec.special[key] = next; // set to absolute value
+    await dbSet(todayPath, todayRec);
   } else {
     await dbSet('users/'+window._currentUser+'/'+key, next);
     // update countMorning/Evening/medit displays
@@ -2020,6 +2026,19 @@ async function adjustCount(key, delta){
       domMap[key].forEach(id=>{
         const e=document.getElementById(id); if(e) e.textContent=next;
       });
+    }
+    // sync today's history for morning/evening/meditation
+    const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
+    const todayRec = await dbGet(todayPath) || {};
+    const todayFieldMap = {
+      cnt_morning: 'cntM',
+      cnt_evening: 'cntE',
+      med_morning_min: 'medM',
+      med_evening_min: 'medE',
+    };
+    if(todayFieldMap[key]){
+      todayRec[todayFieldMap[key]] = next; // set to absolute value
+      await dbSet(todayPath, todayRec);
     }
   }
 }

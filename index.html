@@ -1185,6 +1185,7 @@ async function bootApp(username, userData){
 // ─── STATE ────────────────────────────────────────────
 let activeVideoId = null;
 let _cachedVideos = [];
+const _countOverrides = {}; // local cache — always reflects latest user-edited values
 function uid(){ return window._currentUser; }
 
 // ─── DATE / TIME ──────────────────────────────────────
@@ -1985,9 +1986,6 @@ async function refreshSettingsCounts(){
     if(el) el.textContent = v;
   });
 }
-
-// Local override cache — ensures share modal always sees latest adjusted values
-const _countOverrides = {};
 
 async function adjustCount(key, delta){
   const el = document.getElementById('settingsCount_'+key);

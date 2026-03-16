@@ -1456,7 +1456,13 @@ function playVideo(v){
     recBtn.style.display='block';
     recBtn.onclick = ()=>recordSpecial(v.id, v.title);
   }
-  ps.scrollIntoView({behavior:'smooth',block:'start'});
+  // Scroll to player — use window.scrollTo for better mobile support
+  setTimeout(()=>{
+    const rect = ps.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
+    window.scrollTo({top: scrollTop + rect.top - headerH - 8, behavior:'smooth'});
+  }, 50);
   renderPlaylist();
 }
 
@@ -1937,12 +1943,26 @@ function scrollToVideo(type){
   } else if(type === 'meditation'){
     targetVideo = _cachedVideos.find(v => v.id === 'dv7' || v.cat === 'meditation');
   } else {
-    // direct video ID lookup (dv3, dv4, dv5, dv6...)
     targetVideo = _cachedVideos.find(v => v.id === type);
   }
-  const playlistEl = document.getElementById('playlistRoot');
-  if(playlistEl) playlistEl.scrollIntoView({behavior:'smooth', block:'start'});
-  if(targetVideo) setTimeout(()=>{ playVideo(targetVideo); }, 400);
+  if(targetVideo){
+    // Play first, then scroll to player
+    playVideo(targetVideo);
+    // Give player time to become visible, then scroll to it
+    setTimeout(()=>{
+      const ps = document.getElementById('playerSection');
+      if(ps && ps.style.display !== 'none'){
+        // Use window.scrollTo for better mobile compatibility
+        const rect = ps.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
+        window.scrollTo({
+          top: scrollTop + rect.top - headerH - 8,
+          behavior: 'smooth'
+        });
+      }
+    }, 150);
+  }
 }
 
 // ── expose all onclick handlers to global scope ───────

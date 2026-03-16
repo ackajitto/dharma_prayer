@@ -1777,15 +1777,23 @@ async function openShareModal(mode){
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
 
-  // Always fetch fresh data from Firebase
-  const data = await dbGet('users/'+window._currentUser) || {};
-  const special = data.cnt_special || {};
+  // Fetch each field separately to guarantee latest values after any edits
+  const uid = window._currentUser;
+  const [cntM, cntE, medM, medE, special, joinedDate] = await Promise.all([
+    dbGet('users/'+uid+'/cnt_morning'),
+    dbGet('users/'+uid+'/cnt_evening'),
+    dbGet('users/'+uid+'/med_morning_min'),
+    dbGet('users/'+uid+'/med_evening_min'),
+    dbGet('users/'+uid+'/cnt_special'),
+    dbGet('users/'+uid+'/joined_date'),
+  ]);
+  const sp = special || {};
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
     document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
     const key = todayKey();
-    const todayData = await dbGet('users/'+window._currentUser+'/history/'+key) || {};
+    const todayData = await dbGet('users/'+uid+'/history/'+key) || {};
     const todaySpecial = todayData.special || {};
     document.getElementById('scCountMorning').textContent = todayData.cntM || 0;
     document.getElementById('scCountEvening').textContent = todayData.cntE || 0;
@@ -1800,17 +1808,17 @@ async function openShareModal(mode){
   } else {
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
     document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
-    document.getElementById('scCountMorning').textContent = data.cnt_morning || 0;
-    document.getElementById('scCountEvening').textContent = data.cnt_evening || 0;
-    document.getElementById('scMeditMorning').textContent = data.med_morning_min || 0;
-    document.getElementById('scMeditEvening').textContent = data.med_evening_min || 0;
+    document.getElementById('scCountMorning').textContent = cntM || 0;
+    document.getElementById('scCountEvening').textContent = cntE || 0;
+    document.getElementById('scMeditMorning').textContent = medM || 0;
+    document.getElementById('scMeditEvening').textContent = medE || 0;
     ['dv3','dv5','dv6','dv4'].forEach(id=>{
       const el = document.getElementById('scSpecial_'+id);
-      if(el) el.textContent = (special[id] && special[id].count) ? special[id].count : 0;
+      if(el) el.textContent = (sp[id] && sp[id].count) ? sp[id].count : 0;
     });
     const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = data.joined_date
-      ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(data.joined_date))
+    if(firstEl) firstEl.textContent = joinedDate
+      ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(joinedDate))
       : '';
   }
 }

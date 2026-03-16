@@ -1787,23 +1787,19 @@ async function openShareModal(mode){
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
 
-  // Fetch each field separately to guarantee latest values after any edits
+  // Single fetch of whole user node — much faster than multiple calls
   const uid = window._currentUser;
-  const [cntM_raw, cntE_raw, medM_raw, medE_raw, special, joinedDate] = await Promise.all([
-    dbGet('users/'+uid+'/cnt_morning'),
-    dbGet('users/'+uid+'/cnt_evening'),
-    dbGet('users/'+uid+'/med_morning_min'),
-    dbGet('users/'+uid+'/med_evening_min'),
-    dbGet('users/'+uid+'/cnt_special'),
-    dbGet('users/'+uid+'/joined_date'),
-  ]);
+  const userData = await dbGet('users/'+uid) || {};
+  const special = userData.cnt_special || {};
+  const joinedDate = userData.joined_date || null;
+
   // Use local override if user just edited (overrides stale Firebase cache)
-  const cntM  = 'cnt_morning'    in _countOverrides ? _countOverrides['cnt_morning']    : (cntM_raw  || 0);
-  const cntE  = 'cnt_evening'    in _countOverrides ? _countOverrides['cnt_evening']    : (cntE_raw  || 0);
-  const medM  = 'med_morning_min'in _countOverrides ? _countOverrides['med_morning_min']: (medM_raw  || 0);
-  const medE  = 'med_evening_min'in _countOverrides ? _countOverrides['med_evening_min']: (medE_raw  || 0);
+  const cntM = 'cnt_morning'     in _countOverrides ? _countOverrides['cnt_morning']     : (userData.cnt_morning     || 0);
+  const cntE = 'cnt_evening'     in _countOverrides ? _countOverrides['cnt_evening']     : (userData.cnt_evening     || 0);
+  const medM = 'med_morning_min' in _countOverrides ? _countOverrides['med_morning_min'] : (userData.med_morning_min || 0);
+  const medE = 'med_evening_min' in _countOverrides ? _countOverrides['med_evening_min'] : (userData.med_evening_min || 0);
   // For specials, merge overrides into sp
-  let sp = special ? {...special} : {};
+  let sp = {...special};
   ['dv3','dv5','dv6','dv4'].forEach(id=>{
     if(id in _countOverrides){
       if(!sp[id]) sp[id] = {count:0};

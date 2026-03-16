@@ -788,30 +788,79 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           </div>
         </div>
         <div id="scDate" style="font-size:11px;color:rgba(232,213,163,0.4);margin-bottom:14px;letter-spacing:.4px;position:relative;z-index:1;text-align:center"></div>
-        <div data-sc="statsbox" style="width:100%;display:flex;border-radius:14px;overflow:hidden;border:1px solid rgba(201,168,76,0.2);margin-bottom:10px;position:relative;z-index:1">
-          <div data-sc="morning" style="flex:1;padding:12px 10px;background:rgba(100,50,0,0.35);display:flex;flex-direction:column;gap:8px">
-            <div style="font-size:18px;text-align:center">🌅</div>
-            <div style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:.5px;font-weight:600;text-align:center" data-sc="mlabel">สวดมนต์ทำวัตรเช้า</div>
-            <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
-              <div style="font-size:9px;color:rgba(232,213,163,0.4);margin-bottom:2px">จำนวนครั้ง</div>
-              <div style="display:flex;align-items:baseline;justify-content:center;gap:3px"><span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:#C9A84C;line-height:1">0</span><span style="font-size:11px;color:rgba(232,213,163,0.4)">ครั้ง</span></div>
+        <div style="width:100%;background:rgba(0,0,0,0.25);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:10px 12px;margin-bottom:10px;position:relative;z-index:1;">
+          <div style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:1px;font-weight:600;margin-bottom:8px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🌅</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเช้า</span>
             </div>
-            <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
-              <div style="font-size:9px;color:rgba(232,213,163,0.4);margin-bottom:2px">🧘 นั่งสมาธิ</div>
-              <div style="display:flex;align-items:baseline;justify-content:center;gap:3px"><span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1">0</span><span style="font-size:11px;color:rgba(232,213,163,0.4)">นาที</span></div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
             </div>
-          </div>
-          <div data-sc="divider" style="width:1px;background:rgba(201,168,76,0.15)"></div>
-          <div data-sc="evening" style="flex:1;padding:12px 10px;background:rgba(15,15,70,0.4);display:flex;flex-direction:column;gap:8px">
-            <div style="font-size:18px;text-align:center">🌙</div>
-            <div style="font-size:10px;color:rgba(180,190,255,0.5);letter-spacing:.5px;font-weight:600;text-align:center" data-sc="elabel">สวดมนต์ทำวัตรเย็น</div>
-            <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
-              <div style="font-size:9px;color:rgba(180,190,255,0.35);margin-bottom:2px">จำนวนครั้ง</div>
-              <div style="display:flex;align-items:baseline;justify-content:center;gap:3px"><span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:#c8d4ff;line-height:1">0</span><span style="font-size:11px;color:rgba(180,190,255,0.35)">ครั้ง</span></div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🌙</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเย็น</span>
             </div>
-            <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:7px 8px;text-align:center">
-              <div style="font-size:9px;color:rgba(180,190,255,0.35);margin-bottom:2px">🧘 นั่งสมาธิ</div>
-              <div style="display:flex;align-items:baseline;justify-content:center;gap:3px"><span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1">0</span><span style="font-size:11px;color:rgba(180,190,255,0.35)">นาที</span></div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🧘</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเช้า</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🧘</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเย็น</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระมงคลเทพมุนี</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv3" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระธรรมกาย</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv5" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ธัมมจักกัปปวัตตนสูตร</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv6" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">💛</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญคุณยายอาจารย์</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv4" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#ffe0a0;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
             </div>
           </div>
         </div>
@@ -1645,6 +1694,12 @@ function openShareModal(){
   document.getElementById('scCountEvening').textContent = document.getElementById('countEvening').textContent || '0';
   document.getElementById('scMeditMorning').textContent = document.getElementById('meditMorningMin').textContent || '0';
   document.getElementById('scMeditEvening').textContent = document.getElementById('meditEveningMin').textContent || '0';
+  // special stats
+  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+    const el = document.getElementById('scSpecial_'+id);
+    const src = document.getElementById('totalSpecial_'+id);
+    if(el && src) el.textContent = src.textContent || '0';
+  });
   // date
   const now = new Date();
   const dateStr = new Intl.DateTimeFormat('th-TH',{

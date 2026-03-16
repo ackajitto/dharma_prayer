@@ -386,6 +386,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
+    <!-- Date bar top -->
+    <div id="headerDateBar" style="background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.15);padding:6px 20px;text-align:center;">
+      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:14px;color:var(--gold-light);letter-spacing:.3px;"></span>
+    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
@@ -393,7 +397,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-logout" onclick="openChangePassword()" style="font-size:13px;">🔑 รหัสผ่าน</button>
+          <button class="btn-logout" onclick="openSettingsModal()" style="font-size:13px;">⚙️ ตั้งค่า</button>
           <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
         </div>
       </div>
@@ -407,6 +411,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
     <!-- ══ โปรไฟล์ ══ -->
 <!-- Profile Card -->
       <div class="profile-card">
+        <div style="text-align:center;position:relative;z-index:1;">
+          <div style="font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--gold-light);letter-spacing:.5px;margin-bottom:3px;">สวดมนต์ถวายเป็นพุทธบูชา</div>
+          <div style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.55);letter-spacing:.3px;">บูชาธรรมมหาปูชนียาจารย์</div>
+          <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px auto 0;"></div>
+        </div>
         <div class="profile-photo-wrap">
           <div class="profile-photo-ring">
             <div class="profile-photo-inner" id="profilePhotoInner">
@@ -454,25 +463,20 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
 
-      <!-- Settings -->
-      <div class="settings-card">
-        <div class="settings-title">⚙️ ตั้งค่า</div>
-        <div class="settings-row">
-          <span class="settings-icon">🎨</span>
-          <span class="settings-label">ธีมสี</span>
-          <div class="theme-dots-row">
-            <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"></div>
-            <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"></div>
-            <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"></div>
-            <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"></div>
-            <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"></div>
-            <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
-          </div>
+      <!-- Theme bar inline -->
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--text-light);white-space:nowrap;">🎨 ธีมสี</span>
+        <div class="theme-dots-row">
+          <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"></div>
+          <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"></div>
+          <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"></div>
+          <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"></div>
+          <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"></div>
+          <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
         </div>
-
       </div>
 
-      <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>
+
 
   </div>
 
@@ -605,6 +609,41 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
   </div>
 
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settingsModal" style="display:none" class="share-overlay">
+  <div class="share-modal" style="max-width:380px">
+    <div class="share-modal-header">
+      <span class="share-modal-title">⚙️ ตั้งค่าบัญชี</span>
+      <button class="share-close-btn" onclick="closeSettingsModal()">✕</button>
+    </div>
+    <!-- Upload photo -->
+    <div style="border-bottom:1px solid var(--cream-dark);padding-bottom:16px;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:600;color:var(--text-mid);margin-bottom:10px;">📷 รูปโปรไฟล์</div>
+      <label style="display:block;width:100%;padding:12px;border-radius:13px;border:2px dashed var(--cream-mid);text-align:center;cursor:pointer;font-size:15px;color:var(--text-light);background:var(--cream);transition:all .2s;" onmouseenter="this.style.borderColor='var(--gold-light)'" onmouseleave="this.style.borderColor='var(--cream-mid)'">
+        📷 กดเพื่ออัปโหลดรูป
+        <input type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this);closeSettingsModal();">
+      </label>
+    </div>
+    <!-- Change name -->
+    <div style="border-bottom:1px solid var(--cream-dark);padding-bottom:16px;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:600;color:var(--text-mid);margin-bottom:10px;">✏️ เปลี่ยนชื่อแสดง</div>
+      <div style="display:flex;gap:8px;">
+        <input id="settingsNameInput" type="text" style="flex:1;padding:11px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;" placeholder="ชื่อใหม่">
+        <button onclick="saveNameFromSettings()" style="padding:11px 18px;border-radius:11px;border:none;cursor:pointer;background:var(--gold-dark);color:var(--cream);font-size:15px;font-family:'Sarabun',sans-serif;font-weight:600;">บันทึก</button>
+      </div>
+    </div>
+    <!-- Change password -->
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--text-mid);margin-bottom:10px;">🔑 เปลี่ยนรหัสผ่าน</div>
+      <input id="settingsOldPass" type="password" style="width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;margin-bottom:8px;" placeholder="รหัสผ่านปัจจุบัน">
+      <input id="settingsNewPass" type="password" style="width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;margin-bottom:8px;" placeholder="รหัสผ่านใหม่ (4 ตัวขึ้นไป)">
+      <input id="settingsConfirmPass" type="password" style="width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;margin-bottom:8px;" placeholder="ยืนยันรหัสผ่านใหม่">
+      <div id="settingsPwErr" style="color:#c0392b;font-size:14px;min-height:16px;margin-bottom:8px;"></div>
+      <button onclick="savePasswordFromSettings()" style="width:100%;padding:12px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:16px;font-weight:600;font-family:'Noto Serif Thai',serif;">🔑 บันทึกรหัสผ่านใหม่</button>
+    </div>
+  </div>
 </div>
 
 <!-- CHANGE PASSWORD MODAL -->
@@ -940,6 +979,7 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
+  if(document.getElementById('headerDate')) document.getElementById('headerDate').textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'
@@ -1497,6 +1537,46 @@ async function doChangePassword(){
   }
 }
 
+// ─── SETTINGS MODAL ──────────────────────────────────
+function openSettingsModal(){
+  const cur = document.getElementById('profileName').textContent;
+  document.getElementById('settingsNameInput').value = cur;
+  document.getElementById('settingsOldPass').value = '';
+  document.getElementById('settingsNewPass').value = '';
+  document.getElementById('settingsConfirmPass').value = '';
+  document.getElementById('settingsPwErr').textContent = '';
+  document.getElementById('settingsModal').style.display = 'flex';
+}
+function closeSettingsModal(){
+  document.getElementById('settingsModal').style.display = 'none';
+}
+async function saveNameFromSettings(){
+  const newName = document.getElementById('settingsNameInput').value.trim();
+  if(!newName){showToast('⚠️ กรุณากรอกชื่อ');return}
+  await uSet('name', newName);
+  document.getElementById('profileName').textContent = newName;
+  document.getElementById('profileInitials').textContent = newName.charAt(0).toUpperCase();
+  closeSettingsModal();
+  showToast('✅ บันทึกชื่อใหม่แล้ว: '+newName);
+}
+async function savePasswordFromSettings(){
+  const oldPass = document.getElementById('settingsOldPass').value;
+  const newPass = document.getElementById('settingsNewPass').value;
+  const confirmPass = document.getElementById('settingsConfirmPass').value;
+  const errEl = document.getElementById('settingsPwErr');
+  if(!oldPass||!newPass||!confirmPass){errEl.textContent='กรุณากรอกข้อมูลให้ครบ';return}
+  if(newPass.length<4){errEl.textContent='รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัว';return}
+  if(newPass!==confirmPass){errEl.textContent='รหัสผ่านใหม่ไม่ตรงกัน';return}
+  errEl.textContent='⏳ กำลังตรวจสอบ...';
+  try{
+    const stored = await dbGet('users/'+window._currentUser+'/_pass');
+    if(stored!==btoa(oldPass)){errEl.textContent='รหัสผ่านเดิมไม่ถูกต้อง';return}
+    await dbSet('users/'+window._currentUser+'/_pass', btoa(newPass));
+    closeSettingsModal();
+    showToast('✅ เปลี่ยนรหัสผ่านสำเร็จ 🔑');
+  }catch(e){errEl.textContent='เกิดข้อผิดพลาด: '+e.message;}
+}
+
 // ── expose all onclick handlers to global scope ───────
 window.doLogin = doLogin;
 window.doRegister = doRegister;
@@ -1517,6 +1597,10 @@ window.openChangePassword = openChangePassword;
 window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
 window.downloadCard = downloadCard;
+window.openSettingsModal = openSettingsModal;
+window.closeSettingsModal = closeSettingsModal;
+window.saveNameFromSettings = saveNameFromSettings;
+window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 
 

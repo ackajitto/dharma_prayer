@@ -1446,20 +1446,17 @@ function playVideo(v){
   if(recMed) recMed.style.display='none';
 
   if(v.cat==='morning' && recMorning){
-    recMorning.style.display='block';
+    // recMorning hidden — auto-records
     // auto-record immediately
     recordCount('morning');
   } else if(v.cat==='evening' && recEvening){
-    recEvening.style.display='block';
+    // recEvening hidden — auto-records
     recordCount('evening');
   } else if(v.id==='dv7' || v.cat==='meditation'){
     if(recMed) recMed.style.display='block';
     // meditation: still requires manual input for minutes
   } else if(v.cat==='special'||v.cat==='lp'||v.cat==='grandma'){
-    if(recBtn){
-      recBtn.style.display='block';
-      recBtn.onclick = ()=>recordSpecial(v.id, v.title);
-    }
+    if(recBtn) recBtn.onclick = ()=>recordSpecial(v.id, v.title);
     // auto-record special
     recordSpecial(v.id, v.title);
   }

@@ -364,7 +364,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   <div class="login-bg-ornament"></div>
   <div class="login-box">
     <span class="login-lotus">🪷</span>
-    <div class="login-title">บูชาพระธรรม</div>
+    <div class="login-title">สวดมนต์ถวายเป็นพุทธบูชา</div>
     <div class="login-sub">เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน</div>
     <div id="loginForm">
       <div class="form-group"><label>อีเมล</label><input id="loginUser" type="email" placeholder="name@gmail.com" autocomplete="email"></div>
@@ -1456,13 +1456,7 @@ function playVideo(v){
     recBtn.style.display='block';
     recBtn.onclick = ()=>recordSpecial(v.id, v.title);
   }
-  // Scroll to player — use window.scrollTo for better mobile support
-  setTimeout(()=>{
-    const rect = ps.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
-    window.scrollTo({top: scrollTop + rect.top - headerH - 8, behavior:'smooth'});
-  }, 50);
+  scrollToPlayer();
   renderPlaylist();
 }
 
@@ -1946,23 +1940,20 @@ function scrollToVideo(type){
     targetVideo = _cachedVideos.find(v => v.id === type);
   }
   if(targetVideo){
-    // Play first, then scroll to player
     playVideo(targetVideo);
-    // Give player time to become visible, then scroll to it
-    setTimeout(()=>{
-      const ps = document.getElementById('playerSection');
-      if(ps && ps.style.display !== 'none'){
-        // Use window.scrollTo for better mobile compatibility
-        const rect = ps.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
-        window.scrollTo({
-          top: scrollTop + rect.top - headerH - 8,
-          behavior: 'smooth'
-        });
-      }
-    }, 150);
+    scrollToPlayer();
   }
+}
+
+function scrollToPlayer(){
+  requestAnimationFrame(()=>{
+    const ps = document.getElementById('playerSection');
+    if(!ps) return;
+    ps.style.display = 'block';
+    const headerH = document.querySelector('.app-header')?.offsetHeight || 0;
+    const top = ps.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
+    window.scrollTo({top, behavior:'smooth'});
+  });
 }
 
 // ── expose all onclick handlers to global scope ───────
@@ -1991,6 +1982,7 @@ window.saveNameFromSettings = saveNameFromSettings;
 window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
+window.scrollToPlayer = scrollToPlayer;
 window.adjustCount = adjustCount;
 window.closeCropModal = closeCropModal;
 window.saveCroppedPhoto = saveCroppedPhoto;

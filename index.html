@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>พุทธบูชา – สวดมนต์ทำวัตร</title>
+<title>บูชาพระธรรม – สวดมนต์ทำวัตร</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -386,14 +386,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
-    <div style="background:rgba(0,0,0,0.35);border-bottom:1px solid rgba(201,168,76,0.2);padding:6px 20px;text-align:center;">
-      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:15px;color:var(--gold-light);letter-spacing:.3px;font-weight:500;"></span>
-    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
           <span class="brand-lotus">🪷</span>
-          <div class="brand-text">พุทธบูชา<small>DHARMA PRAYER</small></div>
+          <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <button class="btn-logout" onclick="openSettingsModal()" style="font-size:20px;padding:6px 10px;">⚙️</button>
@@ -474,7 +471,53 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
 
   </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-title">🙏 บันทึกการปฏิบัติ</div>
+      <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
+    </div>
+
+
+
+      <!-- Streak -->
+      <div class="streak-card">
+        <div class="streak-flame">🔥</div>
+        <div class="streak-info">
+          <div class="streak-num" id="streakCount">0</div>
+          <div class="streak-label">วันปฏิบัติต่อเนื่อง</div>
+          <div class="streak-sub" id="streakSub">เริ่มสร้างนิสัยทำวัตรทุกวัน</div>
+        </div>
+      </div>
+
       <!-- Weekly Calendar -->
+      <!-- Record Zones -->
+      <div class="record-zone">
+        <!-- MORNING -->
+        <div class="record-zone-card rz-morning">
+          <div class="rz-header">🌅 ทำวัตรเช้า</div>
+          <div class="rz-stat">
+            <span class="rz-stat-label">จำนวนครั้ง</span>
+            <div class="rz-stat-val"><span class="rz-num" id="countMorning">0</span><span class="rz-unit"> ครั้ง</span></div>
+          </div>
+          <div class="rz-stat">
+            <span class="rz-stat-label">🧘 สมาธิสะสม</span>
+            <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditMorningMin">0</span><span class="rz-unit"> นาที</span></div>
+          </div>
+        </div>
+        <!-- EVENING -->
+        <div class="record-zone-card rz-evening">
+          <div class="rz-header">🌙 ทำวัตรเย็น</div>
+          <div class="rz-stat">
+            <span class="rz-stat-label">จำนวนครั้ง</span>
+            <div class="rz-stat-val"><span class="rz-num" id="countEvening">0</span><span class="rz-unit"> ครั้ง</span></div>
+          </div>
+          <div class="rz-stat">
+            <span class="rz-stat-label">🧘 สมาธิสะสม</span>
+            <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditEveningMin">0</span><span class="rz-unit"> นาที</span></div>
+          </div>
+        </div>
+      </div>
 
       <!-- Special Stats -->
       <div id="specialStatsCard" style="background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
@@ -917,8 +960,6 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
-  const hd = document.getElementById('headerDate');
-  if(hd) hd.textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'
@@ -1620,5 +1661,7 @@ function updateProfileTotals(){
 // ── expose new functions ───────────────────────────────
 
 </script>
+</body>
+<input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
 </body>
 </html>

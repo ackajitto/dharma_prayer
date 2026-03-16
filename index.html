@@ -386,10 +386,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
-    <!-- Date bar top -->
-    <div id="headerDateBar" style="background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.15);padding:6px 20px;text-align:center;">
-      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:14px;color:var(--gold-light);letter-spacing:.3px;"></span>
-    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
@@ -397,7 +393,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-logout" onclick="openSettingsModal()" style="font-size:13px;">⚙️ ตั้งค่า</button>
+          <button class="btn-logout" onclick="openSettingsModal()" style="font-size:20px;padding:6px 10px;">⚙️</button>
           <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
         </div>
       </div>
@@ -409,6 +405,13 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   <div class="content">
 
     <!-- ══ โปรไฟล์ ══ -->
+<!-- Date/Time above profile card -->
+      <div class="today-header" style="margin-bottom:12px;">
+        <div class="today-date" id="dtToday"></div>
+        <div class="today-time" id="dtTime"></div>
+        <div class="today-start" id="todayStartText"></div>
+      </div>
+
 <!-- Profile Card -->
       <div class="profile-card">
         <div style="text-align:center;position:relative;z-index:1;">
@@ -423,21 +426,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
               <img id="profileImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:15px;">
             </div>
           </div>
-          <label class="profile-upload-btn">
-            📷 เปลี่ยนรูปโปรไฟล์
-            <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
-          </label>
         </div>
+        <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
         <div class="profile-info">
-          <div class="profile-name-row">
-            <div class="profile-name" id="profileName">ผู้ใช้</div>
-            <button class="btn-edit-name" onclick="openEditName()" title="แก้ไขชื่อ">✏️</button>
-          </div>
-          <div id="editNameRow" style="display:none" class="edit-name-row">
-            <input id="editNameInput" class="edit-name-input" type="text" placeholder="ชื่อใหม่">
-            <button class="btn-save-name" onclick="saveEditName()">บันทึก</button>
-            <button class="btn-cancel-name" onclick="closeEditName()">ยกเลิก</button>
-          </div>
+          <div class="profile-name" id="profileName">ผู้ใช้</div>
           <div class="profile-stats-total">
             <div class="pst-card">
               <span class="pst-label">🌅 ทำวัตรเช้า</span>
@@ -486,13 +478,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
     </div>
 
-    <!-- ══ วันที่ เวลา ══ -->
-<!-- Date/Time -->
-      <div class="today-header">
-        <div class="today-date" id="dtToday"></div>
-        <div class="today-time" id="dtTime"></div>
-        <div class="today-start" id="todayStartText"></div>
-      </div>
+
 
       <!-- Streak -->
       <div class="streak-card">
@@ -979,7 +965,6 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
-  if(document.getElementById('headerDate')) document.getElementById('headerDate').textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'
@@ -1681,5 +1666,7 @@ function updateProfileTotals(){
 // ── expose new functions ───────────────────────────────
 
 </script>
+</body>
+</html          <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">html lang="th">
 </body>
 </html>

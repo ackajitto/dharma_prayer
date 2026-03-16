@@ -386,7 +386,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
-
+    <div style="display:none">
+      <span id="headerDate"></span>
+    </div>
     <div class="header-inner">
       <div class="header-top">
         <div class="brand">
@@ -407,10 +409,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
     <!-- ══ โปรไฟล์ ══ -->
 <!-- Date/Time above profile card -->
-      <div style="display:none">
-        <div id="dtToday"></div>
-        <div id="dtTime"></div>
-        <div id="todayStartText"></div>
+      <div class="today-header" style="margin-bottom:12px;">
+        <div class="today-date" id="dtToday"></div>
+        <div class="today-time" id="dtTime"></div>
+        <div class="today-start" id="todayStartText"></div>
       </div>
 
 <!-- Profile Card -->

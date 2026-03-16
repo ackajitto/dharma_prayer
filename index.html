@@ -1882,13 +1882,15 @@ function openShareModal(mode){
   const getNum = id => document.getElementById(id)?.textContent || '0';
 
   if(mode === 'today'){
+    // สำหรับการ์ดยอดวันนี้
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-    document.getElementById('scDate').textContent = dateStr;
+    document.getElementById('scDate').textContent = dateStr; 
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = '';
   } else {
-    document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
-    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น ' + dateStr;
+    // สำหรับการ์ดยอดรวมทั้งหมด
+    document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์ทั้งหมด';
+    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น ' + dateStr; 
     const jd = window._joinedDateCache;
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';

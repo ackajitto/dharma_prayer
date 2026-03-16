@@ -485,6 +485,13 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
         <div class="profile-info">
           <div class="profile-name" id="profileName">ผู้ใช้</div>
+
+          <!-- Toggle: วันนี้ / รวมทั้งหมด -->
+          <div id="statsToggle" style="display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0 4px;background:rgba(0,0,0,0.2);border-radius:30px;padding:3px;border:1px solid rgba(201,168,76,0.2);">
+            <button id="toggleToday" onclick="switchStatsMode('today')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--text-dark);box-shadow:0 2px 8px rgba(201,168,76,0.3);">📅 วันนี้</button>
+            <button id="toggleTotal" onclick="switchStatsMode('total')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:transparent;color:rgba(232,213,163,0.5);">📊 รวมทั้งหมด</button>
+          </div>
+
           <div class="profile-stats-total">
             <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('morning')" title="ไปยังทำวัตรเช้า">
               <span class="pst-label">🌅 ทำวัตรเช้า</span>
@@ -1177,8 +1184,10 @@ async function bootApp(username, userData){
 
   renderPlaylist();
   refreshStreakAndCalendar();
-  updateProfileTotals();
   loadSpecialStats();
+  // Check day reset and show today's stats by default
+  await checkDayReset(username);
+  switchStatsMode('today');
 }
 
 // ─── STORAGE ─────────────────────────────────────────
@@ -1382,6 +1391,7 @@ async function recordCount(type){
   showToast(label+' ครั้งที่ '+next);
   markTodayDone(type);
   updateProfileTotals();
+  if(_statsMode === 'today') refreshStatsDisplay();
 }
 
 // ─── MEDITATION ──────────────────────────────────────
@@ -1410,6 +1420,7 @@ async function recordMeditation(session){
   const fd = await dbGet(userPath('first_record_date'));
   if(!fd){ const now=new Date().toISOString(); await uSet('first_record_date',now); updateDateTime(now); }
   showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+next+' นาที)');
+  if(_statsMode === 'today') refreshStatsDisplay();
 }
 
 // ─── SPECIAL BOTTO RECORDING ────────────────────────
@@ -1429,6 +1440,7 @@ async function recordSpecial(videoId, videoTitle){
   markTodaySpecial(safeId, 1);
   // update display
   renderSpecialStats(current);
+  if(_statsMode === 'today') refreshStatsDisplay();
   // refresh pst-card counters
   ['dv3','dv5','dv6','dv4'].forEach(id=>{
     const el = document.getElementById('totalSpecial_'+id);
@@ -2074,6 +2086,97 @@ async function savePasswordFromSettings(){
   }catch(e){errEl.textContent='เกิดข้อผิดพลาด: '+e.message;}
 }
 
+// ─── STATS TOGGLE MODE ───────────────────────────────
+let _statsMode = 'today'; // 'today' | 'total'
+
+function switchStatsMode(mode){
+  _statsMode = mode;
+  // Update button styles
+  const btnToday = document.getElementById('toggleToday');
+  const btnTotal = document.getElementById('toggleTotal');
+  if(mode === 'today'){
+    btnToday.style.background = 'linear-gradient(135deg,var(--gold-dark),var(--gold))';
+    btnToday.style.color = 'var(--text-dark)';
+    btnToday.style.boxShadow = '0 2px 8px rgba(201,168,76,0.3)';
+    btnTotal.style.background = 'transparent';
+    btnTotal.style.color = 'rgba(232,213,163,0.5)';
+    btnTotal.style.boxShadow = 'none';
+  } else {
+    btnTotal.style.background = 'linear-gradient(135deg,var(--gold-dark),var(--gold))';
+    btnTotal.style.color = 'var(--text-dark)';
+    btnTotal.style.boxShadow = '0 2px 8px rgba(201,168,76,0.3)';
+    btnToday.style.background = 'transparent';
+    btnToday.style.color = 'rgba(232,213,163,0.5)';
+    btnToday.style.boxShadow = 'none';
+  }
+  refreshStatsDisplay();
+}
+
+// Refresh pst-card numbers based on current mode
+async function refreshStatsDisplay(){
+  if(_statsMode === 'today'){
+    // Read today's history
+    const key = todayKey();
+    const todayData = await dbGet('users/'+window._currentUser+'/history/'+key) || {};
+    const sp = todayData.special || {};
+    document.getElementById('totalMorning').textContent   = todayData.cntM || 0;
+    document.getElementById('totalEvening').textContent   = todayData.cntE || 0;
+    document.getElementById('totalMedMorning').textContent= todayData.medM || 0;
+    document.getElementById('totalMedEvening').textContent= todayData.medE || 0;
+    document.getElementById('totalSpecial_dv3').textContent = sp['dv3'] || 0;
+    document.getElementById('totalSpecial_dv5').textContent = sp['dv5'] || 0;
+    document.getElementById('totalSpecial_dv6').textContent = sp['dv6'] || 0;
+    document.getElementById('totalSpecial_dv4').textContent = sp['dv4'] || 0;
+  } else {
+    // Compute total = sum all daily snapshots + (today override via _countOverrides)
+    const totals = await computeAllTimeTotals();
+    document.getElementById('totalMorning').textContent   = totals.cntM;
+    document.getElementById('totalEvening').textContent   = totals.cntE;
+    document.getElementById('totalMedMorning').textContent= totals.medM;
+    document.getElementById('totalMedEvening').textContent= totals.medE;
+    document.getElementById('totalSpecial_dv3').textContent = totals.dv3;
+    document.getElementById('totalSpecial_dv5').textContent = totals.dv5;
+    document.getElementById('totalSpecial_dv6').textContent = totals.dv6;
+    document.getElementById('totalSpecial_dv4').textContent = totals.dv4;
+  }
+}
+
+async function computeAllTimeTotals(){
+  const history = await dbGet('users/'+window._currentUser+'/history') || {};
+  const totals = {cntM:0, cntE:0, medM:0, medE:0, dv3:0, dv5:0, dv6:0, dv4:0};
+  Object.values(history).forEach(day=>{
+    totals.cntM += day.cntM || 0;
+    totals.cntE += day.cntE || 0;
+    totals.medM += day.medM || 0;
+    totals.medE += day.medE || 0;
+    const sp = day.special || {};
+    totals.dv3 += sp['dv3'] || 0;
+    totals.dv5 += sp['dv5'] || 0;
+    totals.dv6 += sp['dv6'] || 0;
+    totals.dv4 += sp['dv4'] || 0;
+  });
+  return totals;
+}
+
+// Check if day has changed since last visit → save snapshot of previous counts
+async function checkDayReset(username){
+  const lastKey = await dbGet('users/'+username+'/last_active_date');
+  const todayK  = todayKey();
+  if(lastKey && lastKey !== todayK){
+    // Day changed: snapshot yesterday's counts into history if not already done
+    const yestPath = 'users/'+username+'/history/'+lastKey;
+    const yestRec = await dbGet(yestPath) || {};
+    // Fill in any missing counts from main counters (backup)
+    const data = await dbGet('users/'+username) || {};
+    if(!yestRec.cntM && data.cnt_morning) yestRec.cntM = yestRec.cntM||0;
+    await dbSet(yestPath, yestRec);
+    // Reset today's counts in hidden DOM (today history starts fresh)
+    // (actual reset: today's history/{todayK} won't have data yet, so it's already 0)
+  }
+  // Update last_active_date
+  await dbSet('users/'+username+'/last_active_date', todayK);
+}
+
 // ─── SCROLL TO VIDEO ZONE ─────────────────────────────
 function scrollToVideo(type){
   let targetVideo = null;
@@ -2131,6 +2234,8 @@ window.saveNameFromSettings = saveNameFromSettings;
 window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
+window.switchStatsMode = switchStatsMode;
+window.refreshStatsDisplay = refreshStatsDisplay;
 window.scrollToPlayer = scrollToPlayer;
 window.markTodaySpecial = markTodaySpecial;
 window.markTodayMeditation = markTodayMeditation;
@@ -2172,6 +2277,7 @@ async function markTodayDone(type){
   if(type==='evening'){ existing.e = true; existing.cntE = (existing.cntE||0)+1; }
   await dbSet(path, existing);
   await refreshStreakAndCalendar();
+  if(_statsMode === 'today') refreshStatsDisplay();
 }
 
 async function markTodaySpecial(videoId, delta){

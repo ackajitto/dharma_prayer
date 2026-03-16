@@ -92,9 +92,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 /* ── TAB 1: TODAY ── */
 .today-header{
   background:linear-gradient(145deg,var(--maroon),var(--deep-warm),var(--deep));
-  border-radius:20px;
-  padding:10px 16px; /* ปรับลดความกว้างบนล่างลงมาเหลือ 10px */
-  margin-bottom:16px;
+  border-radius:20px;padding:20px;margin-bottom:16px;
   border:1px solid rgba(201,168,76,0.2);
   box-shadow:0 4px 24px rgba(0,0,0,0.2);
   text-align:center;
@@ -813,6 +811,30 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
     </div>
+
+    <!-- Reset All -->
+    <div style="border-top:1px solid var(--cream-dark);padding-top:16px;margin-top:4px;">
+      <div style="font-size:15px;font-weight:600;color:#c0392b;margin-bottom:8px;">⚠️ รีเซ็ตยอดทั้งหมด</div>
+      <div style="font-size:13px;color:var(--text-ghost);margin-bottom:12px;line-height:1.5;">ล้างยอดสะสมทั้งหมดกลับเป็น 0 รวมถึงประวัติทุกวัน ไม่สามารถกู้คืนได้</div>
+      <button onclick="confirmResetAll()" style="width:100%;padding:13px;border-radius:13px;border:2px solid #c0392b;background:rgba(192,57,43,0.08);color:#c0392b;font-size:16px;font-weight:700;font-family:'Noto Serif Thai',serif;cursor:pointer;transition:all .2s;" onmouseenter="this.style.background='rgba(192,57,43,0.18)'" onmouseleave="this.style.background='rgba(192,57,43,0.08)'">
+        🗑️ รีเซ็ตยอดทั้งหมด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM RESET MODAL -->
+<div id="resetConfirmModal" style="display:none" class="share-overlay" onclick="if(event.target===this)closeResetConfirm()">
+  <div style="background:var(--cream);border-radius:22px;width:100%;max-width:340px;padding:24px;animation:slideUp .2s ease;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:40px;margin-bottom:8px;">⚠️</div>
+      <div style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--maroon);margin-bottom:8px;">ยืนยันรีเซ็ต?</div>
+      <div style="font-size:14px;color:var(--text-light);line-height:1.6;">ยอดสวดมนต์ทั้งหมดและประวัติทุกวันจะถูกลบ<br>ไม่สามารถกู้คืนได้</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeResetConfirm()" style="flex:1;padding:13px;border-radius:13px;border:1px solid var(--cream-mid);background:var(--cream-dark);color:var(--text-mid);font-size:16px;font-family:'Sarabun',sans-serif;cursor:pointer;">ยกเลิก</button>
+      <button onclick="doResetAll()" style="flex:1;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,#8B0000,#c0392b);color:#fff;font-size:16px;font-weight:700;font-family:'Noto Serif Thai',serif;">รีเซ็ต</button>
+    </div>
   </div>
 </div>
 
@@ -1001,10 +1023,6 @@ const ZONE_GROUPS = [
 //  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
 //  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
 // ═══════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════
-//  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
-//  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
-// ═══════════════════════════════════════════════════
 const DEFAULT_VIDEOS = [
   // ── ทำวัตรเช้า ──────────────────────────────────
   {id:'dv1', title:'ทำวัตรเช้า',
@@ -1032,7 +1050,10 @@ const DEFAULT_VIDEOS = [
 
   // ── ถ่ายทอดสด GBN ──────────────────────────────────
   {id:'gbn_sd1', title:'SD1 – ช่องหลัก',        url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',    cat:'live', isM3u8:true},
-  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8',   cat:'live', isM3u8:true},
+  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_hd/playlist.m3u8',     cat:'live', isM3u8:true},
+  {id:'gbn_en',  title:'EN – English Channel',   url:'https://us.gbnus.com/live/en_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  {id:'gbn_ch',  title:'CH – Chinese Channel',   url:'https://us.gbnus.com/live/cn_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  {id:'gbn_th',  title:'TH – Thai Channel',      url:'https://us.gbnus.com/live/th_low/playlist.m3u8',        cat:'live', isM3u8:true},
 ];
 // ═══════════════════════════════════════════════════
 
@@ -1882,15 +1903,13 @@ function openShareModal(mode){
   const getNum = id => document.getElementById(id)?.textContent || '0';
 
   if(mode === 'today'){
-    // สำหรับการ์ดยอดวันนี้
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-    document.getElementById('scDate').textContent = dateStr; 
+    document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = '';
   } else {
-    // สำหรับการ์ดยอดรวมทั้งหมด
-    document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์ทั้งหมด';
-    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น ' + dateStr; 
+    document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
+    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
     const jd = window._joinedDateCache;
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
@@ -2231,6 +2250,45 @@ async function checkDayReset(username){
   await dbSet('users/'+username+'/last_active_date', todayK);
 }
 
+// ─── RESET ALL ───────────────────────────────────────
+function confirmResetAll(){
+  document.getElementById('resetConfirmModal').style.display = 'flex';
+}
+function closeResetConfirm(){
+  document.getElementById('resetConfirmModal').style.display = 'none';
+}
+async function doResetAll(){
+  if(!window._currentUser) return;
+  closeResetConfirm();
+  closeSettingsModal();
+  showToast('⏳ กำลังรีเซ็ต...');
+  try {
+    // Reset all counts and history
+    await dbSet('users/'+window._currentUser+'/cnt_morning', 0);
+    await dbSet('users/'+window._currentUser+'/cnt_evening', 0);
+    await dbSet('users/'+window._currentUser+'/med_morning_min', 0);
+    await dbSet('users/'+window._currentUser+'/med_evening_min', 0);
+    await dbSet('users/'+window._currentUser+'/cnt_special', {});
+    await dbSet('users/'+window._currentUser+'/history', {});
+    await dbSet('users/'+window._currentUser+'/first_record_date', null);
+    await dbSet('users/'+window._currentUser+'/last_active_date', todayKey());
+    // Clear overrides
+    Object.keys(_countOverrides).forEach(k=>delete _countOverrides[k]);
+    // Reset DOM
+    ['countMorning','countEvening','meditMorningMin','meditEveningMin',
+     'totalMorning','totalEvening','totalMedMorning','totalMedEvening',
+     'totalSpecial_dv3','totalSpecial_dv5','totalSpecial_dv6','totalSpecial_dv4',
+     'streakCount'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.textContent='0';
+    });
+    renderSpecialStats({});
+    showToast('✅ รีเซ็ตยอดทั้งหมดแล้ว');
+    switchStatsMode('today');
+  } catch(e){
+    showToast('⚠️ เกิดข้อผิดพลาด: '+e.message);
+  }
+}
+
 // ─── SCROLL TO VIDEO ZONE ─────────────────────────────
 function scrollToVideo(type){
   let targetVideo = null;
@@ -2289,6 +2347,9 @@ window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
 window.switchStatsMode = switchStatsMode;
+window.confirmResetAll = confirmResetAll;
+window.closeResetConfirm = closeResetConfirm;
+window.doResetAll = doResetAll;
 window.refreshStatsDisplay = refreshStatsDisplay;
 window.scrollToPlayer = scrollToPlayer;
 window.markTodaySpecial = markTodaySpecial;

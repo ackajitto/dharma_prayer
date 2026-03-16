@@ -386,7 +386,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <!-- APP -->
 <div id="app">
   <header class="app-header">
-    <!-- Date bar top -->
     <div id="headerDateBar" style="background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.15);padding:6px 20px;text-align:center;">
       <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:14px;color:var(--gold-light);letter-spacing:.3px;"></span>
     </div>
@@ -409,6 +408,13 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   <div class="content">
 
     <!-- ══ โปรไฟล์ ══ -->
+<!-- Date/Time above profile card -->
+      <div class="today-header" style="margin-bottom:12px;">
+        <div class="today-date" id="dtToday"></div>
+        <div class="today-time" id="dtTime"></div>
+        <div class="today-start" id="todayStartText"></div>
+      </div>
+
 <!-- Profile Card -->
       <div class="profile-card">
         <div style="text-align:center;position:relative;z-index:1;">
@@ -477,13 +483,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
     </div>
 
-    <!-- ══ วันที่ เวลา ══ -->
-<!-- Date/Time -->
-      <div class="today-header">
-        <div class="today-date" id="dtToday"></div>
-        <div class="today-time" id="dtTime"></div>
-        <div class="today-start" id="todayStartText"></div>
-      </div>
+
 
       <!-- Streak -->
       <div class="streak-card">
@@ -970,7 +970,6 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
-  if(document.getElementById('headerDate')) document.getElementById('headerDate').textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'
@@ -2055,226 +2054,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="login-divider">มีบัญชีแล้ว? <span onclick="toggleAuthMode(false)">เข้าสู่ระบบ</span></div>
     </div>
   </div>
-</div>
-
-<!-- APP -->
-<div id="app">
-  <header class="app-header">
-    <!-- Date bar top -->
-    <div id="headerDateBar" style="background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.15);padding:6px 20px;text-align:center;">
-      <span id="headerDate" style="font-family:'Noto Serif Thai',serif;font-size:14px;color:var(--gold-light);letter-spacing:.3px;"></span>
-    </div>
-    <div class="header-inner">
-      <div class="header-top">
-        <div class="brand">
-          <span class="brand-lotus">🪷</span>
-          <div class="brand-text">บูชาพระธรรม<small>DHARMA PRAYER</small></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-logout" onclick="openSettingsModal()" style="font-size:13px;">⚙️ ตั้งค่า</button>
-          <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- TAB: TODAY -->
-    <!-- MAIN CONTENT: single page -->
-  <div class="content">
-
-    <!-- ══ โปรไฟล์ ══ -->
-<!-- Profile Card -->
-      <div class="profile-card">
-        <div style="text-align:center;position:relative;z-index:1;">
-          <div style="font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--gold-light);letter-spacing:.5px;margin-bottom:3px;">สวดมนต์ถวายเป็นพุทธบูชา</div>
-          <div style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.55);letter-spacing:.3px;">บูชาธรรมมหาปูชนียาจารย์</div>
-          <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px auto 0;"></div>
-        </div>
-        <div class="profile-photo-wrap">
-          <div class="profile-photo-ring">
-            <div class="profile-photo-inner" id="profilePhotoInner">
-              <span class="profile-initials" id="profileInitials">ก</span>
-              <img id="profileImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:15px;">
-            </div>
-          </div>
-          <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
-        </div>
-        <div class="profile-info">
-          <div class="profile-name-row">
-            <div class="profile-name" id="profileName">ผู้ใช้</div>
-          </div>
-          <div class="profile-stats-total">
-            <div class="pst-card">
-              <span class="pst-label">🌅 ทำวัตรเช้า</span>
-              <span class="pst-num" id="totalMorning">0</span>
-              <span class="pst-unit"> ครั้ง</span>
-            </div>
-            <div class="pst-card">
-              <span class="pst-label">🌙 ทำวัตรเย็น</span>
-              <span class="pst-num" id="totalEvening">0</span>
-              <span class="pst-unit"> ครั้ง</span>
-            </div>
-            <div class="pst-card">
-              <span class="pst-label">🧘 สมาธิเช้า</span>
-              <span class="pst-num" id="totalMedMorning">0</span>
-              <span class="pst-unit"> นาที</span>
-            </div>
-            <div class="pst-card">
-              <span class="pst-label">🧘 สมาธิเย็น</span>
-              <span class="pst-num" id="totalMedEvening">0</span>
-              <span class="pst-unit"> นาที</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Theme bar inline -->
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:14px;">
-        <span style="font-size:13px;color:var(--text-light);white-space:nowrap;">🎨 ธีมสี</span>
-        <div class="theme-dots-row">
-          <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"></div>
-          <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"></div>
-          <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"></div>
-          <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"></div>
-          <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"></div>
-          <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
-        </div>
-      </div>
-
-
-
-  </div>
-
-    <div class="section-divider">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-title">🙏 บันทึกการปฏิบัติ</div>
-      <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
-    </div>
-
-    <!-- ══ วันที่ เวลา ══ -->
-<!-- Date/Time -->
-      <div class="today-header">
-        <div class="today-date" id="dtToday"></div>
-        <div class="today-time" id="dtTime"></div>
-        <div class="today-start" id="todayStartText"></div>
-      </div>
-
-      <!-- Streak -->
-      <div class="streak-card">
-        <div class="streak-flame">🔥</div>
-        <div class="streak-info">
-          <div class="streak-num" id="streakCount">0</div>
-          <div class="streak-label">วันปฏิบัติต่อเนื่อง</div>
-          <div class="streak-sub" id="streakSub">เริ่มสร้างนิสัยทำวัตรทุกวัน</div>
-        </div>
-      </div>
-
-      <!-- Weekly Calendar -->
-      <div class="weekly-card">
-        <div class="weekly-title">📅 สัปดาห์นี้</div>
-        <div class="weekly-grid" id="weeklyGrid"></div>
-      </div>
-
-      <!-- Record Zones -->
-      <div class="record-zone">
-        <!-- MORNING -->
-        <div class="record-zone-card rz-morning">
-          <div class="rz-header">🌅 ทำวัตรเช้า</div>
-          <div class="rz-stat">
-            <span class="rz-stat-label">จำนวนครั้ง</span>
-            <div class="rz-stat-val"><span class="rz-num" id="countMorning">0</span><span class="rz-unit"> ครั้ง</span></div>
-          </div>
-          <div class="rz-stat">
-            <span class="rz-stat-label">🧘 สมาธิสะสม</span>
-            <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditMorningMin">0</span><span class="rz-unit"> นาที</span></div>
-          </div>
-        </div>
-        <!-- EVENING -->
-        <div class="record-zone-card rz-evening">
-          <div class="rz-header">🌙 ทำวัตรเย็น</div>
-          <div class="rz-stat">
-            <span class="rz-stat-label">จำนวนครั้ง</span>
-            <div class="rz-stat-val"><span class="rz-num" id="countEvening">0</span><span class="rz-unit"> ครั้ง</span></div>
-          </div>
-          <div class="rz-stat">
-            <span class="rz-stat-label">🧘 สมาธิสะสม</span>
-            <div class="rz-stat-val"><span class="rz-num" style="font-size:28px" id="meditEveningMin">0</span><span class="rz-unit"> นาที</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Special Stats -->
-      <div id="specialStatsCard" style="background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
-        <div style="font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:12px;">🙏 บันทึกบทสวดพิเศษ</div>
-        <div id="specialStatsRoot"><div style="color:var(--text-ghost);font-size:15px;text-align:center;padding:10px">ยังไม่มีการบันทึก</div></div>
-      </div>
-
-      <button class="btn-share-today" onclick="openShareModal()">📸 แบ่งปันบุญวันนี้</button>
-
-<div class="section-divider">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-title">📿 บทสวดมนต์</div>
-      <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
-    </div>
-    <!-- ══ บทสวดมนต์ ══ -->
-<div id="playerSection" class="player-section" style="display:none">
-        <div class="player-header">
-          <span class="vi-badge player-cat-pill" id="playerCatBadge"></span>
-          <span class="player-title" id="playerTitleText"></span>
-        </div>
-        <div class="player-frame">
-          <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <!-- MORNING record -->
-        <div id="playerRecordMorning" style="display:none;margin-top:10px;">
-          <button style="width:100%;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,#7A4200,#C47A20);color:#FFF8E7;font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(196,122,32,0.4);transition:all .2s;" onclick="recordCount('morning')">
-            🌅 บันทึกทำวัตรเช้า
-          </button>
-        </div>
-        <!-- EVENING record -->
-        <div id="playerRecordEvening" style="display:none;margin-top:10px;">
-          <button style="width:100%;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,#1a1a5a,#2a2a8a);color:#c8d4ff;font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(42,42,138,0.4);transition:all .2s;" onclick="recordCount('evening')">
-            🌙 บันทึกทำวัตรเย็น
-          </button>
-        </div>
-        <!-- MEDITATION record (เช้า+เย็น side by side) -->
-        <div id="playerRecordMeditation" style="display:none;margin-top:10px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <!-- เช้า -->
-            <div style="background:rgba(100,50,0,0.2);border:1px solid rgba(201,168,76,0.25);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
-              <div style="font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--gold-light);text-align:center;">🌅 สมาธิเช้า</div>
-              <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
-                <button class="med-step-btn" onclick="stepMed('morningMin',-5)">−</button>
-                <input id="medInputMorningMin" class="med-input" type="number" value="0" min="0" max="999">
-                <button class="med-step-btn" onclick="stepMed('morningMin',5)">＋</button>
-              </div>
-              <div style="text-align:center;font-size:12px;color:rgba(232,213,163,0.4)">นาที</div>
-              <button class="btn-med-save btn-med-morning" style="width:100%;padding:9px;" onclick="recordMeditation('morning')">+ บันทึก</button>
-            </div>
-            <!-- เย็น -->
-            <div style="background:rgba(15,15,70,0.3);border:1px solid rgba(120,120,255,0.2);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
-              <div style="font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:#c8d4ff;text-align:center;">🌙 สมาธิเย็น</div>
-              <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
-                <button class="med-step-btn eve" onclick="stepMed('eveningMin',-5)">−</button>
-                <input id="medInputEveningMin" class="med-input" type="number" value="0" min="0" max="999">
-                <button class="med-step-btn eve" onclick="stepMed('eveningMin',5)">＋</button>
-              </div>
-              <div style="text-align:center;font-size:12px;color:rgba(180,190,255,0.35)">นาที</div>
-              <button class="btn-med-save btn-med-evening" style="width:100%;padding:9px;" onclick="recordMeditation('evening')">+ บันทึก</button>
-            </div>
-          </div>
-        </div>
-        <!-- SPECIAL record -->
-        <button id="playerRecordBtn" style="display:none;width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:17px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;">
-          🙏 บันทึกการสวดบทนี้
-        </button>
-      </div>
-      <div id="playlistRoot"></div>
-      <div class="footer-ornament">นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส</div>
-
-  </div>
-
-</div>
+<</div>
 
 <!-- SETTINGS MODAL -->
 <div id="settingsModal" style="display:none" class="share-overlay">
@@ -2644,7 +2424,6 @@ function toBEShort(date){
 function updateDateTime(firstDate, joinedDate){
   const now = new Date();
   if(document.getElementById('dtToday')) document.getElementById('dtToday').textContent = toBE(now);
-  if(document.getElementById('headerDate')) document.getElementById('headerDate').textContent = toBE(now);
   const timeStr = new Intl.DateTimeFormat('th-TH',{
     hour:'2-digit',minute:'2-digit',second:'2-digit',
     hour12:false,timeZone:'Asia/Bangkok'

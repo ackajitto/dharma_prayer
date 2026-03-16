@@ -248,7 +248,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
 /* PROFILE STATS TOTAL */
 .profile-stats-total{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-.pst-card{background:rgba(0,0,0,0.25);border-radius:14px;padding:14px;text-align:center;border:1px solid rgba(201,168,76,0.15);}
+.pst-card{background:rgba(0,0,0,0.25);border-radius:14px;padding:14px;text-align:center;border:1px solid rgba(201,168,76,0.15);transition:all .2s;}
+.pst-card:hover{background:rgba(0,0,0,0.4);border-color:rgba(201,168,76,0.4);transform:scale(1.03);}
 .pst-label{font-size:12px;color:rgba(232,213,163,0.5);letter-spacing:.5px;display:block;margin-bottom:4px;}
 .pst-num{font-family:'Noto Serif Thai',serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1;}
 .pst-unit{font-size:13px;color:rgba(232,213,163,0.4);}
@@ -434,22 +435,22 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <div class="profile-info">
           <div class="profile-name" id="profileName">ผู้ใช้</div>
           <div class="profile-stats-total">
-            <div class="pst-card">
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('morning')" title="ไปยังทำวัตรเช้า">
               <span class="pst-label">🌅 ทำวัตรเช้า</span>
               <span class="pst-num" id="totalMorning">0</span>
               <span class="pst-unit"> ครั้ง</span>
             </div>
-            <div class="pst-card">
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('evening')" title="ไปยังทำวัตรเย็น">
               <span class="pst-label">🌙 ทำวัตรเย็น</span>
               <span class="pst-num" id="totalEvening">0</span>
               <span class="pst-unit"> ครั้ง</span>
             </div>
-            <div class="pst-card">
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('meditation')" title="ไปยังนำนั่งสมาธิ">
               <span class="pst-label">🧘 สมาธิเช้า</span>
               <span class="pst-num" id="totalMedMorning">0</span>
               <span class="pst-unit"> นาที</span>
             </div>
-            <div class="pst-card">
+            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('meditation')" title="ไปยังนำนั่งสมาธิ">
               <span class="pst-label">🧘 สมาธิเย็น</span>
               <span class="pst-num" id="totalMedEvening">0</span>
               <span class="pst-unit"> นาที</span>
@@ -1559,6 +1560,31 @@ async function savePasswordFromSettings(){
   }catch(e){errEl.textContent='เกิดข้อผิดพลาด: '+e.message;}
 }
 
+// ─── SCROLL TO VIDEO ZONE ─────────────────────────────
+function scrollToVideo(type){
+  // Find the video in DEFAULT_VIDEOS matching the type
+  let targetVideo = null;
+  if(type === 'morning'){
+    targetVideo = _cachedVideos.find(v => v.cat === 'morning');
+  } else if(type === 'evening'){
+    targetVideo = _cachedVideos.find(v => v.cat === 'evening');
+  } else if(type === 'meditation'){
+    // scroll to นำนั่งสมาธิ (dv7)
+    targetVideo = _cachedVideos.find(v => v.id === 'dv7' || v.cat === 'meditation');
+  }
+
+  // Scroll to playlist section first
+  const playlistEl = document.getElementById('playlistRoot');
+  if(playlistEl){
+    playlistEl.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  // Then play the video after short delay
+  if(targetVideo){
+    setTimeout(()=>{ playVideo(targetVideo); }, 400);
+  }
+}
+
 // ── expose all onclick handlers to global scope ───────
 window.doLogin = doLogin;
 window.doRegister = doRegister;
@@ -1584,6 +1610,7 @@ window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings;
 window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
+window.scrollToVideo = scrollToVideo;
 
 
 // ── STREAK ────────────────────────────────────────────

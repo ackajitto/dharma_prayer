@@ -480,7 +480,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       </div>
 
       <!-- Share button -->
-      <button class="btn-share-today" style="margin-bottom:8px;" onclick="openShareModal()">📸 แบ่งปันบุญวันนี้</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <button class="btn-share-today" style="font-size:14px;padding:11px 8px;" onclick="openShareModal('today')">📅 ยอดวันนี้</button>
+        <button class="btn-share-today" style="font-size:14px;padding:11px 8px;" onclick="openShareModal('total')">📊 ยอดรวมทั้งหมด</button>
+      </div>
 
       <!-- Theme bar inline -->
       <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:4px;">
@@ -789,7 +792,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
         <div id="scDate" style="font-size:11px;color:rgba(232,213,163,0.4);margin-bottom:14px;letter-spacing:.4px;position:relative;z-index:1;text-align:center"></div>
         <div style="width:100%;background:rgba(0,0,0,0.25);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:10px 12px;margin-bottom:10px;position:relative;z-index:1;">
-          <div style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:1px;font-weight:600;margin-bottom:8px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
+          <div id="scCardLabel" style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:1px;font-weight:600;margin-bottom:8px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:14px;">🌅</span>
@@ -1327,6 +1330,7 @@ async function recordMeditation(session){
   document.getElementById(dispId).textContent = next;
   document.getElementById(inputId).value = 0;
   await uSet(storeKey, next);
+  markTodayMeditation(session, mn);
   const fd = await dbGet(userPath('first_record_date'));
   if(!fd){ const now=new Date().toISOString(); await uSet('first_record_date',now); updateDateTime(now); }
   showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+next+' นาที)');
@@ -1345,6 +1349,7 @@ async function recordSpecial(videoId, videoTitle){
   current[safeId].title = videoTitle;
   current[safeId].lastDate = new Date().toISOString();
   await dbSet('users/'+window._currentUser+'/'+key, current);
+  markTodaySpecial(safeId, 1);
   // update display
   renderSpecialStats(current);
   // refresh pst-card counters
@@ -1446,19 +1451,14 @@ function playVideo(v){
   if(recMed) recMed.style.display='none';
 
   if(v.cat==='morning' && recMorning){
-    // recMorning hidden — auto-records
-    // auto-record immediately
-    recordCount('morning');
+    recMorning.style.display='block';
   } else if(v.cat==='evening' && recEvening){
-    // recEvening hidden — auto-records
-    recordCount('evening');
+    recEvening.style.display='block';
   } else if(v.id==='dv7' || v.cat==='meditation'){
     if(recMed) recMed.style.display='block';
-    // meditation: still requires manual input for minutes
-  } else if(v.cat==='special'||v.cat==='lp'||v.cat==='grandma'){
-    if(recBtn) recBtn.onclick = ()=>recordSpecial(v.id, v.title);
-    // auto-record special
-    recordSpecial(v.id, v.title);
+  } else if(recBtn && (v.cat==='special'||v.cat==='lp'||v.cat==='grandma')){
+    recBtn.style.display='block';
+    recBtn.onclick = ()=>recordSpecial(v.id, v.title);
   }
   scrollToPlayer();
   renderPlaylist();
@@ -1673,15 +1673,15 @@ function applyThemeToCard(p){
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
 
-function openShareModal(){
+async function openShareModal(mode){
+  mode = mode || 'total';
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
-  // Apply current theme to share card
   const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
   applyThemeToCard(p);
-  // photo - read from profile img element
+  // photo
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
@@ -1693,29 +1693,47 @@ function openShareModal(){
   } else {
     inner.textContent = displayName.charAt(0).toUpperCase();
   }
-  // stats - read from DOM (already loaded)
-  document.getElementById('scCountMorning').textContent = document.getElementById('countMorning').textContent || '0';
-  document.getElementById('scCountEvening').textContent = document.getElementById('countEvening').textContent || '0';
-  document.getElementById('scMeditMorning').textContent = document.getElementById('meditMorningMin').textContent || '0';
-  document.getElementById('scMeditEvening').textContent = document.getElementById('meditEveningMin').textContent || '0';
-  // special stats
-  ['dv3','dv5','dv6','dv4'].forEach(id=>{
-    const el = document.getElementById('scSpecial_'+id);
-    const src = document.getElementById('totalSpecial_'+id);
-    if(el && src) el.textContent = src.textContent || '0';
-  });
-  // date
   const now = new Date();
   const dateStr = new Intl.DateTimeFormat('th-TH',{
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
-  document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
-  // first record - read from DOM
-  const firstEl = document.getElementById('scFirstDate');
-  const dtStart = document.getElementById('dtStart');
-  if(dtStart && dtStart.textContent){
-    firstEl.textContent = '🌱 เริ่มบันทึกตั้งแต่ ' + dtStart.textContent;
-  } else { firstEl.textContent = ''; }
+
+  if(mode === 'today'){
+    // Load today's data from Firebase history
+    document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
+    document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
+    const key = todayKey();
+    const todayData = await dbGet('users/'+window._currentUser+'/history/'+key) || {};
+    const todaySpecial = todayData.special || {};
+    document.getElementById('scCountMorning').textContent = todayData.cntM || 0;
+    document.getElementById('scCountEvening').textContent = todayData.cntE || 0;
+    document.getElementById('scMeditMorning').textContent = todayData.medM || 0;
+    document.getElementById('scMeditEvening').textContent = todayData.medE || 0;
+    ['dv3','dv5','dv6','dv4'].forEach(id=>{
+      const el = document.getElementById('scSpecial_'+id);
+      if(el) el.textContent = todaySpecial[id] || 0;
+    });
+    const firstEl = document.getElementById('scFirstDate');
+    if(firstEl) firstEl.textContent = '';
+  } else {
+    // Total — read from DOM
+    document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
+    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
+    document.getElementById('scCountMorning').textContent = document.getElementById('countMorning').textContent || '0';
+    document.getElementById('scCountEvening').textContent = document.getElementById('countEvening').textContent || '0';
+    document.getElementById('scMeditMorning').textContent = document.getElementById('meditMorningMin').textContent || '0';
+    document.getElementById('scMeditEvening').textContent = document.getElementById('meditEveningMin').textContent || '0';
+    ['dv3','dv5','dv6','dv4'].forEach(id=>{
+      const el = document.getElementById('scSpecial_'+id);
+      const src = document.getElementById('totalSpecial_'+id);
+      if(el && src) el.textContent = src.textContent || '0';
+    });
+    const firstEl = document.getElementById('scFirstDate');
+    const dtStart = document.getElementById('dtStart');
+    if(firstEl && dtStart && dtStart.textContent){
+      firstEl.textContent = '🌱 เริ่มบันทึกตั้งแต่ ' + dtStart.textContent;
+    } else if(firstEl){ firstEl.textContent = ''; }
+  }
   document.getElementById('shareModal').style.display = 'flex';
 }
 function closeShareModal(){
@@ -1988,6 +2006,8 @@ window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
 window.scrollToPlayer = scrollToPlayer;
+window.markTodaySpecial = markTodaySpecial;
+window.markTodayMeditation = markTodayMeditation;
 window.adjustCount = adjustCount;
 window.closeCropModal = closeCropModal;
 window.saveCroppedPhoto = saveCroppedPhoto;
@@ -2022,10 +2042,28 @@ async function markTodayDone(type){
   const key = todayKey();
   const path = 'users/'+window._currentUser+'/history/'+key;
   const existing = await dbGet(path) || {};
-  if(type==='morning') existing.m = true;
-  if(type==='evening') existing.e = true;
+  if(type==='morning'){ existing.m = true; existing.cntM = (existing.cntM||0)+1; }
+  if(type==='evening'){ existing.e = true; existing.cntE = (existing.cntE||0)+1; }
   await dbSet(path, existing);
   await refreshStreakAndCalendar();
+}
+
+async function markTodaySpecial(videoId, delta){
+  const key = todayKey();
+  const path = 'users/'+window._currentUser+'/history/'+key;
+  const existing = await dbGet(path) || {};
+  if(!existing.special) existing.special = {};
+  existing.special[videoId] = (existing.special[videoId]||0) + delta;
+  await dbSet(path, existing);
+}
+
+async function markTodayMeditation(session, minutes){
+  const key = todayKey();
+  const path = 'users/'+window._currentUser+'/history/'+key;
+  const existing = await dbGet(path) || {};
+  if(session==='morning') existing.medM = (existing.medM||0)+minutes;
+  if(session==='evening') existing.medE = (existing.medE||0)+minutes;
+  await dbSet(path, existing);
 }
 
 async function refreshStreakAndCalendar(){

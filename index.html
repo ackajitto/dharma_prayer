@@ -1676,12 +1676,17 @@ function applyThemeToCard(p){
 
 async function openShareModal(mode){
   mode = mode || 'total';
+
+  // Show modal first so user sees it opening
+  document.getElementById('shareModal').style.display = 'flex';
+
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
   const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
   applyThemeToCard(p);
+
   // photo
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
@@ -1694,13 +1699,17 @@ async function openShareModal(mode){
   } else {
     inner.textContent = displayName.charAt(0).toUpperCase();
   }
+
   const now = new Date();
   const dateStr = new Intl.DateTimeFormat('th-TH',{
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
 
+  // Always fetch fresh data from Firebase
+  const data = await dbGet('users/'+window._currentUser) || {};
+  const special = data.cnt_special || {};
+
   if(mode === 'today'){
-    // Load today's data from Firebase history
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
     document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
     const key = todayKey();
@@ -1717,25 +1726,21 @@ async function openShareModal(mode){
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = '';
   } else {
-    // Total — read from DOM
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
     document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
-    document.getElementById('scCountMorning').textContent = document.getElementById('countMorning').textContent || '0';
-    document.getElementById('scCountEvening').textContent = document.getElementById('countEvening').textContent || '0';
-    document.getElementById('scMeditMorning').textContent = document.getElementById('meditMorningMin').textContent || '0';
-    document.getElementById('scMeditEvening').textContent = document.getElementById('meditEveningMin').textContent || '0';
+    document.getElementById('scCountMorning').textContent = data.cnt_morning || 0;
+    document.getElementById('scCountEvening').textContent = data.cnt_evening || 0;
+    document.getElementById('scMeditMorning').textContent = data.med_morning_min || 0;
+    document.getElementById('scMeditEvening').textContent = data.med_evening_min || 0;
     ['dv3','dv5','dv6','dv4'].forEach(id=>{
       const el = document.getElementById('scSpecial_'+id);
-      const src = document.getElementById('totalSpecial_'+id);
-      if(el && src) el.textContent = src.textContent || '0';
+      if(el) el.textContent = (special[id] && special[id].count) ? special[id].count : 0;
     });
     const firstEl = document.getElementById('scFirstDate');
-    const dtStart = document.getElementById('dtStart');
-    if(firstEl && dtStart && dtStart.textContent){
-      firstEl.textContent = '🌱 เริ่มบันทึกตั้งแต่ ' + dtStart.textContent;
-    } else if(firstEl){ firstEl.textContent = ''; }
+    if(firstEl) firstEl.textContent = data.joined_date
+      ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(data.joined_date))
+      : '';
   }
-  document.getElementById('shareModal').style.display = 'flex';
 }
 function closeShareModal(){
   document.getElementById('shareModal').style.display = 'none';

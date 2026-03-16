@@ -1304,7 +1304,8 @@ async function recordCount(type){
     await uSet('first_record_date', now);
     updateDateTime(now);
   }
-  showToast(type==='morning'?'🌅 บันทึกทำวัตรเช้าแล้ว':'🌙 บันทึกทำวัตรเย็นแล้ว');
+  const label = type==='morning'?'🌅 ทำวัตรเช้า':'🌙 ทำวัตรเย็น';
+  showToast(label+' ครั้งที่ '+next);
   markTodayDone(type);
   updateProfileTotals();
 }

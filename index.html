@@ -1369,6 +1369,7 @@ async function recordCount(type){
   const next = cur+1;
   el.textContent = next;
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  _countOverrides['cnt_'+type] = next;
   await uSet('cnt_'+type, next);
   const fd = await dbGet(userPath('first_record_date'));
   if(!fd){
@@ -1402,6 +1403,7 @@ async function recordMeditation(session){
   const next = cur+mn;
   document.getElementById(dispId).textContent = next;
   document.getElementById(inputId).value = 0;
+  _countOverrides[storeKey] = next;
   await uSet(storeKey, next);
   markTodayMeditation(session, mn);
   const fd = await dbGet(userPath('first_record_date'));
@@ -1421,6 +1423,7 @@ async function recordSpecial(videoId, videoTitle){
   current[safeId].count = (current[safeId].count || 0) + 1;
   current[safeId].title = videoTitle;
   current[safeId].lastDate = new Date().toISOString();
+  _countOverrides[safeId] = current[safeId].count;
   await dbSet('users/'+window._currentUser+'/'+key, current);
   markTodaySpecial(safeId, 1);
   // update display
@@ -1779,7 +1782,7 @@ async function openShareModal(mode){
 
   // Fetch each field separately to guarantee latest values after any edits
   const uid = window._currentUser;
-  const [cntM, cntE, medM, medE, special, joinedDate] = await Promise.all([
+  const [cntM_raw, cntE_raw, medM_raw, medE_raw, special, joinedDate] = await Promise.all([
     dbGet('users/'+uid+'/cnt_morning'),
     dbGet('users/'+uid+'/cnt_evening'),
     dbGet('users/'+uid+'/med_morning_min'),
@@ -1787,7 +1790,19 @@ async function openShareModal(mode){
     dbGet('users/'+uid+'/cnt_special'),
     dbGet('users/'+uid+'/joined_date'),
   ]);
-  const sp = special || {};
+  // Use local override if user just edited (overrides stale Firebase cache)
+  const cntM  = 'cnt_morning'    in _countOverrides ? _countOverrides['cnt_morning']    : (cntM_raw  || 0);
+  const cntE  = 'cnt_evening'    in _countOverrides ? _countOverrides['cnt_evening']    : (cntE_raw  || 0);
+  const medM  = 'med_morning_min'in _countOverrides ? _countOverrides['med_morning_min']: (medM_raw  || 0);
+  const medE  = 'med_evening_min'in _countOverrides ? _countOverrides['med_evening_min']: (medE_raw  || 0);
+  // For specials, merge overrides into sp
+  let sp = special ? {...special} : {};
+  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+    if(id in _countOverrides){
+      if(!sp[id]) sp[id] = {count:0};
+      sp[id].count = _countOverrides[id];
+    }
+  });
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
@@ -1971,12 +1986,17 @@ async function refreshSettingsCounts(){
   });
 }
 
+// Local override cache — ensures share modal always sees latest adjusted values
+const _countOverrides = {};
+
 async function adjustCount(key, delta){
   const el = document.getElementById('settingsCount_'+key);
   if(!el) return;
   const cur = parseInt(el.textContent)||0;
   const next = Math.max(0, cur+delta);
   el.textContent = next;
+  // Track locally so share modal always gets fresh value
+  _countOverrides[key] = next;
   // Save to Firebase
   const isSpecial = ['dv3','dv5','dv6','dv4'].includes(key);
   if(isSpecial){

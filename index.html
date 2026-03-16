@@ -999,6 +999,10 @@ const ZONE_GROUPS = [
 //  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
 //  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
+//  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
+// ═══════════════════════════════════════════════════
 const DEFAULT_VIDEOS = [
   // ── ทำวัตรเช้า ──────────────────────────────────
   {id:'dv1', title:'ทำวัตรเช้า',
@@ -1026,9 +1030,11 @@ const DEFAULT_VIDEOS = [
 
   // ── ถ่ายทอดสด GBN ──────────────────────────────────
   {id:'gbn_sd1', title:'SD1 – ช่องหลัก',        url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',    cat:'live', isM3u8:true},
-  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_hd/playlist.m3u8',     cat:'live', isM3u8:true},
-  {id:'gbn_en',  title:'EN – English Channel',   url:'https://us.gbnus.com/live/en_low/playlist.m3u8',        cat:'live', isM3u8:true},
-  {id:'gbn_ch',  title:'CH – Chinese Channel',   url:'https://us.gbnus.com/live/cn_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  
+  // แก้ไข URL ช่อง HD จาก dhamma_hd เป็น dhamma_high
+  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8',   cat:'live', isM3u8:true},
+  
+  // ลบช่อง EN และ CH ออกตามที่ต้องการ เหลือไว้แค่ช่อง TH
   {id:'gbn_th',  title:'TH – Thai Channel',      url:'https://us.gbnus.com/live/th_low/playlist.m3u8',        cat:'live', isM3u8:true},
 ];
 // ═══════════════════════════════════════════════════

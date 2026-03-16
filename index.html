@@ -1447,14 +1447,21 @@ function playVideo(v){
 
   if(v.cat==='morning' && recMorning){
     recMorning.style.display='block';
+    // auto-record immediately
+    recordCount('morning');
   } else if(v.cat==='evening' && recEvening){
     recEvening.style.display='block';
+    recordCount('evening');
   } else if(v.id==='dv7' || v.cat==='meditation'){
-    // นำนั่งสมาธิ — show both morning+evening meditation inputs
     if(recMed) recMed.style.display='block';
-  } else if(recBtn && (v.cat==='special'||v.cat==='lp'||v.cat==='grandma')){
-    recBtn.style.display='block';
-    recBtn.onclick = ()=>recordSpecial(v.id, v.title);
+    // meditation: still requires manual input for minutes
+  } else if(v.cat==='special'||v.cat==='lp'||v.cat==='grandma'){
+    if(recBtn){
+      recBtn.style.display='block';
+      recBtn.onclick = ()=>recordSpecial(v.id, v.title);
+    }
+    // auto-record special
+    recordSpecial(v.id, v.title);
   }
   scrollToPlayer();
   renderPlaylist();

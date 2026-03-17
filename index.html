@@ -2355,22 +2355,22 @@ function enterGuestMode(){
 
 function shareToLine(){
   const url = encodeURIComponent('https://ackajitto.github.io/dharma_prayer/?guest=1');
-  const text = encodeURIComponent('🙏 สวดมนต์ถวายเป็นพุทธบูชา — บันทึกการปฏิบัติธรรม');
+  const text = encodeURIComponent('🙏 สวดมนต์ถวายเป็นพุทธบูชา — ฟังธรรมะและบันทึกการปฏิบัติธรรม เข้าใช้ได้เลยที่ลิงก์นี้\n');
   window.open('https://social-plugins.line.me/lineit/share?url='+url+'&text='+text, '_blank');
 }
 
 function shareWebsite(){
   const url = 'https://ackajitto.github.io/dharma_prayer/?guest=1';
-  const text = '🙏 สวดมนต์ถวายเป็นพุทธบูชา — บันทึกการปฏิบัติธรรม';
+  const text = '🙏 สวดมนต์ถวายเป็นพุทธบูชา — ฟังธรรมะและบันทึกการปฏิบัติธรรม เข้าใช้ได้เลยที่ลิงก์นี้';
+  const full = text + '\n' + url;
   if(navigator.share){
-    navigator.share({ title: 'สวดมนต์ถวายเป็นพุทธบูชา', text, url })
+    navigator.share({ title: 'สวดมนต์ถวายเป็นพุทธบูชา', text: full, url })
       .catch(()=>{});
   } else {
-    navigator.clipboard.writeText(url).then(()=>{
-      showToast('✅ คัดลอกลิงก์แล้ว 🔗');
+    navigator.clipboard.writeText(full).then(()=>{
+      showToast('✅ คัดลอกข้อความแล้ว 🔗');
     }).catch(()=>{
-      // fallback: show prompt
-      window.prompt('คัดลอกลิงก์:', url);
+      window.prompt('คัดลอกข้อความ:', full);
     });
   }
 }

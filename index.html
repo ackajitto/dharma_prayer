@@ -1968,51 +1968,28 @@ function applyThemeToCard(p){
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
 
-async function openShareModal(mode){
-  mode = mode || 'today';
+// ══════════════════════════════════════════════════════
+//  SHARE MODAL — แยก today / total ชัดเจน ไม่ปนกัน
+// ══════════════════════════════════════════════════════
 
-  // ── ถ้า DOM ยังไม่มีข้อมูลของ mode นั้น ให้ดึงมาก่อน ──
-  // แต่ไม่สลับแท็บบนหน้าจอ — ดึงข้อมูลเงียบๆ แล้วใส่การ์ดเลย
-  let vals = {cntM:0, cntE:0, medM:0, medE:0, dv3:0, dv5:0, dv6:0, dv4:0};
+let _previewDataUrl = null;
 
-  if(mode === 'today'){
-    // อ่านจาก DOM ถ้าตรง mode, ถ้าไม่ตรงดึง Firebase เงียบๆ
-    if(_statsMode === 'today'){
-      vals = _readValsFromDOM();
-    } else {
-      // ดึง today จาก Firebase เงียบๆ
-      if(window._currentUser){
-        const todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {};
-        const sp = todayData.special || {};
-        vals = {cntM:todayData.cntM||0, cntE:todayData.cntE||0, medM:todayData.medM||0, medE:todayData.medE||0,
-                dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0};
-      }
-    }
-  } else {
-    // total
-    if(_statsMode === 'total'){
-      vals = _readValsFromDOM();
-    } else {
-      // คำนวณ total เงียบๆ
-      if(window._currentUser){
-        const totals = await computeAllTimeTotals();
-        vals = {cntM:totals.cntM, cntE:totals.cntE, medM:totals.medM, medE:totals.medE,
-                dv3:totals.dv3, dv5:totals.dv5, dv6:totals.dv6, dv4:totals.dv4};
-      }
-    }
-  }
-
-  // ── เปิด modal ──
+// ── helper: เตรียม modal ก่อน render ──
+function _prepareShareModal(mode, vals){
+  // reset preview
+  _previewDataUrl = null;
+  document.getElementById('sharePreviewImg').style.display = 'none';
+  document.getElementById('shareImgLoading').style.display = 'flex';
+  document.getElementById('shareImgLoading').style.flexDirection = 'column';
+  document.getElementById('shareImgLoading').innerHTML = '<div style="font-size:32px;margin-bottom:8px;animation:float 1.5s ease-in-out infinite;">🪷</div>กำลังสร้างภาพ...';
+  document.getElementById('shareImgActions').style.display = 'none';
   document.getElementById('shareModal').style.display = 'flex';
 
+  // ชื่อ + รูปโปรไฟล์
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
-  const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
-  const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
-  applyThemeToCard(p);
 
-  // photo
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
@@ -2025,25 +2002,27 @@ async function openShareModal(mode){
     inner.textContent = displayName.charAt(0).toUpperCase();
   }
 
-  const now = new Date();
+  // theme
+  const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
+  applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
+
+  // วันที่
   const dateStr = new Intl.DateTimeFormat('th-TH',{
-    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
-  }).format(now);
+    year:'numeric', month:'long', day:'numeric', weekday:'long', timeZone:'Asia/Bangkok'
+  }).format(new Date());
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
     document.getElementById('scDate').textContent = dateStr;
-    const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = '';
+    document.getElementById('scFirstDate').textContent = '';
   } else {
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
     document.getElementById('scDate').textContent = dateStr;
     const jd = window._joinedDateCache;
-    const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
+    document.getElementById('scFirstDate').textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
   }
 
-  // ── ใส่ค่าในการ์ด ──
+  // ใส่ตัวเลข — ซ่อน row ที่เป็น 0
   const rowMap = [
     {numId:'scCountMorning', val:vals.cntM},
     {numId:'scCountEvening', val:vals.cntE},
@@ -2059,35 +2038,24 @@ async function openShareModal(mode){
     if(!numEl) return;
     numEl.textContent = val;
     const row = numEl.closest('div[style*="justify-content:space-between"]');
-    if(row) row.style.display = val === 0 ? 'none' : 'flex';
+    if(row) row.style.display = (val||0) === 0 ? 'none' : 'flex';
   });
-
-  // ── render ภาพ ──
-  _autoRenderShareCard();
 }
 
-// อ่านค่าจาก pst-card DOM ตรงๆ (ใช้เมื่อ mode ตรงกับหน้าจอ)
-function _readValsFromDOM(){
-  const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
-  return {
-    cntM: g('totalMorning'), cntE: g('totalEvening'),
-    medM: g('totalMedMorning'), medE: g('totalMedEvening'),
-    dv3:  g('totalSpecial_dv3'), dv5: g('totalSpecial_dv5'),
-    dv6:  g('totalSpecial_dv6'), dv4: g('totalSpecial_dv4'),
-  };
-}
-
-let _previewDataUrl = null; // เก็บ dataUrl สำหรับปุ่ม download/open tab
-
-function _autoRenderShareCard(){
-  // รีเซ็ต preview
-  _previewDataUrl = null;
-  document.getElementById('sharePreviewImg').style.display = 'none';
-  document.getElementById('shareImgLoading').style.display = 'flex';
-  document.getElementById('shareImgLoading').style.flexDirection = 'column';
-  document.getElementById('shareImgActions').style.display = 'none';
-
-  _renderCardToCanvas().then(canvas=>{
+// ── helper: render shareCard → ภาพ ──
+function _renderShareCardToPreview(){
+  return _loadChedi().then(base64=>{
+    const card = document.getElementById('shareCard');
+    card.style.backgroundImage = "url('"+base64+"')";
+    card.style.backgroundSize = 'cover';
+    card.style.backgroundPosition = 'center center';
+    // รอ browser paint 1 frame ก่อน capture
+    return new Promise(resolve=>requestAnimationFrame(()=>{
+      html2canvas(card, {
+        scale:3, useCORS:true, allowTaint:true, backgroundColor:'#1a0800', logging:false
+      }).then(resolve);
+    }));
+  }).then(canvas=>{
     _previewDataUrl = canvas.toDataURL('image/png');
     const previewImg = document.getElementById('sharePreviewImg');
     previewImg.src = _previewDataUrl;
@@ -2095,8 +2063,58 @@ function _autoRenderShareCard(){
     document.getElementById('shareImgLoading').style.display = 'none';
     document.getElementById('shareImgActions').style.display = 'block';
   }).catch(()=>{
-    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด ลองปิดแล้วเปิดใหม่';
+    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาปิดแล้วลองใหม่';
   });
+}
+
+// ── ปุ่ม "แชร์ยอดวันนี้" ──
+async function openShareModal(mode){
+  mode = mode || 'today';
+  let vals;
+
+  if(mode === 'today'){
+    // อ่านจาก DOM วันนี้ตรงๆ ไม่ผ่าน Firebase
+    const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
+    // ถ้าหน้าจอแสดง today อยู่แล้ว อ่านได้เลย
+    // ถ้าแสดง total อยู่ ต้องดึง today history ก่อน
+    if(_statsMode === 'today'){
+      vals = {
+        cntM:g('totalMorning'), cntE:g('totalEvening'),
+        medM:g('totalMedMorning'), medE:g('totalMedEvening'),
+        dv3:g('totalSpecial_dv3'), dv5:g('totalSpecial_dv5'),
+        dv6:g('totalSpecial_dv6'), dv4:g('totalSpecial_dv4'),
+      };
+    } else {
+      // ดึง today จาก Firebase เงียบๆ
+      const todayData = window._currentUser
+        ? (await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {})
+        : {};
+      const sp = todayData.special || {};
+      vals = {
+        cntM:todayData.cntM||0, cntE:todayData.cntE||0,
+        medM:todayData.medM||0, medE:todayData.medE||0,
+        dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0,
+      };
+    }
+  } else {
+    // total — ถ้าหน้าจอแสดง total อยู่แล้ว อ่านได้เลย
+    const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
+    if(_statsMode === 'total'){
+      vals = {
+        cntM:g('totalMorning'), cntE:g('totalEvening'),
+        medM:g('totalMedMorning'), medE:g('totalMedEvening'),
+        dv3:g('totalSpecial_dv3'), dv5:g('totalSpecial_dv5'),
+        dv6:g('totalSpecial_dv6'), dv4:g('totalSpecial_dv4'),
+      };
+    } else {
+      // คำนวณ total จาก Firebase เงียบๆ
+      const totals = window._currentUser ? await computeAllTimeTotals() : {cntM:0,cntE:0,medM:0,medE:0,dv3:0,dv5:0,dv6:0,dv4:0};
+      vals = totals;
+    }
+  }
+
+  _prepareShareModal(mode, vals);
+  _renderShareCardToPreview();
 }
 
 function downloadFromPreview(){
@@ -2626,7 +2644,7 @@ window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
 window.downloadFromPreview = downloadFromPreview;
 window.openPreviewInTab = openPreviewInTab;
-window._autoRenderShareCard = _autoRenderShareCard;
+
 window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings;

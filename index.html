@@ -1237,7 +1237,7 @@ async function bootApp(username, userData){
     defaultImg.src = 'chedi.jpg'; 
     defaultImg.style.display = 'block'; // แยกออกมาไว้อีกบรรทัด ไม่ให้ติดหลัง //
     document.getElementById('profileInitials').style.display = 'none';
-
+  } // <--- ขาดตัวนี้ไปตัวเดียวครับ! เติมปีกกาปิดตรงนี้
   // counters
   document.getElementById('countMorning').textContent = data.cnt_morning || 0;
   document.getElementById('countEvening').textContent = data.cnt_evening || 0;

@@ -894,11 +894,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <button class="share-close-btn" onclick="closeShareModal()">✕</button>
     </div>
     <div class="share-card-wrap">
-      <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
+      <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;background-image:url('https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
 
-        <!-- พื้นหลังรูปเจดีย์ -->
-        <img src="https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg"
-             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;pointer-events:none;" crossorigin="anonymous">
         <!-- overlay gradient ให้อ่านตัวหนังสือง่าย -->
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,6,0,0.55) 0%,rgba(10,4,0,0.45) 40%,rgba(8,3,0,0.65) 100%);pointer-events:none;"></div>
 
@@ -2031,9 +2028,37 @@ function closeShareModal(){
   document.getElementById('shareModal').style.display = 'none';
 }
 
+const CHEDI_URL = 'https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg';
+let _chediBase64 = null;
+
+function _loadChedi(){
+  if(_chediBase64) return Promise.resolve(_chediBase64);
+  return new Promise((resolve)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = ()=>{
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth; c.height = img.naturalHeight;
+      c.getContext('2d').drawImage(img,0,0);
+      try { _chediBase64 = c.toDataURL('image/jpeg',0.92); }
+      catch(e){ _chediBase64 = CHEDI_URL; }
+      resolve(_chediBase64);
+    };
+    img.onerror = ()=>resolve(CHEDI_URL);
+    img.src = CHEDI_URL + '?t=' + Date.now();
+  });
+}
+
 function _renderCardToCanvas(){
-  return html2canvas(document.getElementById('shareCard'), {
-    scale: 3, useCORS: true, allowTaint: true, backgroundColor: null, logging: false
+  const card = document.getElementById('shareCard');
+  return _loadChedi().then(base64=>{
+    // ใส่รูปเป็น base64 ก่อน render
+    card.style.backgroundImage = "url('"+base64+"')";
+    card.style.backgroundSize = 'cover';
+    card.style.backgroundPosition = 'center center';
+    return html2canvas(card, {
+      scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#1a0800', logging: false
+    });
   });
 }
 

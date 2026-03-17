@@ -97,9 +97,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   box-shadow:0 4px 24px rgba(0,0,0,0.2);
   text-align:center;
 }
-.today-date{font-family:'Noto Serif Thai',serif;font-size:17px;color:rgba(232,213,163,0.6);margin-bottom:2px;}
-.today-time{font-size:32px;font-weight:700;color:var(--gold);font-family:'Noto Serif Thai',serif;letter-spacing:1px;}
-.today-start{font-size:13px;color:rgba(232,213,163,0.4);margin-top:4px;}
+.today-date{font-family:'Noto Serif Thai',serif;font-size:14px;color:rgba(232,213,163,0.6);margin-bottom:1px;}
+.today-time{font-size:24px;font-weight:700;color:var(--gold);font-family:'Noto Serif Thai',serif;letter-spacing:1px;}
+.today-start{font-size:11px;color:rgba(232,213,163,0.4);margin-top:1px;}
 
 /* STREAK */
 .streak-card{
@@ -416,6 +416,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="form-error" id="loginErr"></div>
       <button class="btn-primary" onclick="doLogin()">🙏 เข้าสู่ระบบ</button>
       <div class="login-divider">ยังไม่มีบัญชี? <span onclick="toggleAuthMode(true)">สมัครสมาชิก</span></div>
+      <div style="margin-top:16px;text-align:center;">
+        <button onclick="enterGuestMode()" style="background:none;border:none;color:rgba(232,213,163,0.4);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;text-decoration:underline;padding:6px;">เข้าใช้แบบไม่ล็อกอิน (ดูเนื้อหาอย่างเดียว)</button>
+      </div>
     </div>
     <div id="registerForm" style="display:none">
       <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid rgba(201,168,76,0.25);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
@@ -450,8 +453,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <div class="brand-text">พุทธบูชา<small>DHARMA PRAYER</small></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-logout" onclick="openSettingsModal()" style="font-size:20px;padding:6px 10px;">⚙️</button>
-          <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+          <button id="btnSettings" class="btn-logout" onclick="openSettingsModal()" style="font-size:20px;padding:6px 10px;">⚙️</button>
+          <button id="btnLogout" class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+          <button id="btnLogin" class="btn-logout" onclick="exitGuestMode()" style="display:none;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--text-dark);font-weight:600;">🔑 ล็อกอิน</button>
         </div>
       </div>
     </div>
@@ -463,7 +467,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 
     <!-- ══ โปรไฟล์ ══ -->
 <!-- Date/Time above profile card -->
-      <div class="today-header" style="margin-bottom:12px;">
+      <div class="today-header" style="margin-bottom:10px;padding:8px 16px;">
         <div class="today-date" id="dtToday"></div>
         <div class="today-time" id="dtTime"></div>
         <div class="today-start" id="todayStartText"></div>
@@ -1430,6 +1434,13 @@ async function saveCroppedPhoto(){
 
 // ─── COUNTERS ─────────────────────────────────────────
 async function recordCount(type){
+  if(window._guestMode){
+    // Guest: animate but don't save
+    const el = document.getElementById(type==='morning'?'countMorning':'countEvening');
+    el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+    showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง');
+    return;
+  }
   const el = document.getElementById(type==='morning'?'countMorning':'countEvening');
   const cur = parseInt(el.textContent)||0;
   const next = cur+1;
@@ -1460,6 +1471,7 @@ function stepMed(field, delta){
   el.value = v;
 }
 async function recordMeditation(session){
+  if(window._guestMode){ showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง'); return; }
   const inputId = session==='morning'?'medInputMorningMin':'medInputEveningMin';
   const storeKey = session==='morning'?'med_morning_min':'med_evening_min';
   const dispId  = session==='morning'?'meditMorningMin':'meditEveningMin';
@@ -1483,7 +1495,10 @@ async function recordMeditation(session){
 let _currentSpecialVideo = null; // track which special video is playing
 
 async function recordSpecial(videoId, videoTitle){
-  if(!window._currentUser) return;
+  if(!window._currentUser){
+    showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง');
+    return;
+  }
   const key = 'cnt_special';
   const current = await dbGet('users/'+window._currentUser+'/'+key) || {};
   const safeId = videoId.replace(/[.#$[\]]/g,'_');
@@ -2298,6 +2313,48 @@ async function doResetAll(){
   }
 }
 
+// ─── GUEST MODE ──────────────────────────────────────
+function enterGuestMode(){
+  window._currentUser = null;
+  window._guestMode = true;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  // Hide settings only, show login button
+  document.getElementById('btnSettings').style.display = 'none';
+  document.getElementById('btnLogout').style.display = 'none';
+  document.getElementById('btnLogin').style.display = 'flex';
+  // Set guest profile
+  document.getElementById('profileName').textContent = 'ผู้เยี่ยมชม';
+  document.getElementById('profileInitials').textContent = '🙏';
+  // Show stats toggle and pst-cards (show zeros — guest can explore)
+  document.getElementById('statsToggle').style.display = 'flex';
+  document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');
+  // Set theme default
+  setTheme('default');
+  // Start datetime
+  if(window._dtTimer) clearInterval(window._dtTimer);
+  window._dtTimer = setInterval(()=>updateDateTime(null, null), 1000);
+  updateDateTime(null, null);
+  // Load playlist
+  _cachedVideos = DEFAULT_VIDEOS;
+  renderPlaylist();
+  // Show today stats (all zeros)
+  switchStatsMode('today');
+}
+
+function exitGuestMode(){
+  window._guestMode = false;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  if(window._dtTimer) clearInterval(window._dtTimer);
+  // Restore buttons
+  document.getElementById('btnSettings').style.display = '';
+  document.getElementById('btnLogout').style.display = '';
+  document.getElementById('btnLogin').style.display = 'none';
+  document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');
+  document.getElementById('statsToggle').style.display = 'flex';
+}
+
 // ─── SCROLL TO VIDEO ZONE ─────────────────────────────
 function scrollToVideo(type){
   let targetVideo = null;
@@ -2356,6 +2413,8 @@ window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
 window.switchStatsMode = switchStatsMode;
+window.enterGuestMode = enterGuestMode;
+window.exitGuestMode = exitGuestMode;
 window.confirmResetAll = confirmResetAll;
 window.closeResetConfirm = closeResetConfirm;
 window.doResetAll = doResetAll;

@@ -894,100 +894,130 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <button class="share-close-btn" onclick="closeShareModal()">✕</button>
     </div>
     <div class="share-card-wrap">
-      <div id="shareCard" style="width:360px;min-height:480px;background:#1a0800;display:flex;flex-direction:column;align-items:center;padding:28px 22px 22px;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;">
-        <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(201,168,76,0.08);top:-70px;left:-70px;pointer-events:none"></div>
-        <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,168,76,0.05);bottom:-50px;right:-50px;pointer-events:none"></div>
-        <div style="font-size:26px;margin-bottom:4px;position:relative;z-index:1">🪷</div>
-        <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;color:#E8D5A3;letter-spacing:.5px;margin-bottom:2px;position:relative;z-index:1;text-align:center">สวดมนต์ถวายเป็นพุทธบูชา</div>
-        <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.55);letter-spacing:.3px;margin-bottom:2px;position:relative;z-index:1;text-align:center">บูชาธรรมมหาปูชนียาจารย์</div>
-        <div data-sc="divbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.5),transparent);margin:6px 0 8px;position:relative;z-index:1"></div>
-        <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;margin-bottom:10px;position:relative;z-index:1;text-align:center">ผู้ใช้</div>
-        <div style="margin-bottom:10px;position:relative;z-index:1">
-          <div style="width:72px;height:72px;border-radius:18px;padding:3px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A)">
-            <div id="scPhotoInner" style="width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:26px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3)"><span id="scInitials">ก</span></div>
-          </div>
-        </div>
-        <div id="scDate" style="font-size:11px;color:rgba(232,213,163,0.4);margin-bottom:14px;letter-spacing:.4px;position:relative;z-index:1;text-align:center"></div>
-        <div style="width:100%;background:rgba(0,0,0,0.25);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:10px 12px;margin-bottom:10px;position:relative;z-index:1;">
-          <div id="scCardLabel" style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:1px;font-weight:600;margin-bottom:8px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🌅</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเช้า</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🌙</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเย็น</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🧘</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเช้า</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🧘</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเย็น</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🙏</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระมงคลเทพมุนี</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scSpecial_dv3" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🙏</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระธรรมกาย</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scSpecial_dv5" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">🙏</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ธัมมจักกัปปวัตตนสูตร</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scSpecial_dv6" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
-            </div>
-          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">💛</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญคุณยายอาจารย์</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:3px;">
-              <span id="scSpecial_dv4" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#ffe0a0;line-height:1;">0</span>
-              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+      <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
+
+        <!-- พื้นหลังรูปเจดีย์ -->
+        <img src="https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;pointer-events:none;" crossorigin="anonymous">
+        <!-- overlay gradient ให้อ่านตัวหนังสือง่าย -->
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,6,0,0.55) 0%,rgba(10,4,0,0.45) 40%,rgba(8,3,0,0.65) 100%);pointer-events:none;"></div>
+
+        <!-- content wrapper -->
+        <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;box-sizing:border-box;">
+
+          <!-- หัวการ์ด -->
+          <div style="font-size:28px;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(201,168,76,0.5));">🪷</div>
+          <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:#F5E6C0;letter-spacing:.8px;margin-bottom:3px;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,0.8);">สวดมนต์ถวายเป็นพุทธบูชา</div>
+          <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:12px;color:rgba(232,213,163,0.75);letter-spacing:.4px;margin-bottom:4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);">บูชาธรรมมหาปูชนียาจารย์</div>
+          <div data-sc="divbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.7),transparent);margin:6px 0 14px;"></div>
+
+          <!-- รูปโปรไฟล์ -->
+          <div style="margin-bottom:10px;">
+            <div style="width:80px;height:80px;border-radius:20px;padding:3px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A);box-shadow:0 4px 16px rgba(0,0,0,0.5);">
+              <div id="scPhotoInner" style="width:100%;height:100%;border-radius:17px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:30px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3);"><span id="scInitials">ก</span></div>
             </div>
           </div>
-        </div>
-        <div id="scFirstDate" style="font-size:10px;color:rgba(232,213,163,0.3);margin-bottom:10px;position:relative;z-index:1;text-align:center"></div>
-        <div data-sc="footerbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px 0 6px;position:relative;z-index:1"></div>
-        <div style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;color:rgba(232,213,163,0.65);letter-spacing:1.5px;position:relative;z-index:1;text-align:center">สาธุ  สาธุ  สาธุ</div>
-        <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.35);letter-spacing:.5px;margin-top:3px;position:relative;z-index:1;text-align:center;font-style:italic">ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
+
+          <!-- ชื่อ -->
+          <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#F5E6C0;margin-bottom:4px;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.9);">ผู้ใช้</div>
+          <!-- วันที่ -->
+          <div id="scDate" style="font-size:13px;color:rgba(232,213,163,0.7);margin-bottom:14px;letter-spacing:.4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
+
+          <!-- กล่องสถิติ -->
+          <div style="width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(201,168,76,0.35);border-radius:16px;padding:12px 14px;margin-bottom:10px;backdrop-filter:blur(4px);">
+            <div id="scCardLabel" style="font-size:12px;color:rgba(232,213,163,0.7);letter-spacing:1.2px;font-weight:700;margin-bottom:10px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🌅</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเช้า</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🌙</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเย็น</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🧘</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สมาธิเช้า</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">นาที</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🧘</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สมาธิเย็น</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">นาที</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🙏</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญพระมงคลเทพมุนี</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scSpecial_dv3" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🙏</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญพระธรรมกาย</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scSpecial_dv5" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">🙏</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ธัมมจักกัปปวัตตนสูตร</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scSpecial_dv6" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span style="font-size:16px;">💛</span>
+                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญคุณยายอาจารย์</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:3px;">
+                <span id="scSpecial_dv4" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#ffe0a0;line-height:1;">0</span>
+                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- วันเริ่มต้น -->
+          <div id="scFirstDate" style="font-size:12px;color:rgba(232,213,163,0.45);margin-bottom:10px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
+
+          <!-- footer -->
+          <div data-sc="footerbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.6),transparent);margin:4px 0 10px;"></div>
+          <div style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:rgba(232,213,163,0.9);letter-spacing:2px;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,0.8);">สาธุ  สาธุ  สาธุ</div>
+          <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.7);letter-spacing:.5px;margin-top:6px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.7;">เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
+
+        </div><!-- end content wrapper -->
       </div>
     </div>
     <div class="share-actions">
@@ -1965,12 +1995,12 @@ function openShareModal(mode){
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-    document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
+    document.getElementById('scDate').textContent = dateStr;
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = '';
   } else {
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
-    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
+    document.getElementById('scDate').textContent = dateStr;
     const jd = window._joinedDateCache;
     const firstEl = document.getElementById('scFirstDate');
     if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
@@ -2677,7 +2707,7 @@ const TRANSLATIONS = {
     share_hint:'กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏',
     card_motto_sc:'สวดมนต์ถวายเป็นพุทธบูชา', card_sub_sc:'บูชาธรรมมหาปูชนียาจารย์',
     card_label_today:'📅 ยอดสวดมนต์วันนี้', card_label_total:'📊 ยอดสวดมนต์รวมทั้งหมด',
-    saathu:'สาธุ  สาธุ  สาธุ', anumodhana:'ขออนุโมทนาบุญด้วยกันทุกท่าน',
+    saathu:'สาธุ  สาธุ  สาธุ', anumodhana:'เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน',
     // settings
     settings_title:'⚙️ ตั้งค่าบัญชี',
     settings_photo:'📷 รูปโปรไฟล์', settings_photo_btn:'📷 กดเพื่ออัปโหลดรูป',
@@ -2728,7 +2758,7 @@ const TRANSLATIONS = {
     share_hint:'Save the image and share it to spread merit 🙏',
     card_motto_sc:'Chant as an Offering to the Buddha', card_sub_sc:'In Homage to the Great Masters',
     card_label_today:"📅 Today's Practice", card_label_total:'📊 All-Time Practice',
-    saathu:'Sādhu  Sādhu  Sādhu', anumodhana:'May all rejoice in this merit',
+    saathu:'Sādhu  Sādhu  Sādhu', anumodhana:'Sharing Merit with You<br>May all rejoice in this merit',
     settings_title:'⚙️ Account Settings',
     settings_photo:'📷 Profile Photo', settings_photo_btn:'📷 Upload Photo',
     settings_name:'✏️ Change Display Name', settings_name_ph:'New name', settings_name_save:'Save',
@@ -2776,7 +2806,7 @@ const TRANSLATIONS = {
     share_hint:'保存图片后分享，将功德传递给他人 🙏',
     card_motto_sc:'诵经供养佛陀', card_sub_sc:'礼敬大成就阿阇黎',
     card_label_today:'📅 今日修行记录', card_label_total:'📊 累计修行记录',
-    saathu:'萨度  萨度  萨度', anumodhana:'愿所有人共同随喜功德',
+    saathu:'萨度  萨度  萨度', anumodhana:'与您分享功德<br>愿所有人共同随喜功德',
     settings_title:'⚙️ 账户设置',
     settings_photo:'📷 头像', settings_photo_btn:'📷 点击上传头像',
     settings_name:'✏️ 更改显示名称', settings_name_ph:'新名称', settings_name_save:'保存',
@@ -2975,7 +3005,7 @@ function setLang(lang){
   document.querySelectorAll('#shareCard div,#shareCard span').forEach(el=>{
     const txt=el.textContent.trim();
     if(txt==='สาธุ  สาธุ  สาธุ'||txt==='Sādhu  Sādhu  Sādhu'||txt==='萨度  萨度  萨度') el.textContent=t.saathu;
-    if(txt==='ขออนุโมทนาบุญด้วยกันทุกท่าน'||txt==='May all rejoice in this merit'||txt==='愿所有人共同随喜功德') el.textContent=t.anumodhana;
+    if(txt==='ขออนุโมทนาบุญด้วยกันทุกท่าน'||txt==='May all rejoice in this merit'||txt==='愿所有人共同随喜功德'||txt.includes('เอาบุญมาฝาก')||txt.includes('Sharing Merit')||txt.includes('与您分享')) el.innerHTML=t.anumodhana;
   });
   // share card row labels
   const shareRowLabels=[

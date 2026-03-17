@@ -416,8 +416,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <div class="form-error" id="loginErr"></div>
       <button class="btn-primary" onclick="doLogin()">🙏 เข้าสู่ระบบ</button>
       <div class="login-divider">ยังไม่มีบัญชี? <span onclick="toggleAuthMode(true)">สมัครสมาชิก</span></div>
-      <div style="margin-top:16px;text-align:center;">
-        <button onclick="enterGuestMode()" style="background:none;border:none;color:rgba(232,213,163,0.4);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;text-decoration:underline;padding:6px;">เข้าใช้แบบไม่ล็อกอิน (ดูเนื้อหาอย่างเดียว)</button>
+      <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
+        <button onclick="enterGuestMode()" style="background:none;border:none;color:rgba(232,213,163,0.4);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;text-decoration:underline;padding:6px;">เข้าใช้แบบไม่ล็อกอิน</button>
+        <button onclick="shareWebsite()" style="background:none;border:1px solid rgba(201,168,76,0.3);border-radius:20px;color:rgba(232,213,163,0.6);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;padding:6px 16px;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseenter="this.style.borderColor='rgba(201,168,76,0.7)';this.style.color='var(--gold-light)'" onmouseleave="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(232,213,163,0.6)'">
+          🔗 แชร์เว็บนี้
+        </button>
       </div>
     </div>
     <div id="registerForm" style="display:none">
@@ -2342,6 +2345,22 @@ function enterGuestMode(){
   switchStatsMode('today');
 }
 
+function shareWebsite(){
+  const url = 'https://ackajitto.github.io/dharma_prayer/';
+  const text = '🙏 สวดมนต์ถวายเป็นพุทธบูชา — บันทึกการปฏิบัติธรรม';
+  if(navigator.share){
+    navigator.share({ title: 'สวดมนต์ถวายเป็นพุทธบูชา', text, url })
+      .catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>{
+      showToast('✅ คัดลอกลิงก์แล้ว 🔗');
+    }).catch(()=>{
+      // fallback: show prompt
+      window.prompt('คัดลอกลิงก์:', url);
+    });
+  }
+}
+
 function exitGuestMode(){
   window._guestMode = false;
   document.getElementById('app').style.display = 'none';
@@ -2414,6 +2433,7 @@ window.recordSpecial = recordSpecial;
 window.scrollToVideo = scrollToVideo;
 window.switchStatsMode = switchStatsMode;
 window.enterGuestMode = enterGuestMode;
+window.shareWebsite = shareWebsite;
 window.exitGuestMode = exitGuestMode;
 window.confirmResetAll = confirmResetAll;
 window.closeResetConfirm = closeResetConfirm;

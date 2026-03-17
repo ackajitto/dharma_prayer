@@ -1953,13 +1953,18 @@ function applyThemeToCard(p){
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
 
-function openShareModal(mode){
+async function openShareModal(mode){
   mode = mode || 'today';
 
-  // Switch to the requested tab first so DOM has correct values
-  if(mode !== _statsMode) switchStatsMode(mode);
+  // ถ้าโหมดไม่ตรง ให้ switch ก่อนแล้วรอ DOM อัปเดต
+  if(mode !== _statsMode){
+    await new Promise(resolve=>{
+      switchStatsMode(mode);
+      setTimeout(resolve, 400); // รอ refreshStatsDisplay เสร็จ
+    });
+  }
 
-  // Show modal immediately — read values from DOM (already up-to-date)
+  // Show modal
   document.getElementById('shareModal').style.display = 'flex';
 
   const displayName = document.getElementById('profileName').textContent;
@@ -1987,9 +1992,6 @@ function openShareModal(mode){
     year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
   }).format(now);
 
-  // Read values directly from DOM (pst-card numbers already correct)
-  const getNum = id => document.getElementById(id)?.textContent || '0';
-
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
     document.getElementById('scDate').textContent = dateStr;
@@ -2003,25 +2005,24 @@ function openShareModal(mode){
     if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
   }
 
-  // Fill stats from DOM — และซ่อน row ที่เป็น 0
+  // อ่านค่าจาก DOM (pst-card) ตรงๆ เร็วที่สุด
+  const getNum = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
   const rowMap = [
-    {numId:'scCountMorning',  srcId:'totalMorning'},
-    {numId:'scCountEvening',  srcId:'totalEvening'},
-    {numId:'scMeditMorning',  srcId:'totalMedMorning'},
-    {numId:'scMeditEvening',  srcId:'totalMedEvening'},
-    {numId:'scSpecial_dv3',   srcId:'totalSpecial_dv3'},
-    {numId:'scSpecial_dv5',   srcId:'totalSpecial_dv5'},
-    {numId:'scSpecial_dv6',   srcId:'totalSpecial_dv6'},
-    {numId:'scSpecial_dv4',   srcId:'totalSpecial_dv4'},
+    {numId:'scCountMorning',  val: getNum('totalMorning')},
+    {numId:'scCountEvening',  val: getNum('totalEvening')},
+    {numId:'scMeditMorning',  val: getNum('totalMedMorning')},
+    {numId:'scMeditEvening',  val: getNum('totalMedEvening')},
+    {numId:'scSpecial_dv3',   val: getNum('totalSpecial_dv3')},
+    {numId:'scSpecial_dv5',   val: getNum('totalSpecial_dv5')},
+    {numId:'scSpecial_dv6',   val: getNum('totalSpecial_dv6')},
+    {numId:'scSpecial_dv4',   val: getNum('totalSpecial_dv4')},
   ];
-  rowMap.forEach(({numId, srcId})=>{
-    const val = getNum(srcId);
+  rowMap.forEach(({numId, val})=>{
     const numEl = document.getElementById(numId);
     if(!numEl) return;
     numEl.textContent = val;
-    // หา row div (parent ที่มี justify-content:space-between)
     const row = numEl.closest('div[style*="justify-content:space-between"]');
-    if(row) row.style.display = (parseInt(val)||0) === 0 ? 'none' : 'flex';
+    if(row) row.style.display = val === 0 ? 'none' : 'flex';
   });
 }
 function closeShareModal(){

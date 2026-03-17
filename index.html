@@ -2043,28 +2043,208 @@ function _prepareShareModal(mode, vals){
 }
 
 // ── helper: render shareCard → ภาพ ──
-function _renderShareCardToPreview(){
-  return _loadChedi().then(base64=>{
-    const card = document.getElementById('shareCard');
-    card.style.backgroundImage = "url('"+base64+"')";
-    card.style.backgroundSize = 'cover';
-    card.style.backgroundPosition = 'center center';
-    // รอ browser paint 1 frame ก่อน capture
-    return new Promise(resolve=>requestAnimationFrame(()=>{
-      html2canvas(card, {
-        scale:3, useCORS:true, allowTaint:true, backgroundColor:'#1a0800', logging:false
-      }).then(resolve);
-    }));
-  }).then(canvas=>{
-    _previewDataUrl = canvas.toDataURL('image/png');
-    const previewImg = document.getElementById('sharePreviewImg');
-    previewImg.src = _previewDataUrl;
-    previewImg.style.display = 'block';
-    document.getElementById('shareImgLoading').style.display = 'none';
-    document.getElementById('shareImgActions').style.display = 'block';
+// ── วาด canvas โดยตรงจาก vals — ไม่ใช้ html2canvas ──
+function _renderShareCardToPreview(vals, mode, displayName, dateStr, joinedStr){
+  _loadChedi().then(chediBase64=>{
+    const W = 360, H = 560;
+    const canvas = document.createElement('canvas');
+    const dpr = 2;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    // ── พื้นหลัง ──
+    const drawContent = ()=>{
+      // gradient overlay
+      const grad = ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0,   'rgba(18,6,0,0.58)');
+      grad.addColorStop(0.4, 'rgba(10,4,0,0.48)');
+      grad.addColorStop(1,   'rgba(8,3,0,0.68)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,W,H);
+
+      const gold = '#C9A84C', goldLight = '#F5E6C0', cream = 'rgba(232,213,163,0.75)';
+      let y = 24;
+
+      // lotus
+      ctx.font = '28px serif'; ctx.textAlign = 'center';
+      ctx.fillText('🪷', W/2, y+24); y += 40;
+
+      // title
+      ctx.font = 'bold 15px "Noto Serif Thai", serif';
+      ctx.fillStyle = goldLight;
+      ctx.fillText('สวดมนต์ถวายเป็นพุทธบูชา', W/2, y); y += 20;
+
+      ctx.font = '12px "Noto Serif Thai", serif';
+      ctx.fillStyle = cream;
+      ctx.fillText('บูชาธรรมมหาปูชนียาจารย์', W/2, y); y += 14;
+
+      // divider
+      const dg = ctx.createLinearGradient(W/2-40,0,W/2+40,0);
+      dg.addColorStop(0,'transparent'); dg.addColorStop(0.5,gold); dg.addColorStop(1,'transparent');
+      ctx.strokeStyle = dg; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(W/2-40,y); ctx.lineTo(W/2+40,y); ctx.stroke(); y += 16;
+
+      // profile photo
+      const profileImg = document.getElementById('profileImg');
+      const photoSize = 72;
+      const px = W/2 - photoSize/2, py = y;
+      ctx.save();
+      _roundRect(ctx, px-3, py-3, photoSize+6, photoSize+6, 20);
+      const pgrd = ctx.createLinearGradient(px,py,px+photoSize,py+photoSize);
+      pgrd.addColorStop(0,'#8B6914'); pgrd.addColorStop(0.5,'#C9A84C'); pgrd.addColorStop(1,'#E09A5A');
+      ctx.fillStyle = pgrd; ctx.fill();
+      _roundRect(ctx, px, py, photoSize, photoSize, 17);
+      ctx.clip();
+      try{
+        if(profileImg && profileImg.style.display!=='none' && profileImg.src && profileImg.complete){
+          ctx.drawImage(profileImg, px, py, photoSize, photoSize);
+        } else {
+          ctx.fillStyle = 'linear-gradient(135deg,#3d1a00,#5c2a00)';
+          ctx.fillRect(px,py,photoSize,photoSize);
+          ctx.font = 'bold 30px "Noto Serif Thai",serif';
+          ctx.fillStyle = goldLight; ctx.textAlign='center';
+          ctx.fillText(displayName.charAt(0).toUpperCase(), W/2, py+photoSize/2+11);
+        }
+      }catch(e){
+        ctx.fillStyle='#3d1a00'; ctx.fillRect(px,py,photoSize,photoSize);
+      }
+      ctx.restore();
+      y += photoSize + 10;
+
+      // ชื่อ
+      ctx.font = 'bold 20px "Noto Serif Thai",serif';
+      ctx.fillStyle = goldLight; ctx.textAlign = 'center';
+      ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=6;
+      ctx.fillText(displayName, W/2, y); y += 20;
+
+      // วันที่
+      ctx.font = '12px "Sarabun",sans-serif';
+      ctx.fillStyle = 'rgba(232,213,163,0.7)';
+      ctx.fillText(dateStr, W/2, y); y += 20;
+      ctx.shadowBlur = 0;
+
+      // กล่องสถิติ
+      const boxX=16, boxW=W-32;
+      const rows = [
+        {icon:'🌅', label:'ทำวัตรเช้า',               val:vals.cntM, unit:'ครั้ง', color:'#C9A84C'},
+        {icon:'🌙', label:'ทำวัตรเย็น',               val:vals.cntE, unit:'ครั้ง', color:'#c8d4ff'},
+        {icon:'🧘', label:'สมาธิเช้า',                val:vals.medM, unit:'นาที',  color:'#C9A84C'},
+        {icon:'🧘', label:'สมาธิเย็น',                val:vals.medE, unit:'นาที',  color:'#c8d4ff'},
+        {icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี',   val:vals.dv3,  unit:'ครั้ง', color:'#E8D5A3'},
+        {icon:'🙏', label:'สรรเสริญพระธรรมกาย',       val:vals.dv5,  unit:'ครั้ง', color:'#E8D5A3'},
+        {icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',     val:vals.dv6,  unit:'ครั้ง', color:'#E8D5A3'},
+        {icon:'💛', label:'สรรเสริญคุณยายอาจารย์',    val:vals.dv4,  unit:'ครั้ง', color:'#ffe0a0'},
+      ].filter(r=>r.val>0);
+
+      if(rows.length>0){
+        const rowH = 28;
+        const boxH = 28 + rows.length * rowH + 6;
+        // กล่อง bg
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        _roundRect(ctx,boxX,y,boxW,boxH,14);
+        ctx.fill();
+        ctx.strokeStyle='rgba(201,168,76,0.35)'; ctx.lineWidth=1;
+        _roundRect(ctx,boxX,y,boxW,boxH,14); ctx.stroke();
+
+        // label หัว
+        ctx.font = 'bold 11px "Sarabun",sans-serif';
+        ctx.fillStyle = 'rgba(232,213,163,0.7)'; ctx.textAlign='center';
+        ctx.fillText(mode==='today'?'📅 ยอดสวดมนต์วันนี้':'📊 ยอดสวดมนต์รวมทั้งหมด', W/2, y+18);
+
+        let ry = y + 28;
+        rows.forEach((r,i)=>{
+          // divider
+          if(i>0){
+            ctx.strokeStyle='rgba(201,168,76,0.15)'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(boxX+12,ry); ctx.lineTo(boxX+boxW-12,ry); ctx.stroke();
+          }
+          // icon + label
+          ctx.font='14px serif'; ctx.textAlign='left';
+          ctx.fillText(r.icon, boxX+10, ry+20);
+          ctx.font='12px "Sarabun",sans-serif';
+          ctx.fillStyle='rgba(232,213,163,0.85)';
+          ctx.fillText(r.label, boxX+30, ry+20);
+          // value
+          ctx.font='bold 18px "Noto Serif Thai",serif';
+          ctx.fillStyle=r.color; ctx.textAlign='right';
+          ctx.fillText(r.val, boxX+boxW-30, ry+20);
+          ctx.font='10px "Sarabun",sans-serif';
+          ctx.fillStyle='rgba(232,213,163,0.5)';
+          ctx.fillText(r.unit, boxX+boxW-8, ry+20);
+          ry += rowH;
+        });
+        y += boxH + 8;
+      }
+
+      // joined date
+      if(joinedStr){
+        ctx.font='11px "Sarabun",sans-serif';
+        ctx.fillStyle='rgba(232,213,163,0.45)'; ctx.textAlign='center';
+        ctx.fillText(joinedStr, W/2, y); y+=16;
+      }
+
+      // footer divider
+      const fg=ctx.createLinearGradient(W/2-40,0,W/2+40,0);
+      fg.addColorStop(0,'transparent'); fg.addColorStop(0.5,'rgba(201,168,76,0.6)'); fg.addColorStop(1,'transparent');
+      ctx.strokeStyle=fg; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(W/2-40,y); ctx.lineTo(W/2+40,y); ctx.stroke(); y+=14;
+
+      // สาธุ
+      ctx.font='bold 14px "Noto Serif Thai",serif';
+      ctx.fillStyle='rgba(232,213,163,0.9)'; ctx.textAlign='center';
+      ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=5;
+      ctx.fillText('สาธุ  สาธุ  สาธุ', W/2, y); y+=20;
+
+      ctx.font='12px "Noto Serif Thai",serif';
+      ctx.fillStyle='rgba(232,213,163,0.75)';
+      ctx.fillText('เอาบุญมาฝาก', W/2, y); y+=18;
+      ctx.fillText('ขออนุโมทนาบุญด้วยกันทุกท่าน', W/2, y);
+      ctx.shadowBlur=0;
+
+      // ส่งออกภาพ
+      _previewDataUrl = canvas.toDataURL('image/png');
+      const previewImg = document.getElementById('sharePreviewImg');
+      previewImg.src = _previewDataUrl;
+      previewImg.style.display = 'block';
+      document.getElementById('shareImgLoading').style.display = 'none';
+      document.getElementById('shareImgActions').style.display = 'block';
+    };
+
+    // วาดพื้นหลัง chedi แล้ว drawContent
+    ctx.fillStyle = '#1a0800';
+    ctx.fillRect(0,0,W,H);
+    if(chediBase64 && chediBase64.startsWith('data:')){
+      const bg = new Image();
+      bg.onload = ()=>{
+        // cover: คำนวณ crop กลาง
+        const scale = Math.max(W/bg.width, H/bg.height);
+        const sw = W/scale, sh = H/scale;
+        const sx = (bg.width-sw)/2, sy = (bg.height-sh)/2;
+        ctx.globalAlpha = 0.38;
+        ctx.drawImage(bg, sx,sy,sw,sh, 0,0,W,H);
+        ctx.globalAlpha = 1;
+        drawContent();
+      };
+      bg.onerror = drawContent;
+      bg.src = chediBase64;
+    } else {
+      drawContent();
+    }
   }).catch(()=>{
-    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาปิดแล้วลองใหม่';
+    document.getElementById('shareImgLoading').innerHTML='⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่';
   });
+}
+
+// helper วาด rounded rect
+function _roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
 }
 
 // ── ปุ่ม "แชร์ยอดวันนี้" ──
@@ -2114,7 +2294,15 @@ async function openShareModal(mode){
   }
 
   _prepareShareModal(mode, vals);
-  _renderShareCardToPreview();
+
+  const displayName = document.getElementById('profileName').textContent;
+  const dateStr = new Intl.DateTimeFormat('th-TH',{
+    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
+  }).format(new Date());
+  const joinedStr = window._joinedDateCache && mode==='total'
+    ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(window._joinedDateCache)) : '';
+
+  _renderShareCardToPreview(vals, mode, displayName, dateStr, joinedStr);
 }
 
 function downloadFromPreview(){
@@ -2166,18 +2354,6 @@ function _loadChedi(){
   });
 }
 
-function _renderCardToCanvas(){
-  const card = document.getElementById('shareCard');
-  return _loadChedi().then(base64=>{
-    // ใส่รูปเป็น base64 ก่อน render
-    card.style.backgroundImage = "url('"+base64+"')";
-    card.style.backgroundSize = 'cover';
-    card.style.backgroundPosition = 'center center';
-    return html2canvas(card, {
-      scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#1a0800', logging: false
-    });
-  });
-}
 
 // ─── THEME ────────────────────────────────────────────
 const THEMES = ['default','forest','ocean','rose','golden','night'];

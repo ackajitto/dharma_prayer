@@ -893,150 +893,108 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <span class="share-modal-title">🙏 แบ่งปันบุญ</span>
       <button class="share-close-btn" onclick="closeShareModal()">✕</button>
     </div>
-
-    <!-- ภาพสำเร็จ (แสดงตอนโหลดเสร็จ) -->
-    <div id="shareImgWrap" style="border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.25);margin-bottom:14px;background:#1a0800;min-height:180px;display:flex;align-items:center;justify-content:center;">
-      <div id="shareImgLoading" style="padding:32px;text-align:center;color:rgba(201,168,76,0.6);font-size:15px;font-family:'Sarabun',sans-serif;">
-        <div style="font-size:32px;margin-bottom:8px;animation:float 1.5s ease-in-out infinite;">🪷</div>
-        กำลังสร้างภาพ...
-      </div>
-      <img id="sharePreviewImg" style="display:none;width:100%;border-radius:16px;" alt="การ์ดแบ่งปันบุญ">
-    </div>
-
-    <!-- ปุ่ม -->
-    <div id="shareImgActions" style="display:none;">
-      <div class="share-actions">
-        <button class="btn-download-card" onclick="downloadFromPreview()" style="flex:1;">⬇️ บันทึกรูปภาพ</button>
-        <button class="btn-download-card" onclick="openPreviewInTab()" style="flex:1;background:linear-gradient(135deg,#5C1A1A,#C47A20);margin-left:0;">🔗 เปิดในแท็บใหม่</button>
-      </div>
-      <div class="share-hint">กดบันทึกรูปหรือกด Hold (มือถือ) เพื่อบันทึก แล้วส่งต่อแบ่งปันบุญ 🙏</div>
-    </div>
-
-    <!-- shareCard ซ่อนไว้ใช้ render เท่านั้น -->
-    <div style="position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;">
-      <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;background-image:url('https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
-
-        <!-- overlay gradient ให้อ่านตัวหนังสือง่าย -->
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,6,0,0.55) 0%,rgba(10,4,0,0.45) 40%,rgba(8,3,0,0.65) 100%);pointer-events:none;"></div>
-
-        <!-- content wrapper -->
-        <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;box-sizing:border-box;">
-
-          <!-- หัวการ์ด -->
-          <div style="font-size:28px;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(201,168,76,0.5));">🪷</div>
-          <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:#F5E6C0;letter-spacing:.8px;margin-bottom:3px;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,0.8);">สวดมนต์ถวายเป็นพุทธบูชา</div>
-          <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:12px;color:rgba(232,213,163,0.75);letter-spacing:.4px;margin-bottom:4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);">บูชาธรรมมหาปูชนียาจารย์</div>
-          <div data-sc="divbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.7),transparent);margin:6px 0 14px;"></div>
-
-          <!-- รูปโปรไฟล์ -->
-          <div style="margin-bottom:10px;">
-            <div style="width:80px;height:80px;border-radius:20px;padding:3px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A);box-shadow:0 4px 16px rgba(0,0,0,0.5);">
-              <div id="scPhotoInner" style="width:100%;height:100%;border-radius:17px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:30px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3);"><span id="scInitials">ก</span></div>
+    <div class="share-card-wrap">
+      <div id="shareCard" style="width:360px;min-height:480px;background:#1a0800;display:flex;flex-direction:column;align-items:center;padding:28px 22px 22px;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;">
+        <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(201,168,76,0.08);top:-70px;left:-70px;pointer-events:none"></div>
+        <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,168,76,0.05);bottom:-50px;right:-50px;pointer-events:none"></div>
+        <div style="font-size:26px;margin-bottom:4px;position:relative;z-index:1">🪷</div>
+        <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;color:#E8D5A3;letter-spacing:.5px;margin-bottom:2px;position:relative;z-index:1;text-align:center">สวดมนต์ถวายเป็นพุทธบูชา</div>
+        <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.55);letter-spacing:.3px;margin-bottom:2px;position:relative;z-index:1;text-align:center">บูชาธรรมมหาปูชนียาจารย์</div>
+        <div data-sc="divbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.5),transparent);margin:6px 0 8px;position:relative;z-index:1"></div>
+        <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;margin-bottom:10px;position:relative;z-index:1;text-align:center">ผู้ใช้</div>
+        <div style="margin-bottom:10px;position:relative;z-index:1">
+          <div style="width:72px;height:72px;border-radius:18px;padding:3px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A)">
+            <div id="scPhotoInner" style="width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:26px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3)"><span id="scInitials">ก</span></div>
+          </div>
+        </div>
+        <div id="scDate" style="font-size:11px;color:rgba(232,213,163,0.4);margin-bottom:14px;letter-spacing:.4px;position:relative;z-index:1;text-align:center"></div>
+        <div style="width:100%;background:rgba(0,0,0,0.25);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:10px 12px;margin-bottom:10px;position:relative;z-index:1;">
+          <div id="scCardLabel" style="font-size:10px;color:rgba(232,213,163,0.5);letter-spacing:1px;font-weight:600;margin-bottom:8px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🌅</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเช้า</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🌙</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ทำวัตรเย็น</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🧘</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเช้า</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🧘</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สมาธิเย็น</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">นาที</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระมงคลเทพมุนี</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv3" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญพระธรรมกาย</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv5" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">🙏</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">ธัมมจักกัปปวัตตนสูตร</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv6" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
+            </div>
+          </div>          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.1);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">💛</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.6);letter-spacing:.3px;">สรรเสริญคุณยายอาจารย์</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:3px;">
+              <span id="scSpecial_dv4" style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:#ffe0a0;line-height:1;">0</span>
+              <span style="font-size:10px;color:rgba(232,213,163,0.4);">ครั้ง</span>
             </div>
           </div>
-
-          <!-- ชื่อ -->
-          <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#F5E6C0;margin-bottom:4px;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.9);">ผู้ใช้</div>
-          <!-- วันที่ -->
-          <div id="scDate" style="font-size:13px;color:rgba(232,213,163,0.7);margin-bottom:14px;letter-spacing:.4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
-
-          <!-- กล่องสถิติ -->
-          <div style="width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(201,168,76,0.35);border-radius:16px;padding:12px 14px;margin-bottom:10px;backdrop-filter:blur(4px);">
-            <div id="scCardLabel" style="font-size:12px;color:rgba(232,213,163,0.7);letter-spacing:1.2px;font-weight:700;margin-bottom:10px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
-
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🌅</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเช้า</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🌙</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเย็น</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🧘</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สมาธิเช้า</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scMeditMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">นาที</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🧘</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สมาธิเย็น</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scMeditEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">นาที</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🙏</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญพระมงคลเทพมุนี</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scSpecial_dv3" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🙏</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญพระธรรมกาย</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scSpecial_dv5" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">🙏</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ธัมมจักกัปปวัตตนสูตร</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scSpecial_dv6" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#E8D5A3;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span style="font-size:16px;">💛</span>
-                <span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">สรรเสริญคุณยายอาจารย์</span>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:3px;">
-                <span id="scSpecial_dv4" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#ffe0a0;line-height:1;">0</span>
-                <span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- วันเริ่มต้น -->
-          <div id="scFirstDate" style="font-size:12px;color:rgba(232,213,163,0.45);margin-bottom:10px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
-
-          <!-- footer -->
-          <div data-sc="footerbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.6),transparent);margin:4px 0 10px;"></div>
-          <div style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:rgba(232,213,163,0.9);letter-spacing:2px;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,0.8);">สาธุ  สาธุ  สาธุ</div>
-          <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.7);letter-spacing:.5px;margin-top:6px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.7;">เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
-
-        </div><!-- end content wrapper -->
-      </div><!-- end shareCard -->
-    </div><!-- end hidden wrapper -->
+        </div>
+        <div id="scFirstDate" style="font-size:10px;color:rgba(232,213,163,0.3);margin-bottom:10px;position:relative;z-index:1;text-align:center"></div>
+        <div data-sc="footerbar" style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px 0 6px;position:relative;z-index:1"></div>
+        <div style="font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;color:rgba(232,213,163,0.65);letter-spacing:1.5px;position:relative;z-index:1;text-align:center">สาธุ  สาธุ  สาธุ</div>
+        <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:10px;color:rgba(232,213,163,0.35);letter-spacing:.5px;margin-top:3px;position:relative;z-index:1;text-align:center;font-style:italic">ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
+      </div>
+    </div>
+    <div class="share-actions">
+      <button class="btn-download-card" onclick="downloadCard()" style="flex:1;">⬇️ บันทึกรูปภาพ</button>
+      <button class="btn-download-card" id="btnOpenTab" onclick="openCardInTab()" style="flex:1;background:linear-gradient(135deg,#5C1A1A,#C47A20);margin-left:0;">🔗 เปิดในแท็บใหม่</button>
+    </div>
+    <div class="share-hint">กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏</div>
   </div>
 </div>
 
@@ -1968,28 +1926,23 @@ function applyThemeToCard(p){
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
 
-// ══════════════════════════════════════════════════════
-//  SHARE MODAL — แยก today / total ชัดเจน ไม่ปนกัน
-// ══════════════════════════════════════════════════════
+function openShareModal(mode){
+  mode = mode || 'today';
 
-let _previewDataUrl = null;
+  // Switch to the requested tab first so DOM has correct values
+  if(mode !== _statsMode) switchStatsMode(mode);
 
-// ── helper: เตรียม modal ก่อน render ──
-function _prepareShareModal(mode, vals){
-  // reset preview
-  _previewDataUrl = null;
-  document.getElementById('sharePreviewImg').style.display = 'none';
-  document.getElementById('shareImgLoading').style.display = 'flex';
-  document.getElementById('shareImgLoading').style.flexDirection = 'column';
-  document.getElementById('shareImgLoading').innerHTML = '<div style="font-size:32px;margin-bottom:8px;animation:float 1.5s ease-in-out infinite;">🪷</div>กำลังสร้างภาพ...';
-  document.getElementById('shareImgActions').style.display = 'none';
+  // Show modal immediately — read values from DOM (already up-to-date)
   document.getElementById('shareModal').style.display = 'flex';
 
-  // ชื่อ + รูปโปรไฟล์
   const displayName = document.getElementById('profileName').textContent;
   document.getElementById('scName').textContent = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
+  const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
+  const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
+  applyThemeToCard(p);
 
+  // photo
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
@@ -2002,358 +1955,103 @@ function _prepareShareModal(mode, vals){
     inner.textContent = displayName.charAt(0).toUpperCase();
   }
 
-  // theme
-  const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
-  applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
-
-  // วันที่
+  const now = new Date();
   const dateStr = new Intl.DateTimeFormat('th-TH',{
-    year:'numeric', month:'long', day:'numeric', weekday:'long', timeZone:'Asia/Bangkok'
-  }).format(new Date());
+    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
+  }).format(now);
+
+  // Read values directly from DOM (pst-card numbers already correct)
+  const getNum = id => document.getElementById(id)?.textContent || '0';
 
   if(mode === 'today'){
     document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-    document.getElementById('scDate').textContent = dateStr;
-    document.getElementById('scFirstDate').textContent = '';
+    document.getElementById('scDate').textContent = 'วันที่ ' + dateStr;
+    const firstEl = document.getElementById('scFirstDate');
+    if(firstEl) firstEl.textContent = '';
   } else {
     document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
-    document.getElementById('scDate').textContent = dateStr;
+    document.getElementById('scDate').textContent = 'สวดมนต์ทำวัตรเช้า-เย็น วันที่ ' + dateStr;
     const jd = window._joinedDateCache;
-    document.getElementById('scFirstDate').textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
+    const firstEl = document.getElementById('scFirstDate');
+    if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
   }
 
-  // ใส่ตัวเลข — ซ่อน row ที่เป็น 0
+  // Fill stats from DOM — และซ่อน row ที่เป็น 0
   const rowMap = [
-    {numId:'scCountMorning', val:vals.cntM},
-    {numId:'scCountEvening', val:vals.cntE},
-    {numId:'scMeditMorning', val:vals.medM},
-    {numId:'scMeditEvening', val:vals.medE},
-    {numId:'scSpecial_dv3',  val:vals.dv3},
-    {numId:'scSpecial_dv5',  val:vals.dv5},
-    {numId:'scSpecial_dv6',  val:vals.dv6},
-    {numId:'scSpecial_dv4',  val:vals.dv4},
+    {numId:'scCountMorning',  srcId:'totalMorning'},
+    {numId:'scCountEvening',  srcId:'totalEvening'},
+    {numId:'scMeditMorning',  srcId:'totalMedMorning'},
+    {numId:'scMeditEvening',  srcId:'totalMedEvening'},
+    {numId:'scSpecial_dv3',   srcId:'totalSpecial_dv3'},
+    {numId:'scSpecial_dv5',   srcId:'totalSpecial_dv5'},
+    {numId:'scSpecial_dv6',   srcId:'totalSpecial_dv6'},
+    {numId:'scSpecial_dv4',   srcId:'totalSpecial_dv4'},
   ];
-  rowMap.forEach(({numId, val})=>{
+  rowMap.forEach(({numId, srcId})=>{
+    const val = getNum(srcId);
     const numEl = document.getElementById(numId);
     if(!numEl) return;
     numEl.textContent = val;
+    // หา row div (parent ที่มี justify-content:space-between)
     const row = numEl.closest('div[style*="justify-content:space-between"]');
-    if(row) row.style.display = (val||0) === 0 ? 'none' : 'flex';
+    if(row) row.style.display = (parseInt(val)||0) === 0 ? 'none' : 'flex';
   });
-}
-
-// ── helper: render shareCard → ภาพ ──
-// ── วาด canvas โดยตรงจาก vals — ไม่ใช้ html2canvas ──
-function _renderShareCardToPreview(vals, mode, displayName, dateStr, joinedStr){
-  _loadChedi().then(chediBase64=>{
-    const W = 360, H = 560;
-    const canvas = document.createElement('canvas');
-    const dpr = 2;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-
-    // ── พื้นหลัง ──
-    const drawContent = ()=>{
-      // gradient overlay
-      const grad = ctx.createLinearGradient(0,0,0,H);
-      grad.addColorStop(0,   'rgba(18,6,0,0.58)');
-      grad.addColorStop(0.4, 'rgba(10,4,0,0.48)');
-      grad.addColorStop(1,   'rgba(8,3,0,0.68)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0,0,W,H);
-
-      const gold = '#C9A84C', goldLight = '#F5E6C0', cream = 'rgba(232,213,163,0.75)';
-      let y = 24;
-
-      // lotus
-      ctx.font = '28px serif'; ctx.textAlign = 'center';
-      ctx.fillText('🪷', W/2, y+24); y += 40;
-
-      // title
-      ctx.font = 'bold 15px "Noto Serif Thai", serif';
-      ctx.fillStyle = goldLight;
-      ctx.fillText('สวดมนต์ถวายเป็นพุทธบูชา', W/2, y); y += 20;
-
-      ctx.font = '12px "Noto Serif Thai", serif';
-      ctx.fillStyle = cream;
-      ctx.fillText('บูชาธรรมมหาปูชนียาจารย์', W/2, y); y += 14;
-
-      // divider
-      const dg = ctx.createLinearGradient(W/2-40,0,W/2+40,0);
-      dg.addColorStop(0,'transparent'); dg.addColorStop(0.5,gold); dg.addColorStop(1,'transparent');
-      ctx.strokeStyle = dg; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(W/2-40,y); ctx.lineTo(W/2+40,y); ctx.stroke(); y += 16;
-
-      // profile photo
-      const profileImg = document.getElementById('profileImg');
-      const photoSize = 72;
-      const px = W/2 - photoSize/2, py = y;
-      ctx.save();
-      _roundRect(ctx, px-3, py-3, photoSize+6, photoSize+6, 20);
-      const pgrd = ctx.createLinearGradient(px,py,px+photoSize,py+photoSize);
-      pgrd.addColorStop(0,'#8B6914'); pgrd.addColorStop(0.5,'#C9A84C'); pgrd.addColorStop(1,'#E09A5A');
-      ctx.fillStyle = pgrd; ctx.fill();
-      _roundRect(ctx, px, py, photoSize, photoSize, 17);
-      ctx.clip();
-      try{
-        if(profileImg && profileImg.style.display!=='none' && profileImg.src && profileImg.complete){
-          ctx.drawImage(profileImg, px, py, photoSize, photoSize);
-        } else {
-          ctx.fillStyle = 'linear-gradient(135deg,#3d1a00,#5c2a00)';
-          ctx.fillRect(px,py,photoSize,photoSize);
-          ctx.font = 'bold 30px "Noto Serif Thai",serif';
-          ctx.fillStyle = goldLight; ctx.textAlign='center';
-          ctx.fillText(displayName.charAt(0).toUpperCase(), W/2, py+photoSize/2+11);
-        }
-      }catch(e){
-        ctx.fillStyle='#3d1a00'; ctx.fillRect(px,py,photoSize,photoSize);
-      }
-      ctx.restore();
-      y += photoSize + 10;
-
-      // ชื่อ
-      ctx.font = 'bold 20px "Noto Serif Thai",serif';
-      ctx.fillStyle = goldLight; ctx.textAlign = 'center';
-      ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=6;
-      ctx.fillText(displayName, W/2, y); y += 20;
-
-      // วันที่
-      ctx.font = '12px "Sarabun",sans-serif';
-      ctx.fillStyle = 'rgba(232,213,163,0.7)';
-      ctx.fillText(dateStr, W/2, y); y += 20;
-      ctx.shadowBlur = 0;
-
-      // กล่องสถิติ
-      const boxX=16, boxW=W-32;
-      const rows = [
-        {icon:'🌅', label:'ทำวัตรเช้า',               val:vals.cntM, unit:'ครั้ง', color:'#C9A84C'},
-        {icon:'🌙', label:'ทำวัตรเย็น',               val:vals.cntE, unit:'ครั้ง', color:'#c8d4ff'},
-        {icon:'🧘', label:'สมาธิเช้า',                val:vals.medM, unit:'นาที',  color:'#C9A84C'},
-        {icon:'🧘', label:'สมาธิเย็น',                val:vals.medE, unit:'นาที',  color:'#c8d4ff'},
-        {icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี',   val:vals.dv3,  unit:'ครั้ง', color:'#E8D5A3'},
-        {icon:'🙏', label:'สรรเสริญพระธรรมกาย',       val:vals.dv5,  unit:'ครั้ง', color:'#E8D5A3'},
-        {icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',     val:vals.dv6,  unit:'ครั้ง', color:'#E8D5A3'},
-        {icon:'💛', label:'สรรเสริญคุณยายอาจารย์',    val:vals.dv4,  unit:'ครั้ง', color:'#ffe0a0'},
-      ].filter(r=>r.val>0);
-
-      if(rows.length>0){
-        const rowH = 28;
-        const boxH = 28 + rows.length * rowH + 6;
-        // กล่อง bg
-        ctx.fillStyle = 'rgba(0,0,0,0.45)';
-        _roundRect(ctx,boxX,y,boxW,boxH,14);
-        ctx.fill();
-        ctx.strokeStyle='rgba(201,168,76,0.35)'; ctx.lineWidth=1;
-        _roundRect(ctx,boxX,y,boxW,boxH,14); ctx.stroke();
-
-        // label หัว
-        ctx.font = 'bold 11px "Sarabun",sans-serif';
-        ctx.fillStyle = 'rgba(232,213,163,0.7)'; ctx.textAlign='center';
-        ctx.fillText(mode==='today'?'📅 ยอดสวดมนต์วันนี้':'📊 ยอดสวดมนต์รวมทั้งหมด', W/2, y+18);
-
-        let ry = y + 28;
-        rows.forEach((r,i)=>{
-          // divider
-          if(i>0){
-            ctx.strokeStyle='rgba(201,168,76,0.15)'; ctx.lineWidth=1;
-            ctx.beginPath(); ctx.moveTo(boxX+12,ry); ctx.lineTo(boxX+boxW-12,ry); ctx.stroke();
-          }
-          // icon + label
-          ctx.font='14px serif'; ctx.textAlign='left';
-          ctx.fillText(r.icon, boxX+10, ry+20);
-          ctx.font='12px "Sarabun",sans-serif';
-          ctx.fillStyle='rgba(232,213,163,0.85)';
-          ctx.fillText(r.label, boxX+30, ry+20);
-          // value
-          ctx.font='bold 18px "Noto Serif Thai",serif';
-          ctx.fillStyle=r.color; ctx.textAlign='right';
-          ctx.fillText(r.val, boxX+boxW-30, ry+20);
-          ctx.font='10px "Sarabun",sans-serif';
-          ctx.fillStyle='rgba(232,213,163,0.5)';
-          ctx.fillText(r.unit, boxX+boxW-8, ry+20);
-          ry += rowH;
-        });
-        y += boxH + 8;
-      }
-
-      // joined date
-      if(joinedStr){
-        ctx.font='11px "Sarabun",sans-serif';
-        ctx.fillStyle='rgba(232,213,163,0.45)'; ctx.textAlign='center';
-        ctx.fillText(joinedStr, W/2, y); y+=16;
-      }
-
-      // footer divider
-      const fg=ctx.createLinearGradient(W/2-40,0,W/2+40,0);
-      fg.addColorStop(0,'transparent'); fg.addColorStop(0.5,'rgba(201,168,76,0.6)'); fg.addColorStop(1,'transparent');
-      ctx.strokeStyle=fg; ctx.lineWidth=1;
-      ctx.beginPath(); ctx.moveTo(W/2-40,y); ctx.lineTo(W/2+40,y); ctx.stroke(); y+=14;
-
-      // สาธุ
-      ctx.font='bold 14px "Noto Serif Thai",serif';
-      ctx.fillStyle='rgba(232,213,163,0.9)'; ctx.textAlign='center';
-      ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=5;
-      ctx.fillText('สาธุ  สาธุ  สาธุ', W/2, y); y+=20;
-
-      ctx.font='12px "Noto Serif Thai",serif';
-      ctx.fillStyle='rgba(232,213,163,0.75)';
-      ctx.fillText('เอาบุญมาฝาก', W/2, y); y+=18;
-      ctx.fillText('ขออนุโมทนาบุญด้วยกันทุกท่าน', W/2, y);
-      ctx.shadowBlur=0;
-
-      // ส่งออกภาพ
-      _previewDataUrl = canvas.toDataURL('image/png');
-      const previewImg = document.getElementById('sharePreviewImg');
-      previewImg.src = _previewDataUrl;
-      previewImg.style.display = 'block';
-      document.getElementById('shareImgLoading').style.display = 'none';
-      document.getElementById('shareImgActions').style.display = 'block';
-    };
-
-    // วาดพื้นหลัง chedi แล้ว drawContent
-    ctx.fillStyle = '#1a0800';
-    ctx.fillRect(0,0,W,H);
-    if(chediBase64 && chediBase64.startsWith('data:')){
-      const bg = new Image();
-      bg.onload = ()=>{
-        // cover: คำนวณ crop กลาง
-        const scale = Math.max(W/bg.width, H/bg.height);
-        const sw = W/scale, sh = H/scale;
-        const sx = (bg.width-sw)/2, sy = (bg.height-sh)/2;
-        ctx.globalAlpha = 0.38;
-        ctx.drawImage(bg, sx,sy,sw,sh, 0,0,W,H);
-        ctx.globalAlpha = 1;
-        drawContent();
-      };
-      bg.onerror = drawContent;
-      bg.src = chediBase64;
-    } else {
-      drawContent();
-    }
-  }).catch(()=>{
-    document.getElementById('shareImgLoading').innerHTML='⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่';
-  });
-}
-
-// helper วาด rounded rect
-function _roundRect(ctx,x,y,w,h,r){
-  ctx.beginPath();
-  ctx.moveTo(x+r,y);
-  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
-  ctx.closePath();
-}
-
-// ── ปุ่ม "แชร์ยอดวันนี้" ──
-async function openShareModal(mode){
-  mode = mode || 'today';
-  let vals;
-
-  if(mode === 'today'){
-    // อ่านจาก DOM วันนี้ตรงๆ ไม่ผ่าน Firebase
-    const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
-    // ถ้าหน้าจอแสดง today อยู่แล้ว อ่านได้เลย
-    // ถ้าแสดง total อยู่ ต้องดึง today history ก่อน
-    if(_statsMode === 'today'){
-      vals = {
-        cntM:g('totalMorning'), cntE:g('totalEvening'),
-        medM:g('totalMedMorning'), medE:g('totalMedEvening'),
-        dv3:g('totalSpecial_dv3'), dv5:g('totalSpecial_dv5'),
-        dv6:g('totalSpecial_dv6'), dv4:g('totalSpecial_dv4'),
-      };
-    } else {
-      // ดึง today จาก Firebase เงียบๆ
-      const todayData = window._currentUser
-        ? (await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {})
-        : {};
-      const sp = todayData.special || {};
-      vals = {
-        cntM:todayData.cntM||0, cntE:todayData.cntE||0,
-        medM:todayData.medM||0, medE:todayData.medE||0,
-        dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0,
-      };
-    }
-  } else {
-    // total — ถ้าหน้าจอแสดง total อยู่แล้ว อ่านได้เลย
-    const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
-    if(_statsMode === 'total'){
-      vals = {
-        cntM:g('totalMorning'), cntE:g('totalEvening'),
-        medM:g('totalMedMorning'), medE:g('totalMedEvening'),
-        dv3:g('totalSpecial_dv3'), dv5:g('totalSpecial_dv5'),
-        dv6:g('totalSpecial_dv6'), dv4:g('totalSpecial_dv4'),
-      };
-    } else {
-      // คำนวณ total จาก Firebase เงียบๆ
-      const totals = window._currentUser ? await computeAllTimeTotals() : {cntM:0,cntE:0,medM:0,medE:0,dv3:0,dv5:0,dv6:0,dv4:0};
-      vals = totals;
-    }
-  }
-
-  _prepareShareModal(mode, vals);
-
-  const displayName = document.getElementById('profileName').textContent;
-  const dateStr = new Intl.DateTimeFormat('th-TH',{
-    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
-  }).format(new Date());
-  const joinedStr = window._joinedDateCache && mode==='total'
-    ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(window._joinedDateCache)) : '';
-
-  _renderShareCardToPreview(vals, mode, displayName, dateStr, joinedStr);
-}
-
-function downloadFromPreview(){
-  if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
-  const name = document.getElementById('profileName').textContent || 'dharma';
-  const link = document.createElement('a');
-  link.download = 'แบ่งปันบุญ_' + name + '.png';
-  link.href = _previewDataUrl;
-  link.click();
-  showToast('✅ บันทึกภาพสำเร็จ 🙏');
-}
-
-function openPreviewInTab(){
-  if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
-  const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>แบ่งปันบุญ</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>body{margin:0;background:#1a0800;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;padding:16px;box-sizing:border-box;}
-    img{max-width:420px;width:100%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
-    a{display:inline-block;padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#8B6914,#C9A84C);color:#1a0800;font-size:17px;font-weight:700;text-decoration:none;font-family:sans-serif;}
-    </style></head><body>
-    <img src="${_previewDataUrl}" alt="แบ่งปันบุญ">
-    <a href="${_previewDataUrl}" download="แบ่งปันบุญ.png">⬇️ บันทึกรูปภาพ</a>
-    </body></html>`);
-  win.document.close();
 }
 function closeShareModal(){
   document.getElementById('shareModal').style.display = 'none';
 }
 
-const CHEDI_URL = 'https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg';
-let _chediBase64 = null;
-
-function _loadChedi(){
-  if(_chediBase64) return Promise.resolve(_chediBase64);
-  return new Promise((resolve)=>{
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = ()=>{
-      const c = document.createElement('canvas');
-      c.width = img.naturalWidth; c.height = img.naturalHeight;
-      c.getContext('2d').drawImage(img,0,0);
-      try { _chediBase64 = c.toDataURL('image/jpeg',0.92); }
-      catch(e){ _chediBase64 = CHEDI_URL; }
-      resolve(_chediBase64);
-    };
-    img.onerror = ()=>resolve(CHEDI_URL);
-    img.src = CHEDI_URL + '?t=' + Date.now();
+function _renderCardToCanvas(){
+  return html2canvas(document.getElementById('shareCard'), {
+    scale: 3, useCORS: true, allowTaint: true, backgroundColor: null, logging: false
   });
 }
 
+function downloadCard(){
+  const btns = document.querySelectorAll('.btn-download-card');
+  btns.forEach(b=>{ b.disabled=true; });
+  btns[0].textContent = '⏳ กำลังสร้างภาพ...';
+  _renderCardToCanvas().then(canvas => {
+    const name = document.getElementById('profileName').textContent || 'dharma';
+    const link = document.createElement('a');
+    link.download = 'แบ่งปันบุญ_' + name + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btns[0].textContent = '⬇️ บันทึกรูปภาพ';
+    btns.forEach(b=>{ b.disabled=false; });
+    showToast('✅ บันทึกภาพสำเร็จ 🙏');
+  }).catch(()=>{
+    btns[0].textContent = '⬇️ บันทึกรูปภาพ';
+    btns.forEach(b=>{ b.disabled=false; });
+    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
+  });
+}
+
+function openCardInTab(){
+  const btns = document.querySelectorAll('.btn-download-card');
+  btns.forEach(b=>{ b.disabled=true; });
+  btns[1].textContent = '⏳ กำลังสร้างภาพ...';
+  _renderCardToCanvas().then(canvas => {
+    const dataUrl = canvas.toDataURL('image/png');
+    const win = window.open('', '_blank');
+    win.document.write(`<!DOCTYPE html><html><head><title>แบ่งปันบุญ</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>body{margin:0;background:#1a0800;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;}
+      img{max-width:100%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+      a{display:inline-block;padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#8B6914,#C9A84C);color:#1a0800;font-size:17px;font-weight:700;text-decoration:none;font-family:sans-serif;}
+      </style></head><body>
+      <img src="${dataUrl}" alt="แบ่งปันบุญ">
+      <a href="${dataUrl}" download="แบ่งปันบุญ.png">⬇️ บันทึกรูปภาพ</a>
+      </body></html>`);
+    win.document.close();
+    btns[1].textContent = '🔗 เปิดในแท็บใหม่';
+    btns.forEach(b=>{ b.disabled=false; });
+  }).catch(()=>{
+    btns[1].textContent = '🔗 เปิดในแท็บใหม่';
+    btns.forEach(b=>{ b.disabled=false; });
+    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
+  });
+}
 
 // ─── THEME ────────────────────────────────────────────
 const THEMES = ['default','forest','ocean','rose','golden','night'];
@@ -2818,9 +2516,7 @@ window.closeShareModal = closeShareModal;
 window.openChangePassword = openChangePassword;
 window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
-window.downloadFromPreview = downloadFromPreview;
-window.openPreviewInTab = openPreviewInTab;
-
+window.downloadCard = downloadCard;
 window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings;
@@ -2981,7 +2677,7 @@ const TRANSLATIONS = {
     share_hint:'กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏',
     card_motto_sc:'สวดมนต์ถวายเป็นพุทธบูชา', card_sub_sc:'บูชาธรรมมหาปูชนียาจารย์',
     card_label_today:'📅 ยอดสวดมนต์วันนี้', card_label_total:'📊 ยอดสวดมนต์รวมทั้งหมด',
-    saathu:'สาธุ  สาธุ  สาธุ', anumodhana:'เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน',
+    saathu:'สาธุ  สาธุ  สาธุ', anumodhana:'ขออนุโมทนาบุญด้วยกันทุกท่าน',
     // settings
     settings_title:'⚙️ ตั้งค่าบัญชี',
     settings_photo:'📷 รูปโปรไฟล์', settings_photo_btn:'📷 กดเพื่ออัปโหลดรูป',
@@ -3032,7 +2728,7 @@ const TRANSLATIONS = {
     share_hint:'Save the image and share it to spread merit 🙏',
     card_motto_sc:'Chant as an Offering to the Buddha', card_sub_sc:'In Homage to the Great Masters',
     card_label_today:"📅 Today's Practice", card_label_total:'📊 All-Time Practice',
-    saathu:'Sādhu  Sādhu  Sādhu', anumodhana:'Sharing Merit with You<br>May all rejoice in this merit',
+    saathu:'Sādhu  Sādhu  Sādhu', anumodhana:'May all rejoice in this merit',
     settings_title:'⚙️ Account Settings',
     settings_photo:'📷 Profile Photo', settings_photo_btn:'📷 Upload Photo',
     settings_name:'✏️ Change Display Name', settings_name_ph:'New name', settings_name_save:'Save',
@@ -3080,7 +2776,7 @@ const TRANSLATIONS = {
     share_hint:'保存图片后分享，将功德传递给他人 🙏',
     card_motto_sc:'诵经供养佛陀', card_sub_sc:'礼敬大成就阿阇黎',
     card_label_today:'📅 今日修行记录', card_label_total:'📊 累计修行记录',
-    saathu:'萨度  萨度  萨度', anumodhana:'与您分享功德<br>愿所有人共同随喜功德',
+    saathu:'萨度  萨度  萨度', anumodhana:'愿所有人共同随喜功德',
     settings_title:'⚙️ 账户设置',
     settings_photo:'📷 头像', settings_photo_btn:'📷 点击上传头像',
     settings_name:'✏️ 更改显示名称', settings_name_ph:'新名称', settings_name_save:'保存',
@@ -3279,7 +2975,7 @@ function setLang(lang){
   document.querySelectorAll('#shareCard div,#shareCard span').forEach(el=>{
     const txt=el.textContent.trim();
     if(txt==='สาธุ  สาธุ  สาธุ'||txt==='Sādhu  Sādhu  Sādhu'||txt==='萨度  萨度  萨度') el.textContent=t.saathu;
-    if(txt==='ขออนุโมทนาบุญด้วยกันทุกท่าน'||txt==='May all rejoice in this merit'||txt==='愿所有人共同随喜功德'||txt.includes('เอาบุญมาฝาก')||txt.includes('Sharing Merit')||txt.includes('与您分享')) el.innerHTML=t.anumodhana;
+    if(txt==='ขออนุโมทนาบุญด้วยกันทุกท่าน'||txt==='May all rejoice in this merit'||txt==='愿所有人共同随喜功德') el.textContent=t.anumodhana;
   });
   // share card row labels
   const shareRowLabels=[
@@ -3364,7 +3060,7 @@ function setLang(lang){
   renderPlaylist();
 }
 
-
+window.openCardInTab = openCardInTab;
 window.getVideoTitle = getVideoTitle;
 window.setLang = setLang;
 

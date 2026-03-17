@@ -2590,13 +2590,169 @@ function updateProfileTotals(){
 
 
 // ─── LANGUAGE ─────────────────────────────────────────
-const TRANSLATIONS = {"th": {"brand": "พุทธบูชา", "brand_sub": "DHARMA PRAYER", "login_title": "สวดมนต์ถวายเป็นพุทธบูชา", "login_sub": "เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน", "btn_login": "🙏 เข้าสู่ระบบ", "btn_register": "✨ สมัครสมาชิก", "btn_google": "เข้าสู่ระบบด้วย Google", "btn_google_reg": "สมัครด้วย Google", "btn_guest": "เข้าใช้แบบไม่ล็อกอิน", "btn_logout": "ออกจากระบบ", "btn_login_hdr": "🔑 ล็อกอิน", "section_chant": "📿 บทสวดมนต์", "section_record": "🙏 บันทึกการปฏิบัติ", "card_label": "บันทึกการปฏิบัติธรรม", "share_today": "📅 แชร์ยอดวันนี้", "share_total": "📊 แชร์ยอดรวมทั้งหมด", "toggle_today": "📅 วันนี้", "toggle_total": "📊 รวมทั้งหมด", "theme_label": "🎨 ธีมสี", "settings_title": "⚙️ ตั้งค่าบัญชี", "footer": "นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส", "record_morning": "🌅 บันทึกทำวัตรเช้า", "record_evening": "🌙 บันทึกทำวัตรเย็น", "record_special": "🙏 บันทึกการสวดบทนี้"}, "en": {"brand": "Dhamma Prayer", "brand_sub": "DHARMA PRAYER", "login_title": "Chant for the Buddha", "login_sub": "Sign in with email and password", "btn_login": "🙏 Sign In", "btn_register": "✨ Register", "btn_google": "Sign in with Google", "btn_google_reg": "Register with Google", "btn_guest": "Browse without login", "btn_logout": "Sign Out", "btn_login_hdr": "🔑 Login", "section_chant": "📿 Chanting Playlist", "section_record": "🙏 Practice Record", "card_label": "Dhamma Practice Record", "share_today": "📅 Share Today's", "share_total": "📊 Share Total", "toggle_today": "📅 Today", "toggle_total": "📊 Total", "theme_label": "🎨 Theme", "settings_title": "⚙️ Account Settings", "footer": "Namo Tassa Bhagavato Arahato Sammāsambuddhassa", "record_morning": "🌅 Record Morning Chant", "record_evening": "🌙 Record Evening Chant", "record_special": "🙏 Record This Chant"}, "zh": {"brand": "供养佛法", "brand_sub": "DHARMA PRAYER", "login_title": "诵经供养佛陀", "login_sub": "使用电子邮件和密码登录", "btn_login": "🙏 登录", "btn_register": "✨ 注册", "btn_google": "使用 Google 登录", "btn_google_reg": "使用 Google 注册", "btn_guest": "访客模式（无需登录）", "btn_logout": "退出登录", "btn_login_hdr": "🔑 登录", "section_chant": "📿 诵经列表", "section_record": "🙏 修行记录", "card_label": "修行记录", "share_today": "📅 分享今日记录", "share_total": "📊 分享累计记录", "toggle_today": "📅 今天", "toggle_total": "📊 累计", "theme_label": "🎨 主题颜色", "settings_title": "⚙️ 账户设置", "footer": "南无薄伽梵 阿罗汉 正等正觉者", "record_morning": "🌅 记录早课", "record_evening": "🌙 记录晚课", "record_special": "🙏 记录此经"}};
+const TRANSLATIONS = {
+  th: {
+    brand:'พุทธบูชา', brand_sub:'DHARMA PRAYER',
+    // หน้า login
+    login_title:'สวดมนต์ถวายเป็นพุทธบูชา',
+    login_sub:'เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน',
+    login_or_email:'หรือใช้อีเมล', login_or_reg:'หรือสมัครด้วยอีเมล',
+    label_email:'อีเมล', label_password:'รหัสผ่าน', label_name:'ชื่อแสดง',
+    ph_password:'กรอกรหัสผ่าน', ph_name:'ชื่อของท่าน', ph_new_password:'อย่างน้อย 4 ตัวอักษร',
+    btn_google:'เข้าสู่ระบบด้วย Google', btn_google_reg:'สมัครด้วย Google',
+    btn_login:'🙏 เข้าสู่ระบบ', btn_register:'✨ สมัครสมาชิก',
+    no_account:'ยังไม่มีบัญชี?', link_register:'สมัครสมาชิก',
+    have_account:'มีบัญชีแล้ว?', link_login:'เข้าสู่ระบบ',
+    btn_guest:'เข้าใช้แบบไม่ล็อกอิน', btn_share_web:'🔗 แชร์เว็บนี้',
+    // header
+    btn_logout:'ออกจากระบบ', btn_login_hdr:'🔑 ล็อกอิน', btn_share_hdr:'🔗 แชร์',
+    // profile card
+    card_motto:'สวดมนต์ถวายเป็นพุทธบูชา', card_sub:'บูชาธรรมมหาปูชนียาจารย์',
+    toggle_today:'📅 วันนี้', toggle_total:'📊 รวมทั้งหมด',
+    lbl_morning:'🌅 ทำวัตรเช้า', lbl_evening:'🌙 ทำวัตรเย็น',
+    lbl_med_morning:'🧘 สมาธิเช้า', lbl_med_evening:'🧘 สมาธิเย็น',
+    lbl_dv3:'🙏 สรรเสริญพระมงคลเทพมุนี', lbl_dv5:'🙏 สรรเสริญพระธรรมกาย',
+    lbl_dv6:'🙏 ธัมมจักกัปปวัตตนสูตร', lbl_dv4:'💛 สรรเสริญคุณยายอาจารย์',
+    unit_times:' ครั้ง', unit_min:' นาที',
+    share_today:'📅 แชร์ยอดวันนี้', share_total:'📊 แชร์ยอดรวมทั้งหมด',
+    theme_label:'🎨 ธีมสี',
+    // section
+    section_chant:'📿 บทสวดมนต์',
+    // record buttons
+    record_morning:'🌅 บันทึกทำวัตรเช้า', record_evening:'🌙 บันทึกทำวัตรเย็น',
+    record_special:'🙏 บันทึกการสวดบทนี้',
+    med_morning_title:'🌅 สมาธิเช้า', med_evening_title:'🌙 สมาธิเย็น',
+    med_unit:'นาที', btn_med_save:'+ บันทึก',
+    // footer
+    footer:'นโม ตสฺส ภควโต อรหโต สมฺมาสมฺพุทฺธสฺส',
+    // share modal
+    share_modal_title:'🙏 แบ่งปันบุญ', btn_download:'⬇️ บันทึกเป็นรูปภาพ',
+    share_hint:'กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏',
+    card_motto_sc:'ขอถวายเป็นพุทธบูชา', card_sub_sc:'บูชาธรรมมหาปูชนียาจารย์',
+    card_label_today:'📅 ยอดสวดมนต์วันนี้', card_label_total:'📊 ยอดสวดมนต์รวมทั้งหมด',
+    saathu:'สาธุ  สาธุ  สาธุ', anumodhana:'ขออนุโมทนาบุญด้วยกันทุกท่าน',
+    // settings
+    settings_title:'⚙️ ตั้งค่าบัญชี',
+    settings_photo:'📷 รูปโปรไฟล์', settings_photo_btn:'📷 กดเพื่ออัปโหลดรูป',
+    settings_name:'✏️ เปลี่ยนชื่อแสดง', settings_name_ph:'ชื่อใหม่', settings_name_save:'บันทึก',
+    settings_pw:'🔑 เปลี่ยนรหัสผ่าน',
+    settings_old_pw:'รหัสผ่านปัจจุบัน', settings_new_pw:'รหัสผ่านใหม่ (4 ตัวขึ้นไป)', settings_confirm_pw:'ยืนยันรหัสผ่านใหม่',
+    btn_save_pw:'🔑 บันทึกรหัสผ่านใหม่',
+    settings_counts:'🔢 แก้ไขยอดนับ',
+    settings_reset_title:'⚠️ รีเซ็ตยอดทั้งหมด',
+    settings_reset_desc:'ล้างยอดสะสมทั้งหมดกลับเป็น 0 รวมถึงประวัติทุกวัน ไม่สามารถกู้คืนได้',
+    btn_reset:'🗑️ รีเซ็ตยอดทั้งหมด',
+    // reset confirm
+    reset_confirm_title:'ยืนยันรีเซ็ต?',
+    reset_confirm_desc:'ยอดสวดมนต์ทั้งหมดและประวัติทุกวันจะถูกลบ\nไม่สามารถกู้คืนได้',
+    btn_cancel:'ยกเลิก', btn_confirm_reset:'รีเซ็ต',
+    // crop
+    crop_title:'✂️ ปรับภาพโปรไฟล์', btn_crop_cancel:'ยกเลิก', btn_crop_save:'✅ บันทึกรูป',
+  },
+  en: {
+    brand:'Dhamma Prayer', brand_sub:'DHARMA PRAYER',
+    login_title:'Chant for the Buddha',
+    login_sub:'Sign in with email and password',
+    login_or_email:'or use email', login_or_reg:'or register with email',
+    label_email:'Email', label_password:'Password', label_name:'Display Name',
+    ph_password:'Enter password', ph_name:'Your name', ph_new_password:'At least 4 characters',
+    btn_google:'Sign in with Google', btn_google_reg:'Register with Google',
+    btn_login:'🙏 Sign In', btn_register:'✨ Register',
+    no_account:"Don't have an account?", link_register:'Register',
+    have_account:'Already have an account?', link_login:'Sign In',
+    btn_guest:'Browse without login', btn_share_web:'🔗 Share',
+    btn_logout:'Sign Out', btn_login_hdr:'🔑 Login', btn_share_hdr:'🔗 Share',
+    card_motto:'Chant as an Offering to the Buddha', card_sub:'In Homage to the Great Masters',
+    toggle_today:'📅 Today', toggle_total:'📊 Total',
+    lbl_morning:'🌅 Morning Chant', lbl_evening:'🌙 Evening Chant',
+    lbl_med_morning:'🧘 Morning Meditation', lbl_med_evening:'🧘 Evening Meditation',
+    lbl_dv3:'🙏 Praise of Phra Mongkol Thepmuni', lbl_dv5:'🙏 Praise of Dhammakaya',
+    lbl_dv6:'🙏 Dhammacakkappavattana Sutta', lbl_dv4:'💛 Praise of Khun Yai Acarini',
+    unit_times:' times', unit_min:' min',
+    share_today:'📅 Share Today', share_total:'📊 Share Total',
+    theme_label:'🎨 Theme',
+    section_chant:'📿 Chanting Playlist',
+    record_morning:'🌅 Record Morning Chant', record_evening:'🌙 Record Evening Chant',
+    record_special:'🙏 Record This Chant',
+    med_morning_title:'🌅 Morning Meditation', med_evening_title:'🌙 Evening Meditation',
+    med_unit:'min', btn_med_save:'+ Save',
+    footer:'Namo Tassa Bhagavato Arahato Sammāsambuddhassa',
+    share_modal_title:'🙏 Share Merit', btn_download:'⬇️ Save as Image',
+    share_hint:'Save the image and share it to spread merit 🙏',
+    card_motto_sc:'Offering to the Buddha', card_sub_sc:'In Homage to the Great Masters',
+    card_label_today:"📅 Today's Practice", card_label_total:'📊 All-Time Practice',
+    saathu:'Sādhu  Sādhu  Sādhu', anumodhana:'May all rejoice in this merit',
+    settings_title:'⚙️ Account Settings',
+    settings_photo:'📷 Profile Photo', settings_photo_btn:'📷 Upload Photo',
+    settings_name:'✏️ Change Display Name', settings_name_ph:'New name', settings_name_save:'Save',
+    settings_pw:'🔑 Change Password',
+    settings_old_pw:'Current password', settings_new_pw:'New password (min 4 chars)', settings_confirm_pw:'Confirm new password',
+    btn_save_pw:'🔑 Save New Password',
+    settings_counts:'🔢 Edit Counts',
+    settings_reset_title:'⚠️ Reset All Data',
+    settings_reset_desc:'All accumulated counts and daily history will be deleted. This cannot be undone.',
+    btn_reset:'🗑️ Reset All',
+    reset_confirm_title:'Confirm Reset?',
+    reset_confirm_desc:'All chanting records and daily history will be deleted.\nThis cannot be undone.',
+    btn_cancel:'Cancel', btn_confirm_reset:'Reset',
+    crop_title:'✂️ Adjust Profile Photo', btn_crop_cancel:'Cancel', btn_crop_save:'✅ Save Photo',
+  },
+  zh: {
+    brand:'供养佛法', brand_sub:'DHARMA PRAYER',
+    login_title:'诵经供养佛陀',
+    login_sub:'使用电子邮件和密码登录',
+    login_or_email:'或使用电子邮件', login_or_reg:'或使用电子邮件注册',
+    label_email:'电子邮件', label_password:'密码', label_name:'显示名称',
+    ph_password:'请输入密码', ph_name:'您的名字', ph_new_password:'至少4个字符',
+    btn_google:'使用 Google 登录', btn_google_reg:'使用 Google 注册',
+    btn_login:'🙏 登录', btn_register:'✨ 注册',
+    no_account:'还没有账户？', link_register:'注册',
+    have_account:'已有账户？', link_login:'登录',
+    btn_guest:'访客模式（无需登录）', btn_share_web:'🔗 分享',
+    btn_logout:'退出登录', btn_login_hdr:'🔑 登录', btn_share_hdr:'🔗 分享',
+    card_motto:'诵经供养佛陀', card_sub:'礼敬大成就阿阇黎',
+    toggle_today:'📅 今天', toggle_total:'📊 累计',
+    lbl_morning:'🌅 早课', lbl_evening:'🌙 晚课',
+    lbl_med_morning:'🧘 早坐禅', lbl_med_evening:'🧘 晚坐禅',
+    lbl_dv3:'🙏 赞颂帕蒙空贴普尼', lbl_dv5:'🙏 赞颂法身',
+    lbl_dv6:'🙏 转法轮经', lbl_dv4:'💛 赞颂坤雅阿阇黎',
+    unit_times:' 次', unit_min:' 分钟',
+    share_today:'📅 分享今日记录', share_total:'📊 分享累计记录',
+    theme_label:'🎨 主题颜色',
+    section_chant:'📿 诵经列表',
+    record_morning:'🌅 记录早课', record_evening:'🌙 记录晚课',
+    record_special:'🙏 记录此经',
+    med_morning_title:'🌅 早坐禅', med_evening_title:'🌙 晚坐禅',
+    med_unit:'分钟', btn_med_save:'+ 记录',
+    footer:'南无薄伽梵 阿罗汉 正等正觉者',
+    share_modal_title:'🙏 分享功德', btn_download:'⬇️ 保存为图片',
+    share_hint:'保存图片后分享，将功德传递给他人 🙏',
+    card_motto_sc:'供养佛陀', card_sub_sc:'礼敬大成就阿阇黎',
+    card_label_today:'📅 今日修行记录', card_label_total:'📊 累计修行记录',
+    saathu:'萨度  萨度  萨度', anumodhana:'愿所有人共同随喜功德',
+    settings_title:'⚙️ 账户设置',
+    settings_photo:'📷 头像', settings_photo_btn:'📷 点击上传头像',
+    settings_name:'✏️ 更改显示名称', settings_name_ph:'新名称', settings_name_save:'保存',
+    settings_pw:'🔑 更改密码',
+    settings_old_pw:'当前密码', settings_new_pw:'新密码（至少4位）', settings_confirm_pw:'确认新密码',
+    btn_save_pw:'🔑 保存新密码',
+    settings_counts:'🔢 编辑计数',
+    settings_reset_title:'⚠️ 重置所有数据',
+    settings_reset_desc:'所有累计数据和每日历史记录将被删除，无法恢复。',
+    btn_reset:'🗑️ 重置全部',
+    reset_confirm_title:'确认重置？',
+    reset_confirm_desc:'所有诵经记录和每日历史将被删除。\n无法恢复。',
+    btn_cancel:'取消', btn_confirm_reset:'重置',
+    crop_title:'✂️ 调整头像', btn_crop_cancel:'取消', btn_crop_save:'✅ 保存头像',
+  }
+};
 let _currentLang = 'th';
 
 function setLang(lang){
   _currentLang = lang;
   const t = TRANSLATIONS[lang];
-  // Update lang buttons
+
+  // ── Lang buttons ──────────────────────────────────
   ['th','en','zh'].forEach(l=>{
     const btn = document.getElementById('lang'+l.toUpperCase());
     if(!btn) return;
@@ -2606,57 +2762,252 @@ function setLang(lang){
       btn.style.background='transparent';btn.style.color='var(--text-ghost)';btn.style.borderColor='var(--cream-dark)';
     }
   });
-  // Brand
+
+  // ── Brand ─────────────────────────────────────────
   const brandText = document.querySelector('.brand-text');
   if(brandText) brandText.childNodes[0].textContent = t.brand;
-  // Section dividers
-  document.querySelectorAll('.section-divider-title').forEach(el=>{
-    if(el.textContent.includes('บทสวดมนต์')||el.textContent.includes('Chanting')||el.textContent.includes('诵经'))
-      el.textContent = t.section_chant;
-  });
-  // Toggle buttons
-  const btnToday = document.getElementById('toggleToday');
-  const btnTotal = document.getElementById('toggleTotal');
-  if(btnToday) btnToday.textContent = t.toggle_today;
-  if(btnTotal) btnTotal.textContent = t.toggle_total;
-  // Header logout/login buttons
-  const btnLogout = document.getElementById('btnLogout');
-  const btnLogin  = document.getElementById('btnLogin');
-  if(btnLogout) btnLogout.textContent = t.btn_logout;
-  if(btnLogin)  btnLogin.textContent  = t.btn_login_hdr;
-  // Theme label
-  document.querySelectorAll('span').forEach(s=>{
-    if(s.textContent.trim()==='🎨 ธีมสี'||s.textContent.trim()==='🎨 Theme'||s.textContent.trim()==='🎨 主题颜色')
-      s.textContent = t.theme_label;
-  });
-  // Share buttons
-  document.querySelectorAll('button.btn-share-today').forEach(btn=>{
-    if(btn.textContent.includes('วันนี้')||btn.textContent.includes("Today")||btn.textContent.includes('今日'))
-      btn.textContent = t.share_today;
-    if(btn.textContent.includes('รวมทั้งหมด')||btn.textContent.includes('Total')||btn.textContent.includes('累计'))
-      btn.textContent = t.share_total;
-  });
-  // Footer
-  const footer = document.querySelector('.footer-ornament');
-  if(footer) footer.textContent = t.footer;
-  // Record buttons
-  const recM = document.querySelector('#playerRecordMorning button');
-  const recE = document.querySelector('#playerRecordEvening button');
-  const recB = document.getElementById('playerRecordBtn');
-  if(recM) recM.textContent = t.record_morning;
-  if(recE) recE.textContent = t.record_evening;
-  if(recB) recB.textContent = t.record_special;
-  // Login page
+
+  // ── Login page ────────────────────────────────────
   const loginTitle = document.querySelector('.login-title');
   if(loginTitle) loginTitle.textContent = t.login_title;
   const loginSub = document.querySelector('.login-sub');
   if(loginSub) loginSub.textContent = t.login_sub;
-  // Settings title
-  const settingsTitle = document.querySelector('.share-modal-title');
-  // Guest button
+  // Google buttons (login + register forms)
+  document.querySelectorAll('#loginForm button,#registerForm button').forEach(btn=>{
+    if(btn.querySelector('svg')){
+      const txt = btn.childNodes[btn.childNodes.length-1];
+      if(txt && txt.nodeType===3){
+        if(document.getElementById('loginForm').contains(btn)) txt.textContent = '\n        '+t.btn_google+'\n      ';
+        else txt.textContent = '\n        '+t.btn_google_reg+'\n      ';
+      }
+    }
+  });
+  // "หรือใช้อีเมล" divider
+  document.querySelectorAll('#loginForm span,#registerForm span').forEach(s=>{
+    const txt = s.textContent.trim();
+    if(txt==='หรือใช้อีเมล'||txt==='or use email'||txt==='或使用电子邮件') s.textContent=t.login_or_email;
+    if(txt==='หรือสมัครด้วยอีเมล'||txt==='or register with email'||txt==='或使用电子邮件注册') s.textContent=t.login_or_reg;
+  });
+  // Form labels
+  document.querySelectorAll('.form-group label').forEach(lbl=>{
+    const txt=lbl.textContent.trim();
+    if(['อีเมล','Email','电子邮件'].includes(txt)) lbl.textContent=t.label_email;
+    if(['รหัสผ่าน','Password','密码'].includes(txt)) lbl.textContent=t.label_password;
+    if(['ชื่อแสดง','Display Name','显示名称'].includes(txt)) lbl.textContent=t.label_name;
+  });
+  // Input placeholders
+  const loginPass=document.getElementById('loginPass');
+  if(loginPass) loginPass.placeholder=t.ph_password;
+  const regName=document.getElementById('regName');
+  if(regName) regName.placeholder=t.ph_name;
+  const regPass=document.getElementById('regPass');
+  if(regPass) regPass.placeholder=t.ph_new_password;
+  // Primary buttons
+  document.querySelectorAll('.btn-primary').forEach(btn=>{
+    if(btn.onclick && btn.onclick.toString().includes('doLogin')) btn.textContent=t.btn_login;
+    if(btn.onclick && btn.onclick.toString().includes('doRegister')) btn.textContent=t.btn_register;
+  });
+  // login-divider
+  document.querySelectorAll('.login-divider').forEach(div=>{
+    const span=div.querySelector('span');
+    if(!span)return;
+    const txt=div.textContent.trim();
+    if(txt.includes('ยังไม่มีบัญชี')||txt.includes("Don't have")||txt.includes('还没有账户')){
+      div.childNodes[0].textContent=t.no_account+' ';
+      span.textContent=t.link_register;
+    } else {
+      div.childNodes[0].textContent=t.have_account+' ';
+      span.textContent=t.link_login;
+    }
+  });
+  // Guest + share web buttons
   document.querySelectorAll('button').forEach(btn=>{
-    if(btn.textContent.includes('เข้าใช้แบบไม่ล็อกอิน')||btn.textContent.includes('Browse')||btn.textContent.includes('访客'))
-      btn.textContent = t.btn_guest;
+    const txt=btn.textContent.trim();
+    if(txt==='เข้าใช้แบบไม่ล็อกอิน'||txt==='Browse without login'||txt==='访客模式（无需登录）') btn.textContent=t.btn_guest;
+    if(txt==='🔗 แชร์เว็บนี้'||txt==='🔗 Share'||txt==='🔗 分享') btn.textContent=t.btn_share_web;
+  });
+
+  // ── Header ────────────────────────────────────────
+  const btnLogout=document.getElementById('btnLogout');
+  if(btnLogout) btnLogout.textContent=t.btn_logout;
+  const btnLoginHdr=document.getElementById('btnLogin');
+  if(btnLoginHdr) btnLoginHdr.textContent=t.btn_login_hdr;
+
+  // ── Profile card motto ────────────────────────────
+  document.querySelectorAll('.profile-card div').forEach(d=>{
+    const txt=d.textContent.trim();
+    if(txt==='สวดมนต์ถวายเป็นพุทธบูชา'||txt==='Chant as an Offering to the Buddha'||txt==='诵经供养佛陀') d.textContent=t.card_motto;
+    if(txt==='บูชาธรรมมหาปูชนียาจารย์'||txt==='In Homage to the Great Masters'||txt==='礼敬大成就阿阇黎') d.textContent=t.card_sub;
+  });
+
+  // ── Toggle today/total ────────────────────────────
+  const btnToday=document.getElementById('toggleToday');
+  const btnTotal=document.getElementById('toggleTotal');
+  if(btnToday) btnToday.textContent=t.toggle_today;
+  if(btnTotal) btnTotal.textContent=t.toggle_total;
+
+  // ── pst-card labels ───────────────────────────────
+  const labelMap={
+    'totalMorning':t.lbl_morning,'totalEvening':t.lbl_evening,
+    'totalMedMorning':t.lbl_med_morning,'totalMedEvening':t.lbl_med_evening,
+    'totalSpecial_dv3':t.lbl_dv3,'totalSpecial_dv5':t.lbl_dv5,
+    'totalSpecial_dv6':t.lbl_dv6,'totalSpecial_dv4':t.lbl_dv4
+  };
+  const unitMap={
+    'totalMorning':t.unit_times,'totalEvening':t.unit_times,
+    'totalMedMorning':t.unit_min,'totalMedEvening':t.unit_min,
+    'totalSpecial_dv3':t.unit_times,'totalSpecial_dv5':t.unit_times,
+    'totalSpecial_dv6':t.unit_times,'totalSpecial_dv4':t.unit_times
+  };
+  Object.entries(labelMap).forEach(([id,lbl])=>{
+    const card=document.getElementById(id)?.closest('.pst-card');
+    if(!card)return;
+    const labelEl=card.querySelector('.pst-label');
+    if(labelEl) labelEl.textContent=lbl;
+    const unitEl=card.querySelector('.pst-unit');
+    if(unitEl) unitEl.textContent=unitMap[id];
+  });
+
+  // ── Share buttons ─────────────────────────────────
+  document.querySelectorAll('button.btn-share-today').forEach(btn=>{
+    const txt=btn.textContent.trim();
+    if(txt.includes('วันนี้')||txt.includes('Today')||txt.includes('今日')) btn.textContent=t.share_today;
+    if(txt.includes('รวมทั้งหมด')||txt.includes('Total')||txt.includes('累计')) btn.textContent=t.share_total;
+  });
+
+  // ── Theme label ───────────────────────────────────
+  document.querySelectorAll('span').forEach(s=>{
+    const txt=s.textContent.trim();
+    if(txt==='🎨 ธีมสี'||txt==='🎨 Theme'||txt==='🎨 主题颜色') s.textContent=t.theme_label;
+  });
+
+  // ── Section divider ───────────────────────────────
+  document.querySelectorAll('.section-divider-title').forEach(el=>{
+    const txt=el.textContent.trim();
+    if(txt.includes('📿')) el.textContent=t.section_chant;
+  });
+
+  // ── Record buttons ────────────────────────────────
+  const recM=document.querySelector('#playerRecordMorning button');
+  if(recM) recM.textContent=t.record_morning;
+  const recE=document.querySelector('#playerRecordEvening button');
+  if(recE) recE.textContent=t.record_evening;
+  const recB=document.getElementById('playerRecordBtn');
+  if(recB) recB.textContent=t.record_special;
+  // Meditation save buttons + titles
+  document.querySelectorAll('#playerRecordMeditation .btn-med-save').forEach((btn,i)=>{
+    btn.textContent=t.btn_med_save;
+  });
+  document.querySelectorAll('#playerRecordMeditation [style*="font-weight:700"]').forEach((el,i)=>{
+    const txt=el.textContent.trim();
+    if(txt.includes('สมาธิเช้า')||txt.includes('Morning Meditation')||txt.includes('早坐禅')) el.textContent=t.med_morning_title;
+    if(txt.includes('สมาธิเย็น')||txt.includes('Evening Meditation')||txt.includes('晚坐禅')) el.textContent=t.med_evening_title;
+  });
+  document.querySelectorAll('#playerRecordMeditation [style*="12px"][style*="color"]').forEach(el=>{
+    const txt=el.textContent.trim();
+    if(txt==='นาที'||txt==='min'||txt==='分钟') el.textContent=t.med_unit;
+  });
+
+  // ── Footer ────────────────────────────────────────
+  const footer=document.querySelector('.footer-ornament');
+  if(footer) footer.textContent=t.footer;
+
+  // ── Share modal ───────────────────────────────────
+  const shareModalTitle=document.querySelector('#shareModal .share-modal-title');
+  if(shareModalTitle) shareModalTitle.textContent=t.share_modal_title;
+  const dlBtn=document.querySelector('.btn-download-card');
+  if(dlBtn) dlBtn.textContent=t.btn_download;
+  const shareHint=document.querySelector('.share-hint');
+  if(shareHint) shareHint.textContent=t.share_hint;
+  // share card texts
+  const scTitle=document.querySelector('[data-sc="title"]');
+  if(scTitle) scTitle.textContent=t.card_motto_sc;
+  const scSub=document.querySelector('[data-sc="sub"]');
+  if(scSub) scSub.textContent=t.card_sub_sc;
+  const saathuEl=document.querySelector('#shareCard [style*="สาธุ"],[style*="Sādhu"],[style*="萨度"]');
+  document.querySelectorAll('#shareCard div,#shareCard span').forEach(el=>{
+    const txt=el.textContent.trim();
+    if(txt==='สาธุ  สาธุ  สาธุ'||txt==='Sādhu  Sādhu  Sādhu'||txt==='萨度  萨度  萨度') el.textContent=t.saathu;
+    if(txt==='ขออนุโมทนาบุญด้วยกันทุกท่าน'||txt==='May all rejoice in this merit'||txt==='愿所有人共同随喜功德') el.textContent=t.anumodhana;
+  });
+  // share card row labels
+  const shareRowLabels=[
+    {id:'scCountMorning',lbl:t.lbl_morning,unit:t.unit_times},
+    {id:'scCountEvening',lbl:t.lbl_evening,unit:t.unit_times},
+    {id:'scMeditMorning',lbl:t.lbl_med_morning,unit:t.unit_min},
+    {id:'scMeditEvening',lbl:t.lbl_med_evening,unit:t.unit_min},
+    {id:'scSpecial_dv3',lbl:t.lbl_dv3,unit:t.unit_times},
+    {id:'scSpecial_dv5',lbl:t.lbl_dv5,unit:t.unit_times},
+    {id:'scSpecial_dv6',lbl:t.lbl_dv6,unit:t.unit_times},
+    {id:'scSpecial_dv4',lbl:t.lbl_dv4,unit:t.unit_times},
+  ];
+  shareRowLabels.forEach(({id,lbl,unit})=>{
+    const numEl=document.getElementById(id);
+    if(!numEl)return;
+    const row=numEl.closest('div[style*="justify-content:space-between"]');
+    if(!row)return;
+    const labelEl=row.querySelector('span[style*="color:rgba(232"]');
+    if(labelEl) labelEl.textContent=lbl;
+    const unitEl=numEl.nextElementSibling;
+    if(unitEl) unitEl.textContent=unit.trim();
+  });
+
+  // ── Settings modal ────────────────────────────────
+  const settingsTitle=document.querySelector('#settingsModal .share-modal-title');
+  if(settingsTitle) settingsTitle.textContent=t.settings_title;
+  // Photo section
+  document.querySelectorAll('#settingsModal div').forEach(d=>{
+    const txt=d.textContent.trim();
+    if(txt.startsWith('📷 รูปโปรไฟล์')||txt.startsWith('📷 Profile Photo')||txt.startsWith('📷 头像'))
+      d.childNodes[0] && (d.childNodes[0].textContent=t.settings_photo);
+    if(txt.startsWith('✏️ เปลี่ยนชื่อ')||txt.startsWith('✏️ Change Display')||txt.startsWith('✏️ 更改'))
+      d.childNodes[0] && (d.childNodes[0].textContent=t.settings_name);
+    if(txt.startsWith('🔑 เปลี่ยนรหัสผ่าน')||txt.startsWith('🔑 Change Password')||txt.startsWith('🔑 更改密码'))
+      d.childNodes[0] && (d.childNodes[0].textContent=t.settings_pw);
+    if(txt.startsWith('🔢 แก้ไขยอดนับ')||txt.startsWith('🔢 Edit Counts')||txt.startsWith('🔢 编辑'))
+      d.childNodes[0] && (d.childNodes[0].textContent=t.settings_counts);
+    if(txt.startsWith('⚠️ รีเซ็ต')||txt.startsWith('⚠️ Reset All')||txt.startsWith('⚠️ 重置'))
+      d.childNodes[0] && (d.childNodes[0].textContent=t.settings_reset_title);
+  });
+  const settingsNameInput=document.getElementById('settingsNameInput');
+  if(settingsNameInput) settingsNameInput.placeholder=t.settings_name_ph;
+  const settingsNameSave=document.querySelector('#settingsModal button[onclick="saveNameFromSettings()"]');
+  if(settingsNameSave) settingsNameSave.textContent=t.settings_name_save;
+  const sOldPw=document.getElementById('settingsOldPass');
+  if(sOldPw) sOldPw.placeholder=t.settings_old_pw;
+  const sNewPw=document.getElementById('settingsNewPass');
+  if(sNewPw) sNewPw.placeholder=t.settings_new_pw;
+  const sConfPw=document.getElementById('settingsConfirmPass');
+  if(sConfPw) sConfPw.placeholder=t.settings_confirm_pw;
+  const btnSavePw=document.querySelector('#settingsModal button[onclick="savePasswordFromSettings()"]');
+  if(btnSavePw) btnSavePw.textContent=t.btn_save_pw;
+  const btnResetAll=document.querySelector('button[onclick="confirmResetAll()"]');
+  if(btnResetAll) btnResetAll.textContent=t.btn_reset;
+  // upload photo label
+  document.querySelectorAll('#settingsModal label').forEach(lbl=>{
+    const txt=lbl.textContent.trim();
+    if(txt.includes('กดเพื่ออัปโหลด')||txt.includes('Upload Photo')||txt.includes('点击上传'))
+      lbl.childNodes[0].textContent=t.settings_photo_btn;
+  });
+
+  // ── Reset confirm modal ───────────────────────────
+  const rcTitle=document.querySelector('#resetConfirmModal [style*="font-size:20px"][style*="font-weight:700"]');
+  if(rcTitle) rcTitle.textContent=t.reset_confirm_title;
+  const rcDesc=document.querySelector('#resetConfirmModal [style*="font-size:14px"]');
+  if(rcDesc) rcDesc.innerHTML=t.reset_confirm_desc.replace('\n','<br>');
+  document.querySelectorAll('#resetConfirmModal button').forEach(btn=>{
+    const txt=btn.textContent.trim();
+    if(txt==='ยกเลิก'||txt==='Cancel'||txt==='取消') btn.textContent=t.btn_cancel;
+    if(txt==='รีเซ็ต'||txt==='Reset'||txt==='重置') btn.textContent=t.btn_confirm_reset;
+  });
+
+  // ── Crop modal ────────────────────────────────────
+  const cropTitle=document.querySelector('#cropModal span[style*="font-weight:700"]');
+  if(cropTitle) cropTitle.textContent=t.crop_title;
+  document.querySelectorAll('#cropModal button').forEach(btn=>{
+    const txt=btn.textContent.trim();
+    if(txt==='ยกเลิก'||txt==='Cancel'||txt==='取消') btn.textContent=t.btn_crop_cancel;
+    if(txt.includes('บันทึกรูป')||txt.includes('Save Photo')||txt.includes('保存头像')) btn.textContent=t.btn_crop_save;
   });
 }
 

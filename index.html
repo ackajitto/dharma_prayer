@@ -1640,6 +1640,15 @@ function playVideo(v){
     } else {
       showToast('⚠️ Browser ไม่รองรับ HLS stream');
     }
+    // ซ่อนปุ่มบันทึกทั้งหมดสำหรับ live stream
+    document.getElementById('playerRecordBtn').style.display    = 'none';
+    document.getElementById('playerRecordMorning').style.display = 'none';
+    document.getElementById('playerRecordEvening').style.display = 'none';
+    document.getElementById('playerRecordMeditation').style.display = 'none';
+    document.getElementById('playerTitleText').textContent = v.title;
+    const badge = document.getElementById('playerCatBadge');
+    badge.textContent = '📺 ถ่ายทอดสด';
+    badge.className = 'vi-badge player-cat-pill cat-live';
     scrollToPlayer();
     renderPlaylist();
     return;

@@ -2364,7 +2364,8 @@ function shareWebsite(){
   const text = '🙏 สวดมนต์ถวายเป็นพุทธบูชา — ฟังธรรมะและบันทึกการปฏิบัติธรรม เข้าใช้ได้เลยที่ลิงก์นี้';
   const full = text + '\n' + url;
   if(navigator.share){
-    navigator.share({ title: 'สวดมนต์ถวายเป็นพุทธบูชา', text: full, url })
+    // ส่ง text อย่างเดียว (มี URL อยู่ใน text แล้ว) ป้องกันลิงก์ซ้ำ
+    navigator.share({ title: 'สวดมนต์ถวายเป็นพุทธบูชา', text: full })
       .catch(()=>{});
   } else {
     navigator.clipboard.writeText(full).then(()=>{

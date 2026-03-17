@@ -1229,15 +1229,17 @@ async function bootApp(username, userData){
   // photo
   if(data.photo){
     const img = document.getElementById('profileImg');
-    img.src = data.photo; img.style.display = 'block';
+    img.src = data.photo; 
+    img.style.display = 'block';
     document.getElementById('profileInitials').style.display = 'none';
   } else {
     // Show default chedi image instead of initials
-  const defaultImg = document.getElementById('profileImg');
+    const defaultImg = document.getElementById('profileImg');
     defaultImg.src = 'chedi.jpg'; 
-    defaultImg.style.display = 'block'; // แยกออกมาไว้อีกบรรทัด ไม่ให้ติดหลัง //
+    defaultImg.style.display = 'block';
     document.getElementById('profileInitials').style.display = 'none';
-  } // <--- ขาดตัวนี้ไปตัวเดียวครับ! เติมปีกกาปิดตรงนี้
+  }
+
   // counters
   document.getElementById('countMorning').textContent = data.cnt_morning || 0;
   document.getElementById('countEvening').textContent = data.cnt_evening || 0;

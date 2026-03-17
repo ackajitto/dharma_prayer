@@ -1323,9 +1323,6 @@ async function saveCroppedPhoto(){
 // ─── COUNTERS ─────────────────────────────────────────
 async function recordCount(type){
   if(window._guestMode){
-    // Guest: animate but don't save
-    const el = document.getElementById(type==='morning'?'countMorning':'countEvening');
-    el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
     showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง');
     return;
   }
@@ -1333,9 +1330,19 @@ async function recordCount(type){
   const cur = parseInt(el.textContent)||0;
   const next = cur+1;
   el.textContent = next;
-  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  
+  // อัปเดตยอดบนหน้าจอทันที (ไม่ต้องรอฐานข้อมูล)
+  const topId = type==='morning' ? 'totalMorning' : 'totalEvening';
+  const topEl = document.getElementById(topId);
+  if(_statsMode === 'today') {
+    topEl.textContent = (parseInt(topEl.textContent) || 0) + 1;
+  } else {
+    topEl.textContent = next;
+  }
+
   _countOverrides['cnt_'+type] = next;
-  await uSet('cnt_'+type, next);
+  uSet('cnt_'+type, next); // ปล่อยบันทึกเบื้องหลัง
+  
   const fd = await dbGet(userPath('first_record_date'));
   if(!fd){
     const now = new Date().toISOString();
@@ -1344,9 +1351,8 @@ async function recordCount(type){
   }
   const label = type==='morning'?'🌅 ทำวัตรเช้า':'🌙 ทำวัตรเย็น';
   showToast(label+' ครั้งที่ '+next);
-  markTodayDone(type);
-  updateProfileTotals();
-  if(_statsMode === 'today') refreshStatsDisplay();
+  
+  markTodayDone(type); // ปล่อยทำงานเบื้องหลัง
 }
 // ─── MEDITATION ──────────────────────────────────────
 function stepMed(field, delta){
@@ -1357,28 +1363,43 @@ function stepMed(field, delta){
   v = Math.max(0, v+delta);
   el.value = v;
 }
+// ─── MEDITATION ──────────────────────────────────────
 async function recordMeditation(session){
   if(window._guestMode){ showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง'); return; }
   const inputId = session==='morning'?'medInputMorningMin':'medInputEveningMin';
   const storeKey = session==='morning'?'med_morning_min':'med_evening_min';
   const dispId  = session==='morning'?'meditMorningMin':'meditEveningMin';
   const label = session==='morning'?'สมาธิเช้า':'สมาธิเย็น';
+  
   const mn = parseInt(document.getElementById(inputId).value)||0;
   if(mn<=0){showToast('⚠️ กรุณาใส่จำนวนนาที');return}
+  
   const cur = parseInt(document.getElementById(dispId).textContent)||0;
   const next = cur+mn;
   document.getElementById(dispId).textContent = next;
   document.getElementById(inputId).value = 0;
+
+  // อัปเดตยอดบนหน้าจอทันที
+  const topId = session==='morning' ? 'totalMedMorning' : 'totalMedEvening';
+  const topEl = document.getElementById(topId);
+  if(_statsMode === 'today') {
+    topEl.textContent = (parseInt(topEl.textContent) || 0) + mn;
+  } else {
+    topEl.textContent = next;
+  }
+
   _countOverrides[storeKey] = next;
-  await uSet(storeKey, next);
-  markTodayMeditation(session, mn);
+  uSet(storeKey, next); // ปล่อยบันทึกเบื้องหลัง
+  
+  markTodayMeditation(session, mn); // ปล่อยทำงานเบื้องหลัง
+  
   const fd = await dbGet(userPath('first_record_date'));
   if(!fd){ const now=new Date().toISOString(); await uSet('first_record_date',now); updateDateTime(now); }
   showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+next+' นาที)');
-  if(_statsMode === 'today') refreshStatsDisplay();
 }
 // ─── SPECIAL BOTTO RECORDING ────────────────────────
 let _currentSpecialVideo = null; // track which special video is playing
+// ─── SPECIAL BOTTO RECORDING ────────────────────────
 async function recordSpecial(videoId, videoTitle){
   if(!window._currentUser){
     showToast('🔑 ล็อกอินเพื่อบันทึกยอดจริง');
@@ -1391,17 +1412,22 @@ async function recordSpecial(videoId, videoTitle){
   current[safeId].count = (current[safeId].count || 0) + 1;
   current[safeId].title = videoTitle;
   current[safeId].lastDate = new Date().toISOString();
+  
+  // อัปเดตยอดบนหน้าจอทันที
+  const topEl = document.getElementById('totalSpecial_' + safeId);
+  if(topEl) {
+    if(_statsMode === 'today') {
+      topEl.textContent = (parseInt(topEl.textContent) || 0) + 1;
+    } else {
+      topEl.textContent = current[safeId].count;
+    }
+  }
+
   _countOverrides[safeId] = current[safeId].count;
-  await dbSet('users/'+window._currentUser+'/'+key, current);
-  markTodaySpecial(safeId, 1);
-  // update display
+  dbSet('users/'+window._currentUser+'/'+key, current); // ปล่อยบันทึกเบื้องหลัง
+  markTodaySpecial(safeId, 1); // ปล่อยทำงานเบื้องหลัง
+  
   renderSpecialStats(current);
-  if(_statsMode === 'today') refreshStatsDisplay();
-  // refresh pst-card counters
-  ['dv3','dv5','dv6','dv4'].forEach(id=>{
-    const el = document.getElementById('totalSpecial_'+id);
-    if(el){ const s = current[id.replace(/[.#$[\]]/g,'_')]; el.textContent = s ? s.count : 0; }
-  });
   showToast('🙏 บันทึก '+videoTitle+' ครั้งที่ '+current[safeId].count);
 }
 function renderSpecialStats(stats){
@@ -2461,6 +2487,7 @@ async function refreshStreakAndCalendar(){
 }
 // ── PROFILE TOTALS ─────────────────────────────────────
 function updateProfileTotals(){
+  if(_statsMode !== 'total') return; // ป้องกันไม่ให้ยอดรวมไปทับยอดวันนี้
   document.getElementById('totalMorning').textContent = document.getElementById('countMorning').textContent;
   document.getElementById('totalEvening').textContent = document.getElementById('countEvening').textContent;
   document.getElementById('totalMedMorning').textContent = document.getElementById('meditMorningMin').textContent;

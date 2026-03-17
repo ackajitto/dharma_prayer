@@ -545,16 +545,28 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('total')">📊 แชร์ยอดรวมทั้งหมด</button>
       </div>
 
-      <!-- Theme bar inline -->
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:4px;">
-        <span style="font-size:13px;color:var(--text-light);white-space:nowrap;">🎨 ธีมสี</span>
-        <div class="theme-dots-row">
+      <!-- Theme bar inline + Live buttons -->
+      <div style="background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:4px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;">
+          <span style="font-size:13px;color:var(--text-light);white-space:nowrap;">🎨 ธีมสี</span>
+          <div class="theme-dots-row">
           <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"></div>
           <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"></div>
           <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"></div>
           <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"></div>
           <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"></div>
           <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 12px;">
+          <button onclick="scrollToVideo('gbn_sd1')" style="padding:9px 8px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:700;font-family:'Sarabun',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;touch-action:manipulation;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#ff6666;display:inline-block;box-shadow:0 0 5px #ff4444;"></span>
+            📺 GBN SD Live
+          </button>
+          <button onclick="scrollToVideo('gbn_hd1')" style="padding:9px 8px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:700;font-family:'Sarabun',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;touch-action:manipulation;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#ff6666;display:inline-block;box-shadow:0 0 5px #ff4444;"></span>
+            📺 GBN HD Live
+          </button>
         </div>
       </div>
 
@@ -1049,11 +1061,8 @@ const DEFAULT_VIDEOS = [
    url:'https://youtu.be/r_Bo9LpQ2-E', cat:'special'},
 
   // ── ถ่ายทอดสด GBN ──────────────────────────────────
-  {id:'gbn_sd1', title:'SD1 – ช่องหลัก',        url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',    cat:'live', isM3u8:true},
-  {id:'gbn_hd1', title:'HD1 – ความชัดสูง',       url:'https://us.gbnus.com/live/dhamma_hd/playlist.m3u8',     cat:'live', isM3u8:true},
-  {id:'gbn_en',  title:'EN – English Channel',   url:'https://us.gbnus.com/live/en_low/playlist.m3u8',        cat:'live', isM3u8:true},
-  {id:'gbn_ch',  title:'CH – Chinese Channel',   url:'https://us.gbnus.com/live/cn_low/playlist.m3u8',        cat:'live', isM3u8:true},
-  {id:'gbn_th',  title:'TH – Thai Channel',      url:'https://us.gbnus.com/live/th_low/playlist.m3u8',        cat:'live', isM3u8:true},
+  {id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก',    url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',   cat:'live', isM3u8:true},
+  {id:'gbn_hd1', title:'GBN HD1 – ความชัดสูง',  url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8',  cat:'live', isM3u8:true},
 ];
 // ═══════════════════════════════════════════════════
 

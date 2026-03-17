@@ -893,7 +893,27 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <span class="share-modal-title">🙏 แบ่งปันบุญ</span>
       <button class="share-close-btn" onclick="closeShareModal()">✕</button>
     </div>
-    <div class="share-card-wrap">
+
+    <!-- ภาพสำเร็จ (แสดงตอนโหลดเสร็จ) -->
+    <div id="shareImgWrap" style="border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.25);margin-bottom:14px;background:#1a0800;min-height:180px;display:flex;align-items:center;justify-content:center;">
+      <div id="shareImgLoading" style="padding:32px;text-align:center;color:rgba(201,168,76,0.6);font-size:15px;font-family:'Sarabun',sans-serif;">
+        <div style="font-size:32px;margin-bottom:8px;animation:float 1.5s ease-in-out infinite;">🪷</div>
+        กำลังสร้างภาพ...
+      </div>
+      <img id="sharePreviewImg" style="display:none;width:100%;border-radius:16px;" alt="การ์ดแบ่งปันบุญ">
+    </div>
+
+    <!-- ปุ่ม -->
+    <div id="shareImgActions" style="display:none;">
+      <div class="share-actions">
+        <button class="btn-download-card" onclick="downloadFromPreview()" style="flex:1;">⬇️ บันทึกรูปภาพ</button>
+        <button class="btn-download-card" onclick="openPreviewInTab()" style="flex:1;background:linear-gradient(135deg,#5C1A1A,#C47A20);margin-left:0;">🔗 เปิดในแท็บใหม่</button>
+      </div>
+      <div class="share-hint">กดบันทึกรูปหรือกด Hold (มือถือ) เพื่อบันทึก แล้วส่งต่อแบ่งปันบุญ 🙏</div>
+    </div>
+
+    <!-- shareCard ซ่อนไว้ใช้ render เท่านั้น -->
+    <div style="position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;">
       <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;background-image:url('https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
 
         <!-- overlay gradient ให้อ่านตัวหนังสือง่าย -->
@@ -1015,13 +1035,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.7);letter-spacing:.5px;margin-top:6px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.7;">เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
 
         </div><!-- end content wrapper -->
-      </div>
-    </div>
-    <div class="share-actions">
-      <button class="btn-download-card" onclick="downloadCard()" style="flex:1;">⬇️ บันทึกรูปภาพ</button>
-      <button class="btn-download-card" id="btnOpenTab" onclick="openCardInTab()" style="flex:1;background:linear-gradient(135deg,#5C1A1A,#C47A20);margin-left:0;">🔗 เปิดในแท็บใหม่</button>
-    </div>
-    <div class="share-hint">กดบันทึกรูปแล้วส่งต่อเพื่อแบ่งปันบุญให้ผู้อื่น 🙏</div>
+      </div><!-- end shareCard -->
+    </div><!-- end hidden wrapper -->
   </div>
 </div>
 
@@ -2024,6 +2039,56 @@ async function openShareModal(mode){
     const row = numEl.closest('div[style*="justify-content:space-between"]');
     if(row) row.style.display = val === 0 ? 'none' : 'flex';
   });
+
+  // render ภาพทันทีหลังเซ็ตข้อมูลเสร็จ
+  _autoRenderShareCard();
+}
+
+let _previewDataUrl = null; // เก็บ dataUrl สำหรับปุ่ม download/open tab
+
+function _autoRenderShareCard(){
+  // รีเซ็ต preview
+  _previewDataUrl = null;
+  document.getElementById('sharePreviewImg').style.display = 'none';
+  document.getElementById('shareImgLoading').style.display = 'flex';
+  document.getElementById('shareImgLoading').style.flexDirection = 'column';
+  document.getElementById('shareImgActions').style.display = 'none';
+
+  _renderCardToCanvas().then(canvas=>{
+    _previewDataUrl = canvas.toDataURL('image/png');
+    const previewImg = document.getElementById('sharePreviewImg');
+    previewImg.src = _previewDataUrl;
+    previewImg.style.display = 'block';
+    document.getElementById('shareImgLoading').style.display = 'none';
+    document.getElementById('shareImgActions').style.display = 'block';
+  }).catch(()=>{
+    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด ลองปิดแล้วเปิดใหม่';
+  });
+}
+
+function downloadFromPreview(){
+  if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
+  const name = document.getElementById('profileName').textContent || 'dharma';
+  const link = document.createElement('a');
+  link.download = 'แบ่งปันบุญ_' + name + '.png';
+  link.href = _previewDataUrl;
+  link.click();
+  showToast('✅ บันทึกภาพสำเร็จ 🙏');
+}
+
+function openPreviewInTab(){
+  if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>แบ่งปันบุญ</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>body{margin:0;background:#1a0800;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;padding:16px;box-sizing:border-box;}
+    img{max-width:420px;width:100%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+    a{display:inline-block;padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#8B6914,#C9A84C);color:#1a0800;font-size:17px;font-weight:700;text-decoration:none;font-family:sans-serif;}
+    </style></head><body>
+    <img src="${_previewDataUrl}" alt="แบ่งปันบุญ">
+    <a href="${_previewDataUrl}" download="แบ่งปันบุญ.png">⬇️ บันทึกรูปภาพ</a>
+    </body></html>`);
+  win.document.close();
 }
 function closeShareModal(){
   document.getElementById('shareModal').style.display = 'none';
@@ -2060,52 +2125,6 @@ function _renderCardToCanvas(){
     return html2canvas(card, {
       scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#1a0800', logging: false
     });
-  });
-}
-
-function downloadCard(){
-  const btns = document.querySelectorAll('.btn-download-card');
-  btns.forEach(b=>{ b.disabled=true; });
-  btns[0].textContent = '⏳ กำลังสร้างภาพ...';
-  _renderCardToCanvas().then(canvas => {
-    const name = document.getElementById('profileName').textContent || 'dharma';
-    const link = document.createElement('a');
-    link.download = 'แบ่งปันบุญ_' + name + '.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    btns[0].textContent = '⬇️ บันทึกรูปภาพ';
-    btns.forEach(b=>{ b.disabled=false; });
-    showToast('✅ บันทึกภาพสำเร็จ 🙏');
-  }).catch(()=>{
-    btns[0].textContent = '⬇️ บันทึกรูปภาพ';
-    btns.forEach(b=>{ b.disabled=false; });
-    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
-  });
-}
-
-function openCardInTab(){
-  const btns = document.querySelectorAll('.btn-download-card');
-  btns.forEach(b=>{ b.disabled=true; });
-  btns[1].textContent = '⏳ กำลังสร้างภาพ...';
-  _renderCardToCanvas().then(canvas => {
-    const dataUrl = canvas.toDataURL('image/png');
-    const win = window.open('', '_blank');
-    win.document.write(`<!DOCTYPE html><html><head><title>แบ่งปันบุญ</title>
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <style>body{margin:0;background:#1a0800;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;}
-      img{max-width:100%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
-      a{display:inline-block;padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#8B6914,#C9A84C);color:#1a0800;font-size:17px;font-weight:700;text-decoration:none;font-family:sans-serif;}
-      </style></head><body>
-      <img src="${dataUrl}" alt="แบ่งปันบุญ">
-      <a href="${dataUrl}" download="แบ่งปันบุญ.png">⬇️ บันทึกรูปภาพ</a>
-      </body></html>`);
-    win.document.close();
-    btns[1].textContent = '🔗 เปิดในแท็บใหม่';
-    btns.forEach(b=>{ b.disabled=false; });
-  }).catch(()=>{
-    btns[1].textContent = '🔗 เปิดในแท็บใหม่';
-    btns.forEach(b=>{ b.disabled=false; });
-    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
   });
 }
 
@@ -2572,7 +2591,9 @@ window.closeShareModal = closeShareModal;
 window.openChangePassword = openChangePassword;
 window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
-window.downloadCard = downloadCard;
+window.downloadFromPreview = downloadFromPreview;
+window.openPreviewInTab = openPreviewInTab;
+window._autoRenderShareCard = _autoRenderShareCard;
 window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings;
@@ -3116,7 +3137,7 @@ function setLang(lang){
   renderPlaylist();
 }
 
-window.openCardInTab = openCardInTab;
+
 window.getVideoTitle = getVideoTitle;
 window.setLang = setLang;
 

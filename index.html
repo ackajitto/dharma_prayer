@@ -1006,53 +1006,54 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 // ══════════════════════════════════════════════════════
 
 // ─── CONSTANTS ───────────────────────────────────────
-const CAT_LABELS = {
-  morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น',
-  special:'บทสวดพิเศษ',
-  lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย',
-  meditation:'นั่งสมาธิ', live:'ถ่ายทอดสด', other:'อื่นๆ'
+const CAT_LABELS_I18N = {
+  th:  { morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น', special:'บทสวดพิเศษ', lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย', meditation:'นั่งสมาธิ', live:'ถ่ายทอดสด', other:'อื่นๆ' },
+  en:  { morning:'Morning Chant', evening:'Evening Chant', special:'Special Chants', lp:'Praise of Luang Pu Sod', grandma:'Praise of Khun Yai', meditation:'Meditation', live:'Live Broadcast', other:'Others' },
+  zh:  { morning:'早课', evening:'晚课', special:'特殊经文', lp:'赞颂鲁安普索德', grandma:'赞颂坤雅', meditation:'坐禅', live:'直播', other:'其他' },
 };
+// dynamic getter — always reflects current language
+function getCatLabels(){ return CAT_LABELS_I18N[_currentLang] || CAT_LABELS_I18N.th; }
+// keep CAT_LABELS as a proxy alias for legacy code that reads it directly
+const CAT_LABELS = new Proxy({}, { get(_,k){ return getCatLabels()[k]; } });
+
+const ZONE_LABELS_I18N = {
+  th:  { zone_morning:'ทำวัตรเช้า', zone_evening:'ทำวัตรเย็น', zone_special:'บทสวดพิเศษ', zone_live:'ถ่ายทอดสด GBN' },
+  en:  { zone_morning:'Morning Chant', zone_evening:'Evening Chant', zone_special:'Special Chants', zone_live:'GBN Live Broadcast' },
+  zh:  { zone_morning:'早课', zone_evening:'晚课', zone_special:'特殊经文', zone_live:'GBN 直播' },
+};
+const ITEM_WORD_I18N = { th:'รายการ', en:'items', zh:'项' };
+
 const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',live:'📺',other:'✨'};
 const CAT_ORDER = ['morning','special','lp','grandma','meditation','evening','live','other'];
 
 // Zone groupings for playlist display
 const ZONE_GROUPS = [
-  {
-    id: 'zone_morning',
-    label: 'ทำวัตรเช้า',
-    icon: '🌅',
-    color: 'zone-header-morning',
-    cats: ['morning']
-  },
-  {
-    id: 'zone_evening',
-    label: 'ทำวัตรเย็น',
-    icon: '🌙',
-    color: 'zone-header-evening',
-    cats: ['evening']
-  },
-  {
-    id: 'zone_special',
-    label: 'บทสวดพิเศษ',
-    icon: '🙏',
-    color: 'zone-header-special',
-    cats: ['special'],
-    noSubGroup: true
-  },
-  {
-    id: 'zone_live',
-    label: 'ถ่ายทอดสด GBN',
-    icon: '📺',
-    color: 'zone-header-live',
-    cats: ['live'],
-    noSubGroup: true,
-    isLive: true
-  },
+  { id:'zone_morning', icon:'🌅', color:'zone-header-morning', cats:['morning'] },
+  { id:'zone_evening', icon:'🌙', color:'zone-header-evening', cats:['evening'] },
+  { id:'zone_special', icon:'🙏', color:'zone-header-special', cats:['special'], noSubGroup:true },
+  { id:'zone_live',    icon:'📺', color:'zone-header-live',    cats:['live'], noSubGroup:true, isLive:true },
 ];
 // ═══════════════════════════════════════════════════
 //  เพิ่มหรือแก้ไขรายการสวดมนต์ได้ที่นี่
 //  format: {id:'dv?', title:'ชื่อบท', url:'https://youtu.be/...', cat:'morning|evening|lp|grandma|meditation|other'}
 // ═══════════════════════════════════════════════════
+const VIDEO_TITLES_I18N = {
+  dv1:     { th:'ทำวัตรเช้า',                        en:'Morning Chant',                          zh:'早课' },
+  dv2:     { th:'ทำวัตรเย็น',                        en:'Evening Chant',                          zh:'晚课' },
+  dv3:     { th:'สรรเสริญพระมงคลเทพมุนี',            en:'Praise of Phra Mongkol Thepmuni',        zh:'赞颂帕蒙空贴普尼' },
+  dv5:     { th:'สรรเสริญพระธรรมกาย',                en:'Praise of Dhammakaya',                   zh:'赞颂法身' },
+  dv6:     { th:'ธัมมจักกัปปวัตตนสูตร',              en:'Dhammacakkappavattana Sutta',            zh:'转法轮经' },
+  dv4:     { th:'สรรเสริญคุณยายอาจารย์ ขนนกยูง',    en:'Praise of Khun Yai Acarini',             zh:'赞颂坤雅阿阇黎' },
+  dv7:     { th:'นำนั่งสมาธิ',                       en:'Guided Meditation',                      zh:'引导坐禅' },
+  gbn_sd1: { th:'GBN SD1 – ช่องหลัก',               en:'GBN SD1 – Main Channel',                 zh:'GBN SD1 – 主频道' },
+  gbn_hd1: { th:'GBN HD1 – ความชัดสูง',              en:'GBN HD1 – High Definition',              zh:'GBN HD1 – 高清频道' },
+};
+function getVideoTitle(v){
+  const map = VIDEO_TITLES_I18N[v.id];
+  if(map) return map[_currentLang] || map.th;
+  return v.title;
+}
+
 const DEFAULT_VIDEOS = [
   // ── ทำวัตรเช้า ──────────────────────────────────
   {id:'dv1', title:'ทำวัตรเช้า',
@@ -1076,7 +1077,7 @@ const DEFAULT_VIDEOS = [
    url:'https://youtu.be/q2oDyeaapZE', cat:'special'},
 
   {id:'dv7', title:'นำนั่งสมาธิ',
-   url:'https://youtu.be/r_Bo9LpQ2-E', cat:'special'},
+   url:'https://youtu.be/HhF18m41d2M', cat:'special'},
 
   // ── ถ่ายทอดสด GBN ──────────────────────────────────
   {id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก',    url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',   cat:'live', isM3u8:true},
@@ -1661,9 +1662,9 @@ function playVideo(v){
   const ytid=getYTId(v.url);
   if(!ytid){showToast('⚠️ ลิงก์ไม่ถูกต้อง');return}
   document.getElementById('ytIframe').src='https://www.youtube.com/embed/'+ytid+'?autoplay=1&rel=0&playsinline=1&origin='+encodeURIComponent(window.location.origin);
-  document.getElementById('playerTitleText').textContent=v.title;
+  document.getElementById('playerTitleText').textContent=getVideoTitle(v);
   const badge=document.getElementById('playerCatBadge');
-  badge.textContent=CAT_ICONS[v.cat]+' '+CAT_LABELS[v.cat];
+  badge.textContent=CAT_ICONS[v.cat]+' '+getCatLabels()[v.cat];
   badge.className='vi-badge player-cat-pill cat-'+v.cat;
   // Show record buttons based on cat
   const recBtn = document.getElementById('playerRecordBtn');
@@ -1683,29 +1684,32 @@ function playVideo(v){
     if(recMed) recMed.style.display='block';
   } else if(recBtn && (v.cat==='special'||v.cat==='lp'||v.cat==='grandma')){
     recBtn.style.display='block';
-    recBtn.onclick = ()=>recordSpecial(v.id, v.title);
+    recBtn.onclick = ()=>recordSpecial(v.id, getVideoTitle(v));
   }
   scrollToPlayer();
   renderPlaylist();
 }
 
 // ─── RENDER PLAYLIST ──────────────────────────────────
+const LIVE_WATCH_I18N = { th:'▶ รับชมสด', en:'▶ Watch Live', zh:'▶ 观看直播' };
 function videoCardHtml(v){
-  // Special card for live streams — open in new tab
+  const displayTitle = getVideoTitle(v);
+  // Special card for live streams
   if(v.cat === 'live'){
     const isYT = v.url.includes('youtu');
     const ytid = isYT ? getYTId(v.url) : '';
     const thumb = ytid ? thumbUrl(ytid) : '';
+    const watchLabel = LIVE_WATCH_I18N[_currentLang] || LIVE_WATCH_I18N.th;
     return `<div class="video-item" style="cursor:pointer;" onclick="playVideo(${JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat,isM3u8:!!v.isM3u8}).replace(/"/g,'&quot;')})">
       <div class="vi-num" style="background:linear-gradient(to bottom,#8B0000,#cc2222);color:#fff;">📺</div>
       <div class="vi-thumb" style="background:#1a0808;">${thumb?`<img src="${thumb}" loading="lazy" alt="">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;">📺</div>'}
         <div class="vi-play" style="background:rgba(200,0,0,0.2);"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="red"/></svg></div>
       </div>
       <div class="vi-info">
-        <div class="vi-title">${v.title}</div>
+        <div class="vi-title">${displayTitle}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#ff4444;font-weight:700;"><span style="width:7px;height:7px;border-radius:50%;background:#ff2222;display:inline-block;box-shadow:0 0 6px #ff2222;"></span>LIVE</span>
-          <span onclick="event.stopPropagation()" style="display:inline-block;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;">▶ รับชมสด</span>
+          <span onclick="event.stopPropagation()" style="display:inline-block;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;">${watchLabel}</span>
         </div>
       </div>
     </div>`;
@@ -1720,8 +1724,8 @@ function videoCardHtml(v){
       <div class="vi-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
     </div>
     <div class="vi-info">
-      <div class="vi-title">${v.title}</div>
-      ${v.cat==='special'?'':`<span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${CAT_LABELS[v.cat]}</span>`}
+      <div class="vi-title">${displayTitle}</div>
+      ${v.cat==='special'?'':`<span class="vi-badge cat-${v.cat}">${CAT_ICONS[v.cat]} ${getCatLabels()[v.cat]}</span>`}
     </div>
   </div>`;
 }
@@ -1742,22 +1746,25 @@ function renderPlaylist(){
     groups[cat].push({...v,_idx:globalIdx});
   });
   let html='';
+  const zoneLabels = ZONE_LABELS_I18N[_currentLang] || ZONE_LABELS_I18N.th;
+  const itemWord   = ITEM_WORD_I18N[_currentLang] || ITEM_WORD_I18N.th;
   ZONE_GROUPS.forEach(zone=>{
     const zoneVideos=[];
     zone.cats.forEach(c=>(groups[c]||[]).forEach(v=>zoneVideos.push(v)));
     if(!zoneVideos.length)return;
+    const zoneLabel = zoneLabels[zone.id] || zone.id;
     html+=`<div class="playlist-zone">
       <div class="playlist-zone-header ${zone.color}">
         <span class="pzh-icon">${zone.icon}</span>
-        <span class="pzh-label">${zone.label}</span>
-        <span class="pzh-count">${zoneVideos.length} รายการ</span>
+        <span class="pzh-label">${zoneLabel}</span>
+        <span class="pzh-count">${zoneVideos.length} ${itemWord}</span>
       </div>
       <div class="playlist-zone-body">`;
     if(zone.cats.length>1 && !zone.noSubGroup){
       zone.cats.forEach(cat=>{
         const list=groups[cat]||[];
         if(!list.length)return;
-        html+=`<div class="playlist-sub-label">${CAT_ICONS[cat]} ${CAT_LABELS[cat]}</div>`;
+        html+=`<div class="playlist-sub-label">${CAT_ICONS[cat]} ${getCatLabels()[cat]}</div>`;
         list.forEach(v=>{html+=videoCardHtml(v);});
       });
     } else {
@@ -3009,8 +3016,11 @@ function setLang(lang){
     if(txt==='ยกเลิก'||txt==='Cancel'||txt==='取消') btn.textContent=t.btn_crop_cancel;
     if(txt.includes('บันทึกรูป')||txt.includes('Save Photo')||txt.includes('保存头像')) btn.textContent=t.btn_crop_save;
   });
+  // ── Re-render playlist so zone/category headers update ──
+  renderPlaylist();
 }
 
+window.getVideoTitle = getVideoTitle;
 window.setLang = setLang;
 
 // ── expose new functions ───────────────────────────────

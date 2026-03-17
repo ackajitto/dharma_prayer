@@ -648,7 +648,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span class="player-title" id="playerTitleText"></span>
         </div>
         <div class="player-frame" id="playerFrameYT">
-          <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media; fullscreen" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-forms"></iframe>
         </div>
         <div class="player-frame" id="playerFrameHLS" style="display:none;">
           <video id="hlsVideo" controls autoplay style="width:100%;height:100%;display:block;background:#000;" playsinline></video>
@@ -1651,7 +1651,7 @@ function playVideo(v){
   if(window._hls){ window._hls.destroy(); window._hls = null; }
   const ytid=getYTId(v.url);
   if(!ytid){showToast('⚠️ ลิงก์ไม่ถูกต้อง');return}
-  document.getElementById('ytIframe').src='https://www.youtube.com/embed/'+ytid+'?autoplay=1&rel=0';
+  document.getElementById('ytIframe').src='https://www.youtube.com/embed/'+ytid+'?autoplay=1&rel=0&playsinline=1&origin='+encodeURIComponent(window.location.origin);
   document.getElementById('playerTitleText').textContent=v.title;
   const badge=document.getElementById('playerCatBadge');
   badge.textContent=CAT_ICONS[v.cat]+' '+CAT_LABELS[v.cat];

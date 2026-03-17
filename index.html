@@ -1971,15 +1971,38 @@ function applyThemeToCard(p){
 async function openShareModal(mode){
   mode = mode || 'today';
 
-  // ถ้าโหมดไม่ตรง ให้ switch ก่อนแล้วรอ DOM อัปเดต
-  if(mode !== _statsMode){
-    await new Promise(resolve=>{
-      switchStatsMode(mode);
-      setTimeout(resolve, 400); // รอ refreshStatsDisplay เสร็จ
-    });
+  // ── ถ้า DOM ยังไม่มีข้อมูลของ mode นั้น ให้ดึงมาก่อน ──
+  // แต่ไม่สลับแท็บบนหน้าจอ — ดึงข้อมูลเงียบๆ แล้วใส่การ์ดเลย
+  let vals = {cntM:0, cntE:0, medM:0, medE:0, dv3:0, dv5:0, dv6:0, dv4:0};
+
+  if(mode === 'today'){
+    // อ่านจาก DOM ถ้าตรง mode, ถ้าไม่ตรงดึง Firebase เงียบๆ
+    if(_statsMode === 'today'){
+      vals = _readValsFromDOM();
+    } else {
+      // ดึง today จาก Firebase เงียบๆ
+      if(window._currentUser){
+        const todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {};
+        const sp = todayData.special || {};
+        vals = {cntM:todayData.cntM||0, cntE:todayData.cntE||0, medM:todayData.medM||0, medE:todayData.medE||0,
+                dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0};
+      }
+    }
+  } else {
+    // total
+    if(_statsMode === 'total'){
+      vals = _readValsFromDOM();
+    } else {
+      // คำนวณ total เงียบๆ
+      if(window._currentUser){
+        const totals = await computeAllTimeTotals();
+        vals = {cntM:totals.cntM, cntE:totals.cntE, medM:totals.medM, medE:totals.medE,
+                dv3:totals.dv3, dv5:totals.dv5, dv6:totals.dv6, dv4:totals.dv4};
+      }
+    }
   }
 
-  // Show modal
+  // ── เปิด modal ──
   document.getElementById('shareModal').style.display = 'flex';
 
   const displayName = document.getElementById('profileName').textContent;
@@ -2020,17 +2043,16 @@ async function openShareModal(mode){
     if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
   }
 
-  // อ่านค่าจาก DOM (pst-card) ตรงๆ เร็วที่สุด
-  const getNum = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
+  // ── ใส่ค่าในการ์ด ──
   const rowMap = [
-    {numId:'scCountMorning',  val: getNum('totalMorning')},
-    {numId:'scCountEvening',  val: getNum('totalEvening')},
-    {numId:'scMeditMorning',  val: getNum('totalMedMorning')},
-    {numId:'scMeditEvening',  val: getNum('totalMedEvening')},
-    {numId:'scSpecial_dv3',   val: getNum('totalSpecial_dv3')},
-    {numId:'scSpecial_dv5',   val: getNum('totalSpecial_dv5')},
-    {numId:'scSpecial_dv6',   val: getNum('totalSpecial_dv6')},
-    {numId:'scSpecial_dv4',   val: getNum('totalSpecial_dv4')},
+    {numId:'scCountMorning', val:vals.cntM},
+    {numId:'scCountEvening', val:vals.cntE},
+    {numId:'scMeditMorning', val:vals.medM},
+    {numId:'scMeditEvening', val:vals.medE},
+    {numId:'scSpecial_dv3',  val:vals.dv3},
+    {numId:'scSpecial_dv5',  val:vals.dv5},
+    {numId:'scSpecial_dv6',  val:vals.dv6},
+    {numId:'scSpecial_dv4',  val:vals.dv4},
   ];
   rowMap.forEach(({numId, val})=>{
     const numEl = document.getElementById(numId);
@@ -2040,8 +2062,19 @@ async function openShareModal(mode){
     if(row) row.style.display = val === 0 ? 'none' : 'flex';
   });
 
-  // render ภาพทันทีหลังเซ็ตข้อมูลเสร็จ
+  // ── render ภาพ ──
   _autoRenderShareCard();
+}
+
+// อ่านค่าจาก pst-card DOM ตรงๆ (ใช้เมื่อ mode ตรงกับหน้าจอ)
+function _readValsFromDOM(){
+  const g = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
+  return {
+    cntM: g('totalMorning'), cntE: g('totalEvening'),
+    medM: g('totalMedMorning'), medE: g('totalMedEvening'),
+    dv3:  g('totalSpecial_dv3'), dv5: g('totalSpecial_dv5'),
+    dv6:  g('totalSpecial_dv6'), dv4: g('totalSpecial_dv4'),
+  };
 }
 
 let _previewDataUrl = null; // เก็บ dataUrl สำหรับปุ่ม download/open tab

@@ -2357,6 +2357,11 @@ function enterGuestMode(){
   // Set guest profile
   document.getElementById('profileName').textContent = 'ผู้เยี่ยมชม';
   document.getElementById('profileInitials').textContent = '🙏';
+  // แสดงรูป chedi สำหรับผู้เยี่ยมชม
+  const guestImg = document.getElementById('profileImg');
+  guestImg.src = 'https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg';
+  guestImg.style.display = 'block';
+  document.getElementById('profileInitials').style.display = 'none';
   // Show stats toggle and pst-cards (show zeros — guest can explore)
   document.getElementById('statsToggle').style.display = 'flex';
   document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');
@@ -2407,6 +2412,11 @@ function exitGuestMode(){
   document.getElementById('btnLogin').style.display = 'none';
   document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');
   document.getElementById('statsToggle').style.display = 'flex';
+  // รีเซ็ตรูปโปรไฟล์กลับปกติ
+  const guestImg = document.getElementById('profileImg');
+  guestImg.src = '';
+  guestImg.style.display = 'none';
+  document.getElementById('profileInitials').style.display = 'block';
 }
 
 // ─── SCROLL TO VIDEO ZONE ─────────────────────────────

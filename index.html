@@ -1861,8 +1861,11 @@ async function openShareModal(mode){
     const row = numEl.closest('div[style*="justify-content:space-between"]');
     if(row) row.style.display = val === 0 ? 'none' : 'flex';
   });
-  // render ภาพทันทีหลังเซ็ตข้อมูลเสร็จ
-  _autoRenderShareCard();
+
+  // 👇 สิ่งที่แก้ไข: หน่วงเวลาเล็กน้อยให้ Browser วาดตัวเลขใหม่ลง DOM ให้เสร็จก่อน
+  setTimeout(() => {
+    _autoRenderShareCard();
+  }, 150);
 }
 let _previewDataUrl = null; // เก็บ dataUrl สำหรับปุ่ม download/open tab
 function _autoRenderShareCard(){

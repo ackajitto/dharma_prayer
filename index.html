@@ -2438,7 +2438,7 @@ async function markTodayDone(type){
   if(type==='evening'){ existing.e = true; existing.cntE = (existing.cntE||0)+1; }
   await dbSet(path, existing);
   await refreshStreakAndCalendar();
-  if(_statsMode === 'today') refreshStatsDisplay();
+  // ลบบรรทัด refreshStatsDisplay ออก เพราะเราอัปเดต DOM ไปแล้วตั้งแต่ใน recordCount เพื่อป้องกันการดึงข้อมูลเก่ามาทับ
 }
 async function markTodaySpecial(videoId, delta){
   const key = todayKey();

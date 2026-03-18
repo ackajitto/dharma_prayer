@@ -810,7 +810,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       </div>
       <div class="share-hint">กดบันทึกรูปหรือกด Hold (มือถือ) เพื่อบันทึก แล้วส่งต่อแบ่งปันบุญ 🙏</div>
     </div>
-    <div style="position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;">
+    <div style="position:absolute;left:0;top:0;z-index:-9999;visibility:hidden;pointer-events:none;">
       <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;background-image:url('https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,6,0,0.55) 0%,rgba(10,4,0,0.45) 40%,rgba(8,3,0,0.65) 100%);pointer-events:none;"></div>
         <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;box-sizing:border-box;">
@@ -1819,13 +1819,20 @@ async function openShareModal(mode){
   const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
   applyThemeToCard(p);
   
-  // รูปภาพโปรไฟล์
+ // รูปภาพโปรไฟล์
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
   if(existingImg && existingImg.style.display !== 'none' && existingImg.src){
     const img = document.createElement('img');
-    img.src = existingImg.src;
+    
+    // 👇 1. เพิ่มบรรทัดนี้เพื่อขอสิทธิ์ดึงภาพข้ามโดเมนอย่างถูกต้อง
+    img.crossOrigin = 'anonymous'; 
+    
+    // 👇 2. ดักไม่ให้ใช้ Cache โดยการต่อท้ายเวลา (Cache Busting)
+    const imgSrc = existingImg.src;
+    img.src = imgSrc.startsWith('data:') ? imgSrc : imgSrc + (imgSrc.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
+    
     img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:13px';
     inner.appendChild(img);
   } else {
@@ -1884,15 +1891,20 @@ function _autoRenderShareCard(){
   document.getElementById('shareImgLoading').style.display = 'flex';
   document.getElementById('shareImgLoading').style.flexDirection = 'column';
   document.getElementById('shareImgActions').style.display = 'none';
-  _renderCardToCanvas().then(canvas=>{
-    _previewDataUrl = canvas.toDataURL('image/png');
-    const previewImg = document.getElementById('sharePreviewImg');
-    previewImg.src = _previewDataUrl;
-    previewImg.style.display = 'block';
-    document.getElementById('shareImgLoading').style.display = 'none';
-    document.getElementById('shareImgActions').style.display = 'block';
-  }).catch(()=>{
-    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด ลองปิดแล้วเปิดใหม่';
+  function _renderCardToCanvas(){
+  const card = document.getElementById('shareCard');
+  return _loadChedi().then(base64=>{
+    // ใส่รูปเป็น base64 ก่อน render
+    card.style.backgroundImage = "url('"+base64+"')";
+    card.style.backgroundSize = 'cover';
+    card.style.backgroundPosition = 'center center';
+    return html2canvas(card, {
+      scale: 3, 
+      useCORS: true, 
+      allowTaint: false, // 👈 เปลี่ยนตรงนี้เป็น false ป้องกัน Canvas พังในรอบถัดไป
+      backgroundColor: '#1a0800', 
+      logging: false
+    });
   });
 }
 function downloadFromPreview(){

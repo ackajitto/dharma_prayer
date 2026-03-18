@@ -2503,8 +2503,7 @@ async function refreshStreakAndCalendar(){
   const history = await dbGet('users/'+window._currentUser+'/history') || {};
   // streak
   const streak = calcStreak(history);
-  document.getElementById('streakCount
-  ').textContent = streak;
+  document.getElementById('streakCount').textContent = streak;
   const sub = streak===0 ? 'เริ่มสร้างนิสัยทำวัตรทุกวัน'
     : streak < 7 ? 'เยี่ยมมาก! สู้ต่อไป 💪'
     : streak < 30 ? 'ปฏิบัติสม่ำเสมอ 🌟'

@@ -1099,22 +1099,27 @@ async function doLogout(){
 // ══════════════════════════════════════════════════════
 //  BOOT APP
 // ══════════════════════════════════════════════════════
+// แก้ฟังก์ชันนี้ — return ค่าหลัง increment แล้วเรียก loadSiteStats ต่อทันที
 async function incrementVisitCount(){
   try {
-    await window._db.ref('site_stats/visits').set(
-      firebase.database.ServerValue.increment(1)
-    );
-  } catch(e){ console.error('incrementVisitCount', e); }
+    const ref = window._db.ref('site_stats/visits');
+    await ref.set(firebase.database.ServerValue.increment(1));
+    const snap = await ref.once('value');
+    return snap.val() || 0;
+  } catch(e){ 
+    console.error('incrementVisitCount', e); 
+    return null;
+  }
 }
 
-async function loadSiteStats(){
+async function loadSiteStats(visits){
   try {
-    const visits = await dbGet('site_stats/visits') || 0;
+    const count = visits != null ? visits : (await dbGet('site_stats/visits') || 0);
     const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : String(n);
     const el = document.getElementById('siteStatsBar');
     if(el) el.style.display = 'flex';
     const eu = document.getElementById('statTotalUsers');
-    if(eu) eu.textContent = fmt(visits);
+    if(eu) eu.textContent = fmt(count);
   } catch(e){ console.error('loadSiteStats', e); }
 }
 
@@ -1157,8 +1162,9 @@ async function bootApp(username, userData){
   renderPlaylist();
   refreshStreakAndCalendar();
   loadSpecialStats();
-  incrementVisitCount();
-  loadSiteStats();
+  const visits = await incrementVisitCount();
+loadSiteStats(visits);
+```
   _loadChedi(); // โหลด bg ล่วงหน้าตั้งแต่เริ่ม ไม่ต้องรอตอนกดแชร์
   // Check day reset and show today's stats by default
   await checkDayReset(username);
@@ -2468,8 +2474,9 @@ function enterGuestMode(){
   // Show today stats (all zeros)
   switchStatsMode('today');
   // แสดงสถิติผู้ใช้
-  incrementVisitCount();
-  loadSiteStats();
+ const visits = await incrementVisitCount();
+loadSiteStats(visits);
+```
 }
 function shareToLine(){
   const url = encodeURIComponent('https://ackajitto.github.io/dharma_prayer/?guest=1');

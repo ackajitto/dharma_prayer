@@ -1164,7 +1164,6 @@ async function bootApp(username, userData){
   loadSpecialStats();
   const visits = await incrementVisitCount();
 loadSiteStats(visits);
-```
   _loadChedi(); // โหลด bg ล่วงหน้าตั้งแต่เริ่ม ไม่ต้องรอตอนกดแชร์
   // Check day reset and show today's stats by default
   await checkDayReset(username);
@@ -2442,7 +2441,7 @@ async function doResetAll(){
   }
 }
 // ─── GUEST MODE ──────────────────────────────────────
-function enterGuestMode(){
+async function enterGuestMode(){
   window._currentUser = null;
   window._guestMode = true;
   document.getElementById('loginScreen').style.display = 'none';

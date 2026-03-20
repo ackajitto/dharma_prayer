@@ -1100,11 +1100,11 @@ async function doLogout(){
 //  BOOT APP
 // ══════════════════════════════════════════════════════
 async function incrementVisitCount(){
-  // เพิ่ม visit counter ใน Firebase ทุกครั้งที่เปิดเว็บ (ใช้ transaction)
   try {
-    const ref = window._db.ref('site_stats/visits');
-    await ref.transaction(cur => (cur || 0) + 1);
-  } catch(e){}
+    await window._db.ref('site_stats/visits').set(
+      firebase.database.ServerValue.increment(1)
+    );
+  } catch(e){ console.error('incrementVisitCount', e); }
 }
 
 async function loadSiteStats(){

@@ -1101,12 +1101,17 @@ async function doLogout(){
 // ══════════════════════════════════════════════════════
 async function incrementVisitCount(){
   try {
-    await window._db.ref('site_stats/visits').set(
-      firebase.database.ServerValue.increment(1)
-    );
-  } catch(e){ console.error('incrementVisitCount', e); }
+    const ref = window._db.ref('site_stats/visits');
+    await ref.transaction(current => (current || 0) + 1);
+  } catch(e){ 
+    // fallback to set if transaction fails
+    try {
+      const snap = await window._dbReadOnce('site_stats/visits');
+      const cur = snap.exists() ? (snap.val() || 0) : 0;
+      await window._dbWrite('site_stats/visits', cur + 1);
+    } catch(e2){ console.error('incrementVisitCount', e2); }
+  }
 }
-
 async function loadSiteStats(){
   try {
     const visits = await dbGet('site_stats/visits') || 0;

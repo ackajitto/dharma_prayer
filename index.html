@@ -1778,8 +1778,9 @@ function applyThemeToCard(p){
   if(footerSub)   footerSub.style.color   = 'rgba(232,213,163,0.35)';
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
-let _previewDataUrl = null;    // รูปที่ render แล้ว
-let _shareCacheKey  = null;    // key ของข้อมูลที่ render ไว้ครั้งล่าสุด
+let _previewDataUrl  = null;    // รูปที่ render แล้ว
+let _shareCacheKey   = null;    // key ของข้อมูลที่ render ไว้ครั้งล่าสุด
+let _shareProfileSrc = null;    // src ของรูปโปรไฟล์ที่โหลดไว้ใน share card
 
 async function openShareModal(){
   // เปิด modal ทันที
@@ -1847,25 +1848,30 @@ async function openShareModal(){
   // ธีม
   applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
 
-  // รูปโปรไฟล์ — await ให้โหลดเสร็จก่อน render
+  // รูปโปรไฟล์ — โหลดครั้งเดียว cache ไว้ใน _shareProfileSrc
   const inner = document.getElementById('scPhotoInner');
-  inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
   const hasPhoto = existingImg && existingImg.style.display !== 'none'
                    && existingImg.src && !existingImg.src.endsWith('/');
-  if(hasPhoto){
-    await new Promise(resolve => {
-      const img = document.createElement('img');
-      img.crossOrigin = 'anonymous';
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:13px';
-      img.onload  = () => { inner.appendChild(img); resolve(); };
-      img.onerror = () => { inner.textContent = displayName.charAt(0).toUpperCase(); resolve(); };
-      const src = existingImg.src;
-      img.src = src.startsWith('data:') ? src : src + (src.includes('?') ? '&' : '?') + 'nc=' + Date.now();
-    });
-  } else {
-    inner.textContent = displayName.charAt(0).toUpperCase();
+  const newSrc = hasPhoto ? existingImg.src : '';
+  if(newSrc !== _shareProfileSrc){
+    // src เปลี่ยน — โหลดใหม่
+    _shareProfileSrc = newSrc;
+    inner.innerHTML = '';
+    if(newSrc){
+      await new Promise(resolve => {
+        const img = document.createElement('img');
+        img.crossOrigin = 'anonymous';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:13px';
+        img.onload  = () => { inner.appendChild(img); resolve(); };
+        img.onerror = () => { inner.textContent = displayName.charAt(0).toUpperCase(); resolve(); };
+        img.src = newSrc; // ใช้ src ตรงๆ ไม่ต่อ timestamp
+      });
+    } else {
+      inner.textContent = displayName.charAt(0).toUpperCase();
+    }
   }
+  // ถ้า src เดิม — ไม่ต้องทำอะไร inner ยังมีรูปเดิมอยู่
 
   // Render canvas
   try {

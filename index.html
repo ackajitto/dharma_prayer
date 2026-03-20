@@ -537,29 +537,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
           </div>
         </div>
-        <div id="siteStatsBar" style="display:none;align-items:center;justify-content:center;gap:0;padding:10px 14px 12px;border-top:1px solid var(--cream-dark);flex-wrap:wrap;gap:6px;">
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;">
-            <div style="display:flex;align-items:center;gap:5px;">
-              <span style="font-size:16px;">👥</span>
-              <span style="font-size:13px;color:var(--text-light);">ผู้ใช้ทั้งหมด</span>
-              <span id="statTotalUsers" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
-              <span style="font-size:12px;color:var(--text-ghost);">คน</span>
-            </div>
-            <div style="width:1px;height:16px;background:var(--cream-mid);"></div>
-            <div style="display:flex;align-items:center;gap:5px;">
-              <span style="font-size:16px;">🙏</span>
-              <span style="font-size:13px;color:var(--text-light);">สวดรวม</span>
-              <span id="statTotalChants" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
-              <span style="font-size:12px;color:var(--text-ghost);">ครั้ง</span>
-            </div>
-            <div style="width:1px;height:16px;background:var(--cream-mid);"></div>
-            <div style="display:flex;align-items:center;gap:5px;">
-              <span style="font-size:16px;">🧘</span>
-              <span style="font-size:13px;color:var(--text-light);">สมาธิรวม</span>
-              <span id="statTotalMed" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
-              <span style="font-size:12px;color:var(--text-ghost);">นาที</span>
-            </div>
-          </div>
+        <div id="siteStatsBar" style="display:none;align-items:center;justify-content:center;padding:10px 14px 12px;border-top:1px solid var(--cream-dark);">
+          <span style="font-size:16px;">👥</span>
+          <span style="font-size:13px;color:var(--text-light);margin:0 5px;">มีผู้เข้าใช้งานแล้ว</span>
+          <span id="statTotalUsers" style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:var(--gold);">-</span>
+          <span style="font-size:13px;color:var(--text-ghost);margin-left:3px;">คน</span>
         </div>
       </div>
   </div>
@@ -1139,11 +1121,7 @@ async function loadSiteStats(){
     const el = document.getElementById('siteStatsBar');
     if(el) el.style.display = 'flex';
     const eu = document.getElementById('statTotalUsers');
-    const ec = document.getElementById('statTotalChants');
-    const em = document.getElementById('statTotalMed');
     if(eu) eu.textContent = fmt(totalUsers);
-    if(ec) ec.textContent = fmt(totalChants);
-    if(em) em.textContent = fmt(totalMed);
   } catch(e){ console.error('loadSiteStats', e); }
 }
 

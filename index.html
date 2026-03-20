@@ -537,6 +537,30 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
           </div>
         </div>
+        <div id="siteStatsBar" style="display:none;align-items:center;justify-content:center;gap:0;padding:10px 14px 12px;border-top:1px solid var(--cream-dark);flex-wrap:wrap;gap:6px;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <span style="font-size:16px;">👥</span>
+              <span style="font-size:13px;color:var(--text-light);">ผู้ใช้ทั้งหมด</span>
+              <span id="statTotalUsers" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
+              <span style="font-size:12px;color:var(--text-ghost);">คน</span>
+            </div>
+            <div style="width:1px;height:16px;background:var(--cream-mid);"></div>
+            <div style="display:flex;align-items:center;gap:5px;">
+              <span style="font-size:16px;">🙏</span>
+              <span style="font-size:13px;color:var(--text-light);">สวดรวม</span>
+              <span id="statTotalChants" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
+              <span style="font-size:12px;color:var(--text-ghost);">ครั้ง</span>
+            </div>
+            <div style="width:1px;height:16px;background:var(--cream-mid);"></div>
+            <div style="display:flex;align-items:center;gap:5px;">
+              <span style="font-size:16px;">🧘</span>
+              <span style="font-size:13px;color:var(--text-light);">สมาธิรวม</span>
+              <span id="statTotalMed" style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold);">-</span>
+              <span style="font-size:12px;color:var(--text-ghost);">นาที</span>
+            </div>
+          </div>
+        </div>
       </div>
   </div>
     <div class="section-divider" style="display:none">
@@ -1093,6 +1117,36 @@ async function doLogout(){
 // ══════════════════════════════════════════════════════
 //  BOOT APP
 // ══════════════════════════════════════════════════════
+async function loadSiteStats(){
+  try {
+    const allUsers = await dbGet('users') || {};
+    const keys = Object.keys(allUsers).filter(k => !k.startsWith('_'));
+    const totalUsers = keys.length;
+
+    let totalChants = 0, totalMed = 0;
+    keys.forEach(k => {
+      const u = allUsers[k];
+      if(!u) return;
+      totalChants += (u.cnt_morning||0) + (u.cnt_evening||0);
+      // นับจาก special ด้วย
+      const sp = u.cnt_special || {};
+      Object.values(sp).forEach(s => { totalChants += (s.count||0); });
+      totalMed += (u.med_morning_min||0) + (u.med_evening_min||0);
+    });
+
+    // แสดงผล
+    const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : String(n);
+    const el = document.getElementById('siteStatsBar');
+    if(el) el.style.display = 'flex';
+    const eu = document.getElementById('statTotalUsers');
+    const ec = document.getElementById('statTotalChants');
+    const em = document.getElementById('statTotalMed');
+    if(eu) eu.textContent = fmt(totalUsers);
+    if(ec) ec.textContent = fmt(totalChants);
+    if(em) em.textContent = fmt(totalMed);
+  } catch(e){ console.error('loadSiteStats', e); }
+}
+
 async function bootApp(username, userData){
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -1132,6 +1186,7 @@ async function bootApp(username, userData){
   renderPlaylist();
   refreshStreakAndCalendar();
   loadSpecialStats();
+  loadSiteStats();
   _loadChedi(); // โหลด bg ล่วงหน้าตั้งแต่เริ่ม ไม่ต้องรอตอนกดแชร์
   // Check day reset and show today's stats by default
   await checkDayReset(username);
@@ -2440,6 +2495,8 @@ function enterGuestMode(){
   renderPlaylist();
   // Show today stats (all zeros)
   switchStatsMode('today');
+  // แสดงสถิติผู้ใช้
+  loadSiteStats();
 }
 function shareToLine(){
   const url = encodeURIComponent('https://ackajitto.github.io/dharma_prayer/?guest=1');

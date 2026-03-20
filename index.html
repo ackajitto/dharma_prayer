@@ -2064,17 +2064,18 @@ async function openSettingsModal(){
   await refreshSettingsCounts();
 }
 async function refreshSettingsCounts(){
-  const data = await dbGet('users/'+window._currentUser) || {};
-  const special = data.cnt_special || {};
+  // โหลดเฉพาะยอดวันนี้จาก history
+  const todayRec = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {};
+  const sp = todayRec.special || {};
   const items = {
-    cnt_morning: data.cnt_morning||0,
-    cnt_evening: data.cnt_evening||0,
-    med_morning_min: data.med_morning_min||0,
-    med_evening_min: data.med_evening_min||0,
-    dv3: (special['dv3']&&special['dv3'].count)||0,
-    dv5: (special['dv5']&&special['dv5'].count)||0,
-    dv6: (special['dv6']&&special['dv6'].count)||0,
-    dv4: (special['dv4']&&special['dv4'].count)||0,
+    cnt_morning:     todayRec.cntM || 0,
+    cnt_evening:     todayRec.cntE || 0,
+    med_morning_min: todayRec.medM || 0,
+    med_evening_min: todayRec.medE || 0,
+    dv3: sp['dv3'] || 0,
+    dv5: sp['dv5'] || 0,
+    dv6: sp['dv6'] || 0,
+    dv4: sp['dv4'] || 0,
   };
   Object.entries(items).forEach(([k,v])=>{
     const el = document.getElementById('settingsCount_'+k);
@@ -2087,54 +2088,39 @@ async function adjustCount(key, delta){
   const cur = parseInt(el.textContent)||0;
   const next = Math.max(0, cur+delta);
   el.textContent = next;
-  // Track locally so share modal always gets fresh value
-  _countOverrides[key] = next;
-  // Save to Firebase
+
+  // แก้เฉพาะ history วันนี้ — ไม่แตะยอดรวม
+  const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
+  const todayRec  = await dbGet(todayPath) || {};
+
   const isSpecial = ['dv3','dv5','dv6','dv4'].includes(key);
   if(isSpecial){
-    const special = await dbGet('users/'+window._currentUser+'/cnt_special') || {};
-    if(!special[key]) special[key] = {title:'', count:0};
-    special[key].count = next;
-    await dbSet('users/'+window._currentUser+'/cnt_special', special);
-    // update pst-card
-    const pstEl = document.getElementById('totalSpecial_'+key);
-    if(pstEl) pstEl.textContent = next;
-    // reload special stats display
-    renderSpecialStats(special);
-    // sync today's history for special
-    const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
-    const todayRec = await dbGet(todayPath) || {};
     if(!todayRec.special) todayRec.special = {};
-    todayRec.special[key] = next; // set to absolute value
-    await dbSet(todayPath, todayRec);
+    todayRec.special[key] = next;
   } else {
-    await dbSet('users/'+window._currentUser+'/'+key, next);
-    // update countMorning/Evening/medit displays
-    const domMap = {
-      cnt_morning: ['countMorning','totalMorning'],
-      cnt_evening: ['countEvening','totalEvening'],
+    const todayFieldMap = {
+      cnt_morning: 'cntM', cnt_evening: 'cntE',
+      med_morning_min: 'medM', med_evening_min: 'medE',
+    };
+    if(todayFieldMap[key]) todayRec[todayFieldMap[key]] = next;
+  }
+  await dbSet(todayPath, todayRec);
+
+  // อัปเดต UI หน้าหลัก (เฉพาะถ้าอยู่ใน mode today)
+  if(_statsMode === 'today'){
+    const uiMap = {
+      cnt_morning:     ['countMorning','totalMorning'],
+      cnt_evening:     ['countEvening','totalEvening'],
       med_morning_min: ['meditMorningMin','totalMedMorning'],
       med_evening_min: ['meditEveningMin','totalMedEvening'],
+      dv3: ['totalSpecial_dv3'], dv5: ['totalSpecial_dv5'],
+      dv6: ['totalSpecial_dv6'], dv4: ['totalSpecial_dv4'],
     };
-    if(domMap[key]){
-      domMap[key].forEach(id=>{
-        const e=document.getElementById(id); if(e) e.textContent=next;
-      });
-    }
-    // sync today's history for morning/evening/meditation
-    const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
-    const todayRec = await dbGet(todayPath) || {};
-    const todayFieldMap = {
-      cnt_morning: 'cntM',
-      cnt_evening: 'cntE',
-      med_morning_min: 'medM',
-      med_evening_min: 'medE',
-    };
-    if(todayFieldMap[key]){
-      todayRec[todayFieldMap[key]] = next; // set to absolute value
-      await dbSet(todayPath, todayRec);
-    }
+    (uiMap[key]||[]).forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=next; });
   }
+
+  // invalidate share cache เพื่อให้ render ใหม่เมื่อกดแชร์
+  _shareCacheKey = null;
 }
 function closeSettingsModal(){
   document.getElementById('settingsModal').style.display = 'none';

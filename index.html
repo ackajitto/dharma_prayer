@@ -1757,6 +1757,53 @@ const THEME_PALETTES = {
     dividerBar:'rgba(155,155,255,0.5)', statBoxBg:'rgba(0,0,0,0.2)',
   },
 };
+function applyLangToShareCard(){
+  const t = TRANSLATIONS[_currentLang] || TRANSLATIONS.th;
+  // locale สำหรับวันที่
+  const localeMap = { th:'th-TH', en:'en-US', zh:'zh-TW' };
+  const locale = localeMap[_currentLang] || 'th-TH';
+  document.getElementById('scCardLabel').textContent = t.card_label_today;
+  document.getElementById('scDate').textContent = new Intl.DateTimeFormat(locale,{
+    year:'numeric', month:'long', day:'numeric', weekday:'long', timeZone:'Asia/Bangkok'
+  }).format(new Date());
+  // title / sub / footer
+  const scTitle = document.querySelector('[data-sc="title"]');
+  const scSub   = document.querySelector('[data-sc="sub"]');
+  if(scTitle) scTitle.textContent = t.card_motto_sc;
+  if(scSub)   scSub.textContent   = t.card_sub_sc;
+  // สาธุ / อนุโมทนา
+  document.querySelectorAll('#shareCard div,#shareCard span').forEach(el=>{
+    const txt = el.textContent.trim();
+    if(txt === 'สาธุ  สาธุ  สาธุ' || txt === 'Sādhu  Sādhu  Sādhu' || txt === '萨度  萨度  萨度')
+      el.textContent = t.saathu;
+    if(txt.includes('เอาบุญมาฝาก') || txt.includes('Sharing Merit') || txt.includes('与您分享') ||
+       txt === 'ขออนุโมทนาบุญด้วยกันทุกท่าน' || txt === 'May all rejoice in this merit' || txt === '愿所有人共同随喜功德')
+      el.innerHTML = t.anumodhana;
+  });
+  // label + unit ในแต่ละ row
+  const rowDefs = [
+    {numId:'scCountMorning', lbl:t.lbl_morning,     unit:t.unit_times},
+    {numId:'scCountEvening', lbl:t.lbl_evening,     unit:t.unit_times},
+    {numId:'scMeditMorning',  lbl:t.lbl_med_morning, unit:t.unit_min},
+    {numId:'scMeditEvening',  lbl:t.lbl_med_evening, unit:t.unit_min},
+    {numId:'scSpecial_dv3',  lbl:t.lbl_dv3,         unit:t.unit_times},
+    {numId:'scSpecial_dv5',  lbl:t.lbl_dv5,         unit:t.unit_times},
+    {numId:'scSpecial_dv6',  lbl:t.lbl_dv6,         unit:t.unit_times},
+    {numId:'scSpecial_dv4',  lbl:t.lbl_dv4,         unit:t.unit_times},
+  ];
+  rowDefs.forEach(({numId, lbl, unit})=>{
+    const numEl = document.getElementById(numId);
+    if(!numEl) return;
+    const row = numEl.closest('div[style*="justify-content:space-between"]');
+    if(!row) return;
+    // label span (2nd span inside left div)
+    const labelSpan = row.querySelector('div > span:nth-child(2)');
+    if(labelSpan) labelSpan.textContent = lbl;
+    // unit span (after the number)
+    const unitSpan = numEl.nextElementSibling;
+    if(unitSpan) unitSpan.textContent = unit.trim();
+  });
+}
 function applyThemeToCard(p){
   const card = document.getElementById("shareCard");
   card.style.background = p.bg;
@@ -1828,11 +1875,11 @@ async function openShareModal(){
     dv3: sp['dv3']||0, dv5: sp['dv5']||0, dv6: sp['dv6']||0, dv4: sp['dv4']||0,
   };
 
-  // สร้าง cache key จากข้อมูล + ธีม + ชื่อ + วันที่
+  // สร้าง cache key จากข้อมูล + ธีม + ชื่อ + วันที่ + ภาษา
   const displayName = document.getElementById('profileName').textContent;
   const themeName   = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const todayStr    = todayKey();
-  const newKey = JSON.stringify({...stats, displayName, themeName, todayStr});
+  const newKey = JSON.stringify({...stats, displayName, themeName, todayStr, lang: _currentLang});
 
   // ถ้าข้อมูลเหมือนเดิมและมีรูปอยู่แล้ว → แสดงรูปเดิมเลย ไม่ต้อง render ใหม่
   if(newKey === _shareCacheKey && _previewDataUrl){
@@ -1867,15 +1914,12 @@ async function openShareModal(){
   // ข้อมูลพื้นฐานการ์ด
   document.getElementById('scName').textContent     = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
-  document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-  document.getElementById('scDate').textContent = new Intl.DateTimeFormat('th-TH',{
-    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
-  }).format(new Date());
   const firstEl = document.getElementById('scFirstDate');
   if(firstEl) firstEl.textContent = '';
 
-  // ธีม
+  // ธีม + ข้อความตามภาษา (ต้องทำก่อน render canvas)
   applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
+  applyLangToShareCard();
 
   // รูปโปรไฟล์ — await ให้โหลดเสร็จก่อน render
   const inner = document.getElementById('scPhotoInner');
@@ -2910,6 +2954,9 @@ function setLang(lang){
   });
   // ── Re-render playlist so zone/category headers update ──
   renderPlaylist();
+  // ── อัปเดตการ์ดแชร์ตามภาษาใหม่ และล้าง cache ให้ render ใหม่ครั้งถัดไป ──
+  applyLangToShareCard();
+  _shareCacheKey = null;
 }
 window.getVideoTitle = getVideoTitle;
 window.setLang = setLang;

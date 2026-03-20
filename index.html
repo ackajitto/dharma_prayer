@@ -501,8 +501,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px;">
-        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('today')">📅 รีเฟรชหน้าจอและกดแชร์ยอดวันนี้ </button>
-        <button class="btn-share-today" style="display:none; font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal('total')">📊 แชร์ยอดรวมทั้งหมด</button>
+        <button class="btn-share-today" style="font-size:14px;padding:13px 8px;touch-action:manipulation;" onclick="openShareModal()">📅 แชร์ยอดวันนี้</button>
       </div>
       <div style="background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:4px;overflow:hidden;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px 8px;">
@@ -1809,103 +1808,108 @@ function applyThemeToCard(p){
   if(footerSub)   footerSub.style.color   = 'rgba(232,213,163,0.35)';
   if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
 }
-async function openShareModal(mode){
-  mode = mode || 'today';
-  
-  // 1. เปิดหน้าต่าง Modal และแสดงสถานะกำลังโหลดก่อนเลย
-  document.getElementById('shareModal').style.display = 'flex';
-  document.getElementById('shareImgLoading').style.display = 'flex';
-  document.getElementById('shareImgActions').style.display = 'none';
-  document.getElementById('sharePreviewImg').style.display = 'none';
+let _previewDataUrl = null;    // รูปที่ render แล้ว
+let _shareCacheKey  = null;    // key ของข้อมูลที่ render ไว้ครั้งล่าสุด
 
-  // 2. บังคับดึงข้อมูลใหม่จากฐานข้อมูล (เช็คใหม่สดๆ ทุกครั้งที่กดแชร์)
-  _statsMode = mode;
-  await refreshStatsDisplay(); 
-  switchStatsMode(mode); // อัปเดต UI ปุ่มสลับโหมดให้ตรงกัน
-  
-  // 3. เตรียมข้อมูลใส่ในการ์ด
+async function openShareModal(){
+  // เปิด modal ทันที
+  document.getElementById('shareModal').style.display = 'flex';
+
+  // ดึงข้อมูล today จาก Firebase โดยตรง
+  let todayData = {};
+  if(window._currentUser && !window._guestMode){
+    try { todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {}; }
+    catch(e){ todayData = {}; }
+  }
+  const sp = todayData.special || {};
+  const stats = {
+    cntM: todayData.cntM || 0, cntE: todayData.cntE || 0,
+    medM: todayData.medM || 0, medE: todayData.medE || 0,
+    dv3: sp['dv3']||0, dv5: sp['dv5']||0, dv6: sp['dv6']||0, dv4: sp['dv4']||0,
+  };
+
+  // สร้าง cache key จากข้อมูล + ธีม + ชื่อ + วันที่
   const displayName = document.getElementById('profileName').textContent;
-  document.getElementById('scName').textContent = displayName;
+  const themeName   = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
+  const todayStr    = todayKey();
+  const newKey = JSON.stringify({...stats, displayName, themeName, todayStr});
+
+  // ถ้าข้อมูลเหมือนเดิมและมีรูปอยู่แล้ว → แสดงรูปเดิมเลย ไม่ต้อง render ใหม่
+  if(newKey === _shareCacheKey && _previewDataUrl){
+    document.getElementById('shareImgLoading').style.display  = 'none';
+    document.getElementById('shareImgActions').style.display  = 'block';
+    document.getElementById('sharePreviewImg').style.display  = 'block';
+    document.getElementById('sharePreviewImg').src = _previewDataUrl;
+    return;
+  }
+
+  // ข้อมูลเปลี่ยน → แสดง loading แล้ว render ใหม่
+  document.getElementById('shareImgLoading').style.display  = 'flex';
+  document.getElementById('shareImgLoading').style.flexDirection = 'column';
+  document.getElementById('shareImgActions').style.display  = 'none';
+  document.getElementById('sharePreviewImg').style.display  = 'none';
+
+  // ใส่ข้อมูลตัวเลขในการ์ด
+  const rowMap = [
+    {numId:'scCountMorning', val:stats.cntM}, {numId:'scCountEvening', val:stats.cntE},
+    {numId:'scMeditMorning',  val:stats.medM}, {numId:'scMeditEvening',  val:stats.medE},
+    {numId:'scSpecial_dv3',  val:stats.dv3},  {numId:'scSpecial_dv5',  val:stats.dv5},
+    {numId:'scSpecial_dv6',  val:stats.dv6},  {numId:'scSpecial_dv4',  val:stats.dv4},
+  ];
+  rowMap.forEach(({numId, val})=>{
+    const el = document.getElementById(numId);
+    if(!el) return;
+    el.textContent = val;
+    const row = el.closest('div[style*="justify-content:space-between"]');
+    if(row) row.style.display = val === 0 ? 'none' : 'flex';
+  });
+
+  // ข้อมูลพื้นฐานการ์ด
+  document.getElementById('scName').textContent     = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
-  const themeName = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
-  const p = THEME_PALETTES[themeName] || THEME_PALETTES.default;
-  applyThemeToCard(p);
-  
-  // รูปภาพโปรไฟล์
+  document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
+  document.getElementById('scDate').textContent = new Intl.DateTimeFormat('th-TH',{
+    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
+  }).format(new Date());
+  const firstEl = document.getElementById('scFirstDate');
+  if(firstEl) firstEl.textContent = '';
+
+  // ธีม
+  applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
+
+  // รูปโปรไฟล์ — await ให้โหลดเสร็จก่อน render
   const inner = document.getElementById('scPhotoInner');
   inner.innerHTML = '';
   const existingImg = document.getElementById('profileImg');
-  if(existingImg && existingImg.style.display !== 'none' && existingImg.src){
-    const img = document.createElement('img');
-    img.src = existingImg.src;
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:13px';
-    inner.appendChild(img);
+  const hasPhoto = existingImg && existingImg.style.display !== 'none'
+                   && existingImg.src && !existingImg.src.endsWith('/');
+  if(hasPhoto){
+    await new Promise(resolve => {
+      const img = document.createElement('img');
+      img.crossOrigin = 'anonymous';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:13px';
+      img.onload  = () => { inner.appendChild(img); resolve(); };
+      img.onerror = () => { inner.textContent = displayName.charAt(0).toUpperCase(); resolve(); };
+      const src = existingImg.src;
+      img.src = src.startsWith('data:') ? src : src + (src.includes('?') ? '&' : '?') + 'nc=' + Date.now();
+    });
   } else {
     inner.textContent = displayName.charAt(0).toUpperCase();
   }
-  
-  const now = new Date();
-  const dateStr = new Intl.DateTimeFormat('th-TH',{
-    year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok'
-  }).format(now);
-  
-  if(mode === 'today'){
-    document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-    document.getElementById('scDate').textContent = dateStr;
-    const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = '';
-  } else {
-    document.getElementById('scCardLabel').textContent = '📊 ยอดสวดมนต์รวมทั้งหมด';
-    document.getElementById('scDate').textContent = dateStr;
-    const jd = window._joinedDateCache;
-    const firstEl = document.getElementById('scFirstDate');
-    if(firstEl) firstEl.textContent = jd ? '🌱 เริ่มใช้งานตั้งแต่ ' + toBEShort(new Date(jd)) : '';
-  }
-  
-  // อ่านค่าตัวเลขที่เพิ่งถูกอัปเดตใหม่สุด
-  const getNum = id => parseInt(document.getElementById(id)?.textContent||'0')||0;
-  const rowMap = [
-    {numId:'scCountMorning',  val: getNum('totalMorning')},
-    {numId:'scCountEvening',  val: getNum('totalEvening')},
-    {numId:'scMeditMorning',  val: getNum('totalMedMorning')},
-    {numId:'scMeditEvening',  val: getNum('totalMedEvening')},
-    {numId:'scSpecial_dv3',   val: getNum('totalSpecial_dv3')},
-    {numId:'scSpecial_dv5',   val: getNum('totalSpecial_dv5')},
-    {numId:'scSpecial_dv6',   val: getNum('totalSpecial_dv6')},
-    {numId:'scSpecial_dv4',   val: getNum('totalSpecial_dv4')},
-  ];
-  
-  rowMap.forEach(({numId, val})=>{
-    const numEl = document.getElementById(numId);
-    if(!numEl) return;
-    numEl.textContent = val;
-    const row = numEl.closest('div[style*="justify-content:space-between"]');
-    if(row) row.style.display = val === 0 ? 'none' : 'flex';
-  });
-  
-  // 4. หน่วงเวลาเล็กน้อยให้ Browser วาดข้อความใหม่เสร็จก่อนสั่งแคปภาพ
-  setTimeout(() => {
-    _autoRenderShareCard();
-  }, 150);
-}
-let _previewDataUrl = null; // เก็บ dataUrl สำหรับปุ่ม download/open tab
-function _autoRenderShareCard(){
-  // รีเซ็ต preview
-  _previewDataUrl = null;
-  document.getElementById('sharePreviewImg').style.display = 'none';
-  document.getElementById('shareImgLoading').style.display = 'flex';
-  document.getElementById('shareImgLoading').style.flexDirection = 'column';
-  document.getElementById('shareImgActions').style.display = 'none';
-  _renderCardToCanvas().then(canvas=>{
-    _previewDataUrl = canvas.toDataURL('image/png');
+
+  // Render canvas
+  try {
+    const canvas = await _renderCardToCanvas();
+    _previewDataUrl  = canvas.toDataURL('image/png');
+    _shareCacheKey   = newKey; // บันทึก key ของการ render ครั้งนี้
     const previewImg = document.getElementById('sharePreviewImg');
-    previewImg.src = _previewDataUrl;
+    previewImg.src   = _previewDataUrl;
     previewImg.style.display = 'block';
     document.getElementById('shareImgLoading').style.display = 'none';
     document.getElementById('shareImgActions').style.display = 'block';
-  }).catch(()=>{
-    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด ลองปิดแล้วเปิดใหม่';
-  });
+  } catch(e){
+    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่';
+  }
 }
 function downloadFromPreview(){
   if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
@@ -2406,7 +2410,7 @@ window.closeChangePassword = closeChangePassword;
 window.doChangePassword = doChangePassword;
 window.downloadFromPreview = downloadFromPreview;
 window.openPreviewInTab = openPreviewInTab;
-window._autoRenderShareCard = _autoRenderShareCard;
+
 window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings;
@@ -2789,9 +2793,7 @@ function setLang(lang){
   });
   // ── Share buttons ─────────────────────────────────
   document.querySelectorAll('button.btn-share-today').forEach(btn=>{
-    const txt=btn.textContent.trim();
-    if(txt.includes('วันนี้')||txt.includes('Today')||txt.includes('今日')) btn.textContent=t.share_today;
-    if(txt.includes('รวมทั้งหมด')||txt.includes('Total')||txt.includes('累计')) btn.textContent=t.share_total;
+    btn.textContent = t.share_today;
   });
   // ── Theme label ───────────────────────────────────
   document.querySelectorAll('span').forEach(s=>{

@@ -1986,13 +1986,9 @@ async function _renderCardToCanvas(){
     ctx.lineTo(x,yy+r); ctx.quadraticCurveTo(x,yy,x+r,yy); ctx.closePath();
   }
 
-  // ── lotus ────────────────────────────────────────────────────
-  ctx.font = `${28*S}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  ctx.fillText('🪷', cx, y); y += 38*S;
-
   // ── title ────────────────────────────────────────────────────
-  txt('สวดมนต์ถวายเป็นพุทธบูชา', 14, '#F5E6C0', 'bold'); y += 20*S;
-  txt('บูชาธรรมมหาปูชนียาจารย์', 11, 'rgba(232,213,163,0.7)'); y += 14*S;
+  txt('สวดมนต์ถวายเป็นพุทธบูชา', 18, '#F5E6C0', 'bold'); y += 26*S;
+  txt('บูชาธรรมมหาปูชนียาจารย์', 13, 'rgba(232,213,163,0.7)'); y += 16*S;
   line(); y += 12*S;
 
   // ── profile photo ────────────────────────────────────────────

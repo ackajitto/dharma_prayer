@@ -472,25 +472,115 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
               <span class="pst-num" id="totalMedEvening">0</span>
               <span class="pst-unit"> นาที</span>
             </div>
-            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv3')" title="สรรเสริญพระมงคลเทพมุนี">
-              <span class="pst-label">🙏 สรรเสริญพระมงคลเทพมุนี</span>
-              <span class="pst-num" id="totalSpecial_dv3">0</span>
-              <span class="pst-unit"> ครั้ง</span>
+            <!-- ══════════════════════════════════════════════
+                 ปุ่มบทสวดพิเศษต่างๆ — toggle แสดง/ซ่อน card
+                 ══════════════════════════════════════════════ -->
+            <div style="grid-column:span 2;margin-top:4px;">
+              <button id="btnToggleSpecial" onclick="toggleSpecialCards()" style="width:100%;padding:10px 14px;border-radius:13px;border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.1);color:var(--gold-light);font-size:15px;font-weight:700;font-family:'Noto Serif Thai',serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;">
+                <span>🙏 บทสวดพิเศษต่างๆ</span>
+                <span id="specialToggleArrow" style="font-size:12px;transition:transform .3s;">▼</span>
+              </button>
             </div>
-            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv5')" title="สรรเสริญพระธรรมกาย">
-              <span class="pst-label">🙏 สรรเสริญพระธรรมกาย</span>
-              <span class="pst-num" id="totalSpecial_dv5">0</span>
-              <span class="pst-unit"> ครั้ง</span>
-            </div>
-            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv6')" title="ธัมมจักกัปปวัตตนสูตร">
-              <span class="pst-label">🙏 ธัมมจักกัปปวัตตนสูตร</span>
-              <span class="pst-num" id="totalSpecial_dv6">0</span>
-              <span class="pst-unit"> ครั้ง</span>
-            </div>
-            <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('dv4')" title="สรรเสริญคุณยายอาจารย์ ขนนกยูง">
-              <span class="pst-label">💛 สรรเสริญคุณยายอาจารย์</span>
-              <span class="pst-num" id="totalSpecial_dv4">0</span>
-              <span class="pst-unit"> ครั้ง</span>
+
+            <!-- ══════════════════════════════════════════════
+                 SPECIAL CHANT CARDS — ซ่อนไว้ก่อน toggle เปิด
+                 ──────────────────────────────────────────────
+                 วิธีเพิ่มบทสวดใหม่:
+                 1. copy block <div class="pst-card ..."> ด้านล่าง
+                 2. เปลี่ยน id="totalSpecial_XXX"  (XXX = id ของ video เช่น dv8)
+                 3. เปลี่ยน onclick="scrollToVideo('XXX')"
+                 4. เปลี่ยน emoji + ชื่อบทสวดใน <span class="pst-label">
+                 5. เพิ่ม video ใน DEFAULT_VIDEOS พร้อม id:"XXX", cat:"special"
+                 ══════════════════════════════════════════════ -->
+            <div id="specialCardsWrap" style="display:none;grid-column:span 2;display:none;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;">
+
+                <!-- บทสวดพิเศษ 1 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv3')" title="สรรเสริญพระมงคลเทพมุนี">
+                  <span class="pst-label">🙏 สรรเสริญพระมงคลเทพมุนี</span>
+                  <span class="pst-num" id="totalSpecial_dv3">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 2 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv5')" title="สรรเสริญพระธรรมกาย">
+                  <span class="pst-label">🙏 สรรเสริญพระธรรมกาย</span>
+                  <span class="pst-num" id="totalSpecial_dv5">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 3 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv6')" title="ธัมมจักกัปปวัตตนสูตร">
+                  <span class="pst-label">🙏 ธัมมจักกัปปวัตตนสูตร</span>
+                  <span class="pst-num" id="totalSpecial_dv6">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 4 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv4')" title="สรรเสริญคุณยายอาจารย์ ขนนกยูง">
+                  <span class="pst-label">💛 สรรเสริญคุณยายอาจารย์</span>
+                  <span class="pst-num" id="totalSpecial_dv4">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 5 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv8')" title="เจริญพุทธมนต์ 7 ตำนาน">
+                  <span class="pst-label">📿 เจริญพุทธมนต์ 7 ตำนาน</span>
+                  <span class="pst-num" id="totalSpecial_dv8">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 6 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv9')" title="เจริญพุทธมนต์ 12 ตำนาน">
+                  <span class="pst-label">📿 เจริญพุทธมนต์ 12 ตำนาน</span>
+                  <span class="pst-num" id="totalSpecial_dv9">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 7 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv10')" title="พาหุง, มหาการุณิโก">
+                  <span class="pst-label">🙏 พาหุง, มหาการุณิโก</span>
+                  <span class="pst-num" id="totalSpecial_dv10">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 8 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv11')" title="ธรรมนิยาม">
+                  <span class="pst-label">🙏 ธรรมนิยาม</span>
+                  <span class="pst-num" id="totalSpecial_dv11">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 9 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv12')" title="มาติกา">
+                  <span class="pst-label">🙏 มาติกา</span>
+                  <span class="pst-num" id="totalSpecial_dv12">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 10 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv13')" title="พระสะหัสสะนัย">
+                  <span class="pst-label">🙏 พระสะหัสสะนัย</span>
+                  <span class="pst-num" id="totalSpecial_dv13">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- บทสวดพิเศษ 11 -->
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv14')" title="มงคลจักรวาลใหญ่">
+                  <span class="pst-label">🙏 มงคลจักรวาลใหญ่</span>
+                  <span class="pst-num" id="totalSpecial_dv14">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+
+                <!-- ══ เพิ่มบทสวดพิเศษใหม่ได้ที่นี่ ══
+                <div class="pst-card pst-special" style="cursor:pointer;" onclick="scrollToVideo('dv8')" title="ชื่อบทสวด">
+                  <span class="pst-label">🙏 ชื่อบทสวด</span>
+                  <span class="pst-num" id="totalSpecial_dv8">0</span>
+                  <span class="pst-unit"> ครั้ง</span>
+                </div>
+                ══════════════════════════════════════ -->
+
+              </div>
             </div>
           </div>
         </div>
@@ -774,7 +864,62 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <button onclick="adjustCount('dv4',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
           <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
         </div>
-      </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">📿</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">เจริญพุทธมนต์ 7 ตำนาน</span>
+          <button onclick="adjustCount('dv8',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv8" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv8',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">📿</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">เจริญพุทธมนต์ 12 ตำนาน</span>
+          <button onclick="adjustCount('dv9',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv9" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv9',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">🙏</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">พาหุง, มหาการุณิโก</span>
+          <button onclick="adjustCount('dv10',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv10" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv10',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">🙏</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">ธรรมนิยาม</span>
+          <button onclick="adjustCount('dv11',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv11" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv11',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">🙏</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">มาติกา</span>
+          <button onclick="adjustCount('dv12',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv12" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv12',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">🙏</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">พระสะหัสสะนัย</span>
+          <button onclick="adjustCount('dv13',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv13" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv13',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;">
+          <span style="font-size:16px;flex-shrink:0;">🙏</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">มงคลจักรวาลใหญ่</span>
+          <button onclick="adjustCount('dv14',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_dv14" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('dv14',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">ครั้ง</span>
+        </div>
     </div>
     <div style="border-top:1px solid var(--cream-dark);padding-top:16px;margin-top:4px;">
       <div style="font-size:15px;font-weight:600;color:#c0392b;margin-bottom:8px;">⚠️ รีเซ็ตยอดทั้งหมด</div>
@@ -912,15 +1057,26 @@ const ZONE_GROUPS = [
 ];
 function getVideoTitle(v){ return v.title; }
 const DEFAULT_VIDEOS = [
-  {id:'dv1', title:'ทำวัตรเช้า', url:'https://youtu.be/izv1NAUshPM', cat:'morning'},
-  {id:'dv2', title:'ทำวัตรเย็น', url:'https://youtu.be/qBL6bElc4jU', cat:'evening'},
-  {id:'dv3', title:'สรรเสริญพระมงคลเทพมุนี', url:'https://youtu.be/dCfhbasEmtQ', cat:'special'},
-  {id:'dv5', title:'สรรเสริญพระธรรมกาย', url:'https://youtu.be/ZfxHwPCrcso', cat:'special'},
-  {id:'dv6', title:'ธัมมจักกัปปวัตตนสูตร', url:'https://youtu.be/sSZI1ewkEFc', cat:'special'},
-  {id:'dv4', title:'สรรเสริญคุณยายอาจารย์ ขนนกยูง', url:'https://youtu.be/q2oDyeaapZE', cat:'special'},
-  {id:'dv7', title:'นำนั่งสมาธิ', url:'https://youtu.be/HhF18m41d2M', cat:'special'},
-  {id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก', url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8', cat:'live', isM3u8:true},
-  {id:'gbn_hd1', title:'GBN HD1 – ความชัดสูง', url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8', cat:'live', isM3u8:true},
+  {id:'dv1',  title:'ทำวัตรเช้า',                          url:'https://youtu.be/izv1NAUshPM',              cat:'morning'},
+  {id:'dv2',  title:'ทำวัตรเย็น',                          url:'https://youtu.be/qBL6bElc4jU',              cat:'evening'},
+  // ── บทสวดพิเศษ ──────────────────────────────────────────
+  {id:'dv3',  title:'สรรเสริญพระมงคลเทพมุนี',              url:'https://youtu.be/dCfhbasEmtQ',              cat:'special'},
+  {id:'dv5',  title:'สรรเสริญพระธรรมกาย',                  url:'https://youtu.be/ZfxHwPCrcso',              cat:'special'},
+  {id:'dv6',  title:'ธัมมจักกัปปวัตตนสูตร',                url:'https://youtu.be/sSZI1ewkEFc',              cat:'special'},
+  {id:'dv4',  title:'สรรเสริญคุณยายอาจารย์ ขนนกยูง',      url:'https://youtu.be/q2oDyeaapZE',              cat:'special'},
+  {id:'dv7',  title:'นำนั่งสมาธิ',                         url:'https://youtu.be/HhF18m41d2M',              cat:'special'},
+  {id:'dv8',  title:'เจริญพุทธมนต์ 7 ตำนาน',              url:'https://youtu.be/5P1AVECJFFs',              cat:'special'},
+  {id:'dv9',  title:'เจริญพุทธมนต์ 12 ตำนาน',             url:'https://youtu.be/7HP-gFEv8Sc',              cat:'special'},
+  {id:'dv10', title:'พาหุง, มหาการุณิโก',                  url:'https://youtu.be/CE_OBSxIKvM',              cat:'special'},
+  {id:'dv11', title:'ธรรมนิยาม',                           url:'https://youtu.be/k4czDhbPn04',              cat:'special'},
+  {id:'dv12', title:'มาติกา',                              url:'https://youtu.be/tktb6Wk5HPM',              cat:'special'},
+  {id:'dv13', title:'พระสะหัสสะนัย',                      url:'https://youtu.be/AaSlY5XIfh0',              cat:'special'},
+  {id:'dv14', title:'มงคลจักรวาลใหญ่',                    url:'https://youtu.be/cE7a2xo56Jc',              cat:'special'},
+  // ── เพิ่มบทสวดพิเศษใหม่ได้ที่นี่ ──────────────────────
+  // {id:'dv15', title:'ชื่อบทสวด', url:'https://youtu.be/XXXX', cat:'special'},
+  // ────────────────────────────────────────────────────────
+  {id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก',              url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',  cat:'live', isM3u8:true},
+  {id:'gbn_hd1', title:'GBN HD1 – ความชัดสูง',            url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8', cat:'live', isM3u8:true},
 ];
 function emailToKey(email){
   return email.toLowerCase()
@@ -1326,7 +1482,7 @@ function renderSpecialStats(stats){
 async function loadSpecialStats(){
   const stats = await dbGet('users/'+window._currentUser+'/cnt_special') || {};
   renderSpecialStats(stats);
-  ['dv3','dv5','dv6','dv4'].forEach(id=>{
+  ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'].forEach(id=>{
     const el = document.getElementById('totalSpecial_'+id);
     if(el){ const safeId = id.replace(/[.#$[\]]/g,'_'); el.textContent = (stats[safeId] && stats[safeId].count) ? stats[safeId].count : 0; }
   });
@@ -1751,6 +1907,21 @@ async function saveGroupNameFromSettings(){
 }
 window.saveGroupNameFromSettings = saveGroupNameFromSettings;
 
+let _specialCardsOpen = false;
+function toggleSpecialCards(){
+  _specialCardsOpen = !_specialCardsOpen;
+  const wrap = document.getElementById('specialCardsWrap');
+  const arrow = document.getElementById('specialToggleArrow');
+  if(_specialCardsOpen){
+    wrap.style.display = 'block';
+    arrow.style.transform = 'rotate(180deg)';
+  } else {
+    wrap.style.display = 'none';
+    arrow.style.transform = 'rotate(0deg)';
+  }
+}
+window.toggleSpecialCards = toggleSpecialCards;
+
 async function openSettingsModal(){
   const cur = document.getElementById('profileName').textContent;
   document.getElementById('settingsNameInput').value = cur;
@@ -1764,7 +1935,9 @@ async function openSettingsModal(){
 async function refreshSettingsCounts(){
   const todayRec = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {};
   const sp = todayRec.special || {};
-  const items = { cnt_morning: todayRec.cntM || 0, cnt_evening: todayRec.cntE || 0, med_morning_min: todayRec.medM || 0, med_evening_min: todayRec.medE || 0, dv3: sp['dv3'] || 0, dv5: sp['dv5'] || 0, dv6: sp['dv6'] || 0, dv4: sp['dv4'] || 0 };
+  const items = { cnt_morning: todayRec.cntM||0, cnt_evening: todayRec.cntE||0, med_morning_min: todayRec.medM||0, med_evening_min: todayRec.medE||0,
+    dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0,
+    dv8:sp['dv8']||0, dv9:sp['dv9']||0, dv10:sp['dv10']||0, dv11:sp['dv11']||0, dv12:sp['dv12']||0, dv13:sp['dv13']||0, dv14:sp['dv14']||0 };
   Object.entries(items).forEach(([k,v])=>{ const el = document.getElementById('settingsCount_'+k); if(el) el.textContent = v; });
 }
 async function adjustCount(key, delta){
@@ -1772,12 +1945,16 @@ async function adjustCount(key, delta){
   const cur = parseInt(el.textContent)||0; const next = Math.max(0, cur+delta); el.textContent = next;
   const todayPath = 'users/'+window._currentUser+'/history/'+todayKey();
   const todayRec  = await dbGet(todayPath) || {};
-  const isSpecial = ['dv3','dv5','dv6','dv4'].includes(key);
+  const isSpecial = ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'].includes(key);
   if(isSpecial){ if(!todayRec.special) todayRec.special = {}; todayRec.special[key] = next; }
   else { const m = { cnt_morning:'cntM', cnt_evening:'cntE', med_morning_min:'medM', med_evening_min:'medE' }; if(m[key]) todayRec[m[key]] = next; }
   await dbSet(todayPath, todayRec);
   if(_statsMode === 'today'){
-    const uiMap = { cnt_morning:['countMorning','totalMorning'], cnt_evening:['countEvening','totalEvening'], med_morning_min:['meditMorningMin','totalMedMorning'], med_evening_min:['meditEveningMin','totalMedEvening'], dv3:['totalSpecial_dv3'], dv5:['totalSpecial_dv5'], dv6:['totalSpecial_dv6'], dv4:['totalSpecial_dv4'] };
+    const uiMap = { cnt_morning:['countMorning','totalMorning'], cnt_evening:['countEvening','totalEvening'],
+      med_morning_min:['meditMorningMin','totalMedMorning'], med_evening_min:['meditEveningMin','totalMedEvening'],
+      dv3:['totalSpecial_dv3'], dv5:['totalSpecial_dv5'], dv6:['totalSpecial_dv6'], dv4:['totalSpecial_dv4'],
+      dv8:['totalSpecial_dv8'], dv9:['totalSpecial_dv9'], dv10:['totalSpecial_dv10'], dv11:['totalSpecial_dv11'],
+      dv12:['totalSpecial_dv12'], dv13:['totalSpecial_dv13'], dv14:['totalSpecial_dv14'] };
     (uiMap[key]||[]).forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=next; });
   }
   _shareCacheKey = null;
@@ -1820,39 +1997,33 @@ function switchStatsMode(mode){
   refreshStatsDisplay();
 }
 async function refreshStatsDisplay(){
+  const ALL_SP = ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'];
   if(_statsMode === 'today'){
     const key = todayKey();
     const todayData = await dbGet('users/'+window._currentUser+'/history/'+key) || {};
     const sp = todayData.special || {};
-    document.getElementById('totalMorning').textContent   = todayData.cntM || 0;
-    document.getElementById('totalEvening').textContent   = todayData.cntE || 0;
-    document.getElementById('totalMedMorning').textContent= todayData.medM || 0;
-    document.getElementById('totalMedEvening').textContent= todayData.medE || 0;
-    document.getElementById('totalSpecial_dv3').textContent = sp['dv3'] || 0;
-    document.getElementById('totalSpecial_dv5').textContent = sp['dv5'] || 0;
-    document.getElementById('totalSpecial_dv6').textContent = sp['dv6'] || 0;
-    document.getElementById('totalSpecial_dv4').textContent = sp['dv4'] || 0;
+    document.getElementById('totalMorning').textContent    = todayData.cntM || 0;
+    document.getElementById('totalEvening').textContent    = todayData.cntE || 0;
+    document.getElementById('totalMedMorning').textContent = todayData.medM || 0;
+    document.getElementById('totalMedEvening').textContent = todayData.medE || 0;
+    ALL_SP.forEach(id=>{ const el=document.getElementById('totalSpecial_'+id); if(el) el.textContent = sp[id]||0; });
   } else {
     const totals = await computeAllTimeTotals();
-    document.getElementById('totalMorning').textContent   = totals.cntM;
-    document.getElementById('totalEvening').textContent   = totals.cntE;
-    document.getElementById('totalMedMorning').textContent= totals.medM;
-    document.getElementById('totalMedEvening').textContent= totals.medE;
-    document.getElementById('totalSpecial_dv3').textContent = totals.dv3;
-    document.getElementById('totalSpecial_dv5').textContent = totals.dv5;
-    document.getElementById('totalSpecial_dv6').textContent = totals.dv6;
-    document.getElementById('totalSpecial_dv4').textContent = totals.dv4;
+    document.getElementById('totalMorning').textContent    = totals.cntM;
+    document.getElementById('totalEvening').textContent    = totals.cntE;
+    document.getElementById('totalMedMorning').textContent = totals.medM;
+    document.getElementById('totalMedEvening').textContent = totals.medE;
+    ALL_SP.forEach(id=>{ const el=document.getElementById('totalSpecial_'+id); if(el) el.textContent = totals[id]||0; });
   }
 }
 async function computeAllTimeTotals(){
   const history = await dbGet('users/'+window._currentUser+'/history') || {};
-  const totals = {cntM:0, cntE:0, medM:0, medE:0, dv3:0, dv5:0, dv6:0, dv4:0};
+  const totals = {cntM:0,cntE:0,medM:0,medE:0,dv3:0,dv5:0,dv6:0,dv4:0,dv8:0,dv9:0,dv10:0,dv11:0,dv12:0,dv13:0,dv14:0};
   Object.values(history).forEach(day=>{
-    totals.cntM += day.cntM || 0; totals.cntE += day.cntE || 0;
-    totals.medM += day.medM || 0; totals.medE += day.medE || 0;
-    const sp = day.special || {};
-    totals.dv3 += sp['dv3'] || 0; totals.dv5 += sp['dv5'] || 0;
-    totals.dv6 += sp['dv6'] || 0; totals.dv4 += sp['dv4'] || 0;
+    totals.cntM += day.cntM||0; totals.cntE += day.cntE||0;
+    totals.medM += day.medM||0; totals.medE += day.medE||0;
+    const sp = day.special||{};
+    ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'].forEach(id=>{ totals[id] += sp[id]||0; });
   });
   return totals;
 }

@@ -934,39 +934,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       </div>
       <div class="share-hint">กดบันทึกรูปหรือกด Hold (มือถือ) เพื่อบันทึก แล้วส่งต่อแบ่งปันบุญ 🙏</div>
     </div>
-    <div style="position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;">
-      <div id="shareCard" style="width:360px;min-height:520px;background:#1a0800;background-image:url('https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;flex-direction:column;align-items:center;padding:0;position:relative;font-family:'Sarabun',sans-serif;box-sizing:border-box;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,6,0,0.55) 0%,rgba(10,4,0,0.45) 40%,rgba(8,3,0,0.65) 100%);pointer-events:none;"></div>
-        <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;box-sizing:border-box;">
-          <div style="font-size:28px;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(201,168,76,0.5));">🪷</div>
-          <div data-sc="title" style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:#F5E6C0;letter-spacing:.8px;margin-bottom:3px;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,0.8);">สวดมนต์ถวายเป็นพุทธบูชา</div>
-          <div data-sc="sub" style="font-family:'Noto Serif Thai',serif;font-size:12px;color:rgba(232,213,163,0.75);letter-spacing:.4px;margin-bottom:4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);">บูชาธรรมมหาปูชนียาจารย์</div>
-          <div data-sc="divbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.7),transparent);margin:6px 0 14px;"></div>
-          <div style="margin-bottom:10px;">
-            <div style="width:80px;height:80px;border-radius:20px;padding:3px;background:linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A);box-shadow:0 4px 16px rgba(0,0,0,0.5);">
-              <div id="scPhotoInner" style="width:100%;height:100%;border-radius:17px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:30px;font-weight:700;color:#E8D5A3;font-family:'Noto Serif Thai',serif;border:2px solid rgba(18,8,0,0.3);"><span id="scInitials">ก</span></div>
-            </div>
-          </div>
-          <div id="scName" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#F5E6C0;margin-bottom:4px;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.9);">ผู้ใช้</div>
-          <div id="scDate" style="font-size:13px;color:rgba(232,213,163,0.7);margin-bottom:14px;letter-spacing:.4px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
-          <div style="width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(201,168,76,0.35);border-radius:16px;padding:12px 14px;margin-bottom:10px;backdrop-filter:blur(4px);">
-            <div id="scCardLabel" style="font-size:12px;color:rgba(232,213,163,0.7);letter-spacing:1.2px;font-weight:700;margin-bottom:10px;text-align:center;">บันทึกการปฏิบัติธรรม</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;"><span style="font-size:16px;">🌅</span><span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเช้า</span></div>
-              <div style="display:flex;align-items:baseline;gap:3px;"><span id="scCountMorning" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#C9A84C;line-height:1;">0</span><span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span></div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
-              <div style="display:flex;align-items:center;gap:7px;"><span style="font-size:16px;">🌙</span><span style="font-size:13px;color:rgba(232,213,163,0.85);letter-spacing:.3px;font-weight:500;">ทำวัตรเย็น</span></div>
-              <div style="display:flex;align-items:baseline;gap:3px;"><span id="scCountEvening" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#c8d4ff;line-height:1;">0</span><span style="font-size:12px;color:rgba(232,213,163,0.5);">ครั้ง</span></div>
-            </div>
-          </div>
-          <div id="scFirstDate" style="font-size:12px;color:rgba(232,213,163,0.45);margin-bottom:10px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></div>
-          <div data-sc="footerbar" style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.6),transparent);margin:4px 0 10px;"></div>
-          <div style="font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:rgba(232,213,163,0.9);letter-spacing:2px;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,0.8);">สาธุ  สาธุ  สาธุ</div>
-          <div data-sc="footersub" style="font-family:'Noto Serif Thai',serif;font-size:13px;color:rgba(232,213,163,0.7);letter-spacing:.5px;margin-top:6px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.7;">เอาบุญมาฝาก<br>ขออนุโมทนาบุญด้วยกันทุกท่าน</div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -1652,8 +1619,144 @@ function _loadChedi(){
   });
 }
 
-// Added groupName parameter
-_renderCardToCanvas
+async function _renderCardToCanvas(stats, displayName, groupName, themeName){
+  const [bgBase64, profileImg] = await Promise.all([_loadChedi(), _loadShareProfileImg()]);
+  const W = 360, S = 3; const cw = W * S;
+  
+  const ALL_ROWS = [
+    {key:'cntM',  icon:'🌅', label:'ทำวัตรเช้า',               unit:'ครั้ง', color:'#C9A84C'},
+    {key:'cntE',  icon:'🌙', label:'ทำวัตรเย็น',               unit:'ครั้ง', color:'#c8d4ff'},
+    {key:'medM',  icon:'🧘', label:'สมาธิเช้า',                 unit:'นาที',  color:'#C9A84C'},
+    {key:'medE',  icon:'🧘', label:'สมาธิเย็น',                 unit:'นาที',  color:'#c8d4ff'},
+    {key:'dv3',   icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี',   unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv5',   icon:'🙏', label:'สรรเสริญพระธรรมกาย',       unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv6',   icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',     unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv4',   icon:'💛', label:'สรรเสริญคุณยายอาจารย์',    unit:'ครั้ง', color:'#ffe0a0'},
+    {key:'dv8',   icon:'📿', label:'เจริญพุทธมนต์ 7 ตำนาน',    unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv9',   icon:'📿', label:'เจริญพุทธมนต์ 12 ตำนาน',   unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv10',  icon:'🙏', label:'พาหุง, มหาการุณิโก',        unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv11',  icon:'🙏', label:'ธรรมนิยาม',                unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv12',  icon:'🙏', label:'มาติกา',                   unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv13',  icon:'🙏', label:'พระสะหัสสะนัย',             unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv14',  icon:'🙏', label:'มงคลจักรวาลใหญ่',           unit:'ครั้ง', color:'#E8D5A3'}
+  ];
+  
+  const rows = ALL_ROWS.map(r => ({...r, val: stats[r.key] || 0})).filter(r => r.val > 0);
+  
+  const name = displayName || 'ผู้ใช้';
+  const date = new Intl.DateTimeFormat('th-TH',{ year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok' }).format(new Date());
+  
+  const ROW_H = 36 * S; 
+  // คำนวณความสูงพื้นฐาน
+  let dynamicH = 260 + (rows.length === 0 ? 1 : rows.length) * 36 + 80;
+  // ✅ เพิ่มความสูงการ์ดเผื่อชื่อกลุ่มที่ตัวใหญ่ขึ้น
+  if (groupName) dynamicH += 26; 
+  
+  const ch = Math.max(dynamicH * S, 400 * S);
+  
+  const cv = document.createElement('canvas'); cv.width = cw; cv.height = ch;
+  const ctx = cv.getContext('2d');
+  
+  const bgImg = new Image();
+  bgImg.crossOrigin = "anonymous";
+  await new Promise(r => { bgImg.onload = r; bgImg.onerror = r; bgImg.src = bgBase64; });
+  
+  const bw = bgImg.width||1, bh = bgImg.height||1; const scale = Math.max(cw/bw, ch/bh);
+  const dx = (cw - bw*scale)/2, dy = (ch - bh*scale)/2;
+  ctx.drawImage(bgImg, dx, dy, bw*scale, bh*scale);
+  
+  const grd = ctx.createLinearGradient(0,0,0,ch);
+  grd.addColorStop(0,'rgba(18,6,0,0.6)'); grd.addColorStop(0.4,'rgba(10,4,0,0.5)'); grd.addColorStop(1,'rgba(8,3,0,0.7)');
+  ctx.fillStyle = grd; ctx.fillRect(0, 0, cw, ch);
+  
+  const cx = cw/2; let y = 28*S;
+  
+  function txt(text, size, color, weight='normal', align='center', font="'Noto Serif Thai', 'Sarabun', sans-serif"){
+    ctx.font = `${weight} ${size*S}px ${font}`;
+    ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'top';
+    ctx.fillText(text, align==='center'?cx : align==='right'?cw-16*S:16*S, y);
+  }
+  
+  function line(color='rgba(201,168,76,0.45)', w=80){
+    ctx.beginPath(); const lx = (cw-w*S)/2;
+    const grad = ctx.createLinearGradient(lx,y,lx+w*S,y);
+    grad.addColorStop(0,'transparent'); grad.addColorStop(0.5,color); grad.addColorStop(1,'transparent');
+    ctx.strokeStyle = grad; ctx.lineWidth = 1*S; ctx.moveTo(lx, y); ctx.lineTo(lx+w*S, y); ctx.stroke();
+  }
+  
+  function roundRect(x,yy,w,h,r){
+    ctx.beginPath(); ctx.moveTo(x+r,yy); ctx.lineTo(x+w-r,yy); ctx.quadraticCurveTo(x+w,yy,x+w,yy+r);
+    ctx.lineTo(x+w,yy+h-r); ctx.quadraticCurveTo(x+w,yy+h,x+w-r,yy+h); ctx.lineTo(x+r,yy+h);
+    ctx.quadraticCurveTo(x,yy+h,x,yy+h-r); ctx.lineTo(x,yy+r); ctx.quadraticCurveTo(x,yy,x+r,yy); ctx.closePath();
+  }
+  
+  txt('สวดมนต์ถวายเป็นพุทธบูชา', 18, '#F5E6C0', 'bold'); y += 26*S;
+  txt('บูชาธรรมมหาปูชนียาจารย์', 13, 'rgba(232,213,163,0.7)'); y += 16*S;
+  line(); y += 12*S;
+  
+  const photoSize = 74*S, photoX = (cw-photoSize)/2;
+  const ringGrad = ctx.createLinearGradient(photoX, y, photoX+photoSize, y+photoSize);
+  ringGrad.addColorStop(0,'#8B6914'); ringGrad.addColorStop(0.5,'#C9A84C'); ringGrad.addColorStop(1,'#E09A5A');
+  const pad = 3*S, r2 = 16*S;
+  roundRect(photoX, y, photoSize, photoSize, r2); ctx.fillStyle = ringGrad; ctx.fill();
+  const iSize = photoSize - pad*2, iX = photoX+pad, iY = y+pad; const ir = 13*S;
+  roundRect(iX, iY, iSize, iSize, ir); ctx.save(); ctx.clip();
+  
+  if(profileImg){
+    const ps = Math.max(iSize/profileImg.width, iSize/profileImg.height);
+    const px = iX+(iSize-profileImg.width*ps)/2, py = iY+(iSize-profileImg.height*ps)/2;
+    ctx.drawImage(profileImg, px, py, profileImg.width*ps, profileImg.height*ps);
+  } else {
+    ctx.fillStyle = '#3d1a00'; ctx.fillRect(iX,iY,iSize,iSize);
+    ctx.font = `bold ${30*S}px 'Noto Serif Thai',sans-serif`; ctx.fillStyle = '#E8D5A3'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(name.charAt(0).toUpperCase(), iX+iSize/2, iY+iSize/2);
+  }
+  ctx.restore(); y += photoSize + 12*S;
+  
+  // พิมพ์ชื่อผู้ใช้
+  txt(name, 20, '#F5E6C0', 'bold'); y += 26*S;
+  
+  // ✅ วาดชื่อกลุ่มด้วยขนาด 18 สีทอง และทำตัวหนา (bold) ให้เด่นชัด
+  if (groupName) {
+    txt(groupName, 18, '#E8D5A3', 'bold'); y += 26*S;
+  }
+  
+  txt(date, 12, 'rgba(232,213,163,0.65)'); y += 20*S;
+  
+  const boxX = 16*S, boxW = cw - 32*S, boxPad = 12*S;
+  const boxH = (28 + (rows.length === 0 ? 1 : rows.length)*36 + 16)*S;
+  roundRect(boxX, y, boxW, boxH, 14*S); ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.fill();
+  ctx.strokeStyle = 'rgba(201,168,76,0.35)'; ctx.lineWidth = 1*S; ctx.stroke(); y += boxPad;
+  
+  ctx.font = `bold ${11*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.65)'; ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillText('📅 ยอดสวดมนต์วันนี้', cx, y); y += 26*S;
+  
+  if(rows.length === 0){
+    ctx.font = `${14*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.4)'; ctx.textAlign='center';
+    ctx.fillText('ยังไม่มีรายการ', cx, y+10*S);
+    y += ROW_H;
+  } else {
+    rows.forEach((row, i) => {
+      const rowY = y;
+      if(i>0){ ctx.beginPath(); ctx.strokeStyle='rgba(201,168,76,0.15)'; ctx.lineWidth=1*S; ctx.moveTo(boxX+boxPad, rowY-1*S); ctx.lineTo(boxX+boxW-boxPad, rowY-1*S); ctx.stroke(); }
+      ctx.font = `${14*S}px serif`; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(row.icon, boxX+boxPad, rowY+16*S);
+      ctx.font = `${12*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.85)';
+      ctx.fillText(row.label, boxX+boxPad+22*S, rowY+16*S);
+      ctx.font = `bold ${20*S}px 'Noto Serif Thai',sans-serif`; ctx.fillStyle = row.color; ctx.textAlign='right';
+      ctx.fillText(String(row.val), boxX+boxW-boxPad-28*S, rowY+16*S);
+      ctx.font = `${11*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.45)';
+      ctx.fillText(row.unit, boxX+boxW-boxPad, rowY+20*S); y += ROW_H;
+    });
+  }
+  
+  y += boxPad; y += 12*S;
+  line('rgba(201,168,76,0.5)'); y += 10*S;
+  txt('สาธุ  สาธุ  สาธุ', 14, 'rgba(232,213,163,0.9)', 'bold'); y += 20*S;
+  txt('เอาบุญมาฝาก', 12, 'rgba(232,213,163,0.65)'); y += 16*S;
+  txt('ขออนุโมทนาบุญด้วยกันทุกท่าน', 12, 'rgba(232,213,163,0.65)'); y += 20*S;
+  
+  return cv;
+}
 
 let _shareProfileImgEl = null; let _shareProfileImgSrc = '';
 async function _loadShareProfileImg(){
@@ -1704,7 +1807,7 @@ window.addEventListener('load', async () => {
   } catch(e){ console.error('auto-login',e); }
   const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'flex';
   const lo = document.getElementById('appLoading'); if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
-  if(new URLSearchParams(window.location.search).get('guest') === '1'){ setTimeout(()=>enterGuestMode(), 50); }
+  if(newSearchParams(window.location.search).get('guest') === '1'){ setTimeout(()=>enterGuestMode(), 50); }
 });
 // ─── CHANGE PASSWORD ─────────────────────────────────
 function openChangePassword(){
@@ -1902,7 +2005,7 @@ function enterGuestMode(){
   document.getElementById('profileName').textContent = 'ผู้เยี่ยมชม';
   document.getElementById('profileInitials').textContent = '🙏';
   const guestImg = document.getElementById('profileImg');
-  guestImg.src = 'chedi.jpg';
+  guestImg.src = 'https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg';
   guestImg.style.display = 'block'; document.getElementById('profileInitials').style.display = 'none';
   document.getElementById('statsToggle').style.display = 'flex';
   document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');

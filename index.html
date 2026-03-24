@@ -1656,7 +1656,9 @@ async function openShareModal(){
     try { todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {}; } catch(e){ todayData = {}; }
   }
   const sp = todayData.special || {};
-  const stats = { cntM: todayData.cntM || 0, cntE: todayData.cntE || 0, medM: todayData.medM || 0, medE: todayData.medE || 0, dv3: sp['dv3']||0, dv5: sp['dv5']||0, dv6: sp['dv6']||0, dv4: sp['dv4']||0 };
+  const ALL_SP_IDS = ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'];
+  const stats = { cntM: todayData.cntM||0, cntE: todayData.cntE||0, medM: todayData.medM||0, medE: todayData.medE||0 };
+  ALL_SP_IDS.forEach(id => { stats[id] = sp[id]||0; });
   const displayName = document.getElementById('profileName').textContent;
   const themeName   = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const todayStr    = todayKey();
@@ -1672,18 +1674,6 @@ async function openShareModal(){
   document.getElementById('shareImgLoading').style.flexDirection = 'column';
   document.getElementById('shareImgActions').style.display  = 'none';
   document.getElementById('sharePreviewImg').style.display  = 'none';
-  const rowMap = [
-    {numId:'scCountMorning', val:stats.cntM}, {numId:'scCountEvening', val:stats.cntE},
-    {numId:'scMeditMorning',  val:stats.medM}, {numId:'scMeditEvening',  val:stats.medE},
-    {numId:'scSpecial_dv3',  val:stats.dv3},  {numId:'scSpecial_dv5',  val:stats.dv5},
-    {numId:'scSpecial_dv6',  val:stats.dv6},  {numId:'scSpecial_dv4',  val:stats.dv4},
-  ];
-  rowMap.forEach(({numId, val})=>{
-    const el = document.getElementById(numId); if(!el) return;
-    el.textContent = val;
-    const row = el.closest('div[style*="justify-content:space-between"]');
-    if(row) row.style.display = val === 0 ? 'none' : 'flex';
-  });
   document.getElementById('scName').textContent     = displayName;
   document.getElementById('scInitials').textContent = displayName.charAt(0).toUpperCase();
   document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
@@ -1691,14 +1681,17 @@ async function openShareModal(){
   const firstEl = document.getElementById('scFirstDate'); if(firstEl) firstEl.textContent = '';
   applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
   try {
-    const canvas = await _renderCardToCanvas();
+    const canvas = await _renderCardToCanvas(stats);
     _previewDataUrl  = canvas.toDataURL('image/png');
     _shareCacheKey   = newKey;
     const previewImg = document.getElementById('sharePreviewImg');
     previewImg.src   = _previewDataUrl; previewImg.style.display = 'block';
     document.getElementById('shareImgLoading').style.display = 'none';
     document.getElementById('shareImgActions').style.display = 'block';
-  } catch(e){ document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่'; }
+  } catch(e){
+    console.error('share card error:', e);
+    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่';
+  }
 }
 function downloadFromPreview(){
   if(!_previewDataUrl){ showToast('⏳ กรุณารอภาพโหลดก่อน'); return; }
@@ -1723,19 +1716,29 @@ function _loadChedi(){
     img.onerror = ()=>resolve(CHEDI_URL); img.src = CHEDI_URL + '?t=' + Date.now();
   });
 }
-async function _renderCardToCanvas(){
+async function _renderCardToCanvas(stats){
+  stats = stats || {};
   const [bgBase64, profileImg] = await Promise.all([_loadChedi(), _loadShareProfileImg()]);
   const W = 360, S = 3; const cw = W * S;
-  const rows = [
-    {id:'scCountMorning', icon:'🌅', label:'ทำวัตรเช้า',              unit:'ครั้ง', color:'#C9A84C'},
-    {id:'scCountEvening', icon:'🌙', label:'ทำวัตรเย็น',              unit:'ครั้ง', color:'#c8d4ff'},
-    {id:'scMeditMorning',  icon:'🧘', label:'สมาธิเช้า',               unit:'นาที',  color:'#C9A84C'},
-    {id:'scMeditEvening',  icon:'🧘', label:'สมาธิเย็น',               unit:'นาที',  color:'#c8d4ff'},
-    {id:'scSpecial_dv3',  icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี', unit:'ครั้ง', color:'#E8D5A3'},
-    {id:'scSpecial_dv5',  icon:'🙏', label:'สรรเสริญพระธรรมกาย',     unit:'ครั้ง', color:'#E8D5A3'},
-    {id:'scSpecial_dv6',  icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',   unit:'ครั้ง', color:'#E8D5A3'},
-    {id:'scSpecial_dv4',  icon:'💛', label:'สรรเสริญคุณยายอาจารย์',  unit:'ครั้ง', color:'#ffe0a0'},
-  ].map(r => ({...r, val: parseInt(document.getElementById(r.id)?.textContent||'0')||0})).filter(r => r.val > 0);
+  // สร้าง rows จาก stats โดยตรง กรองเฉพาะที่มียอด > 0
+  const ALL_ROWS = [
+    {key:'cntM',  icon:'🌅', label:'ทำวัตรเช้า',                unit:'ครั้ง', color:'#C9A84C'},
+    {key:'cntE',  icon:'🌙', label:'ทำวัตรเย็น',                unit:'ครั้ง', color:'#c8d4ff'},
+    {key:'medM',  icon:'🧘', label:'สมาธิเช้า',                 unit:'นาที',  color:'#C9A84C'},
+    {key:'medE',  icon:'🧘', label:'สมาธิเย็น',                 unit:'นาที',  color:'#c8d4ff'},
+    {key:'dv3',   icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี',   unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv5',   icon:'🙏', label:'สรรเสริญพระธรรมกาย',       unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv6',   icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',     unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv4',   icon:'💛', label:'สรรเสริญคุณยายอาจารย์',    unit:'ครั้ง', color:'#ffe0a0'},
+    {key:'dv8',   icon:'📿', label:'เจริญพุทธมนต์ 7 ตำนาน',    unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv9',   icon:'📿', label:'เจริญพุทธมนต์ 12 ตำนาน',   unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv10',  icon:'🙏', label:'พาหุง, มหาการุณิโก',        unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv11',  icon:'🙏', label:'ธรรมนิยาม',                 unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv12',  icon:'🙏', label:'มาติกา',                    unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv13',  icon:'🙏', label:'พระสะหัสสะนัย',             unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv14',  icon:'🙏', label:'มงคลจักรวาลใหญ่',           unit:'ครั้ง', color:'#E8D5A3'},
+  ];
+  const rows = ALL_ROWS.map(r => ({...r, val: stats[r.key]||0})).filter(r => r.val > 0);
   const name = document.getElementById('scName')?.textContent || '';
   const date = document.getElementById('scDate')?.textContent || '';
   const ROW_H = 36 * S; const ch = (300 + rows.length * 36 + 80) * S;

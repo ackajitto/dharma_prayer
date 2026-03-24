@@ -1792,34 +1792,35 @@ document.addEventListener('keydown',e=>{
   }
 });
 // ─── AUTO LOGIN ───────────────────────────────────────
-// ─── AUTO LOGIN & GUEST MODE ───────────────────────────────────────
+// ─── AUTO LOGIN & GUEST MODE (ค่าเริ่มต้นเข้าหน้าหลักทันที) ───────────────────
 try { if(localStorage.getItem('dh_user')){ const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; } } catch(e){}
+
 window.addEventListener('load', async () => {
   let tries = 0;
+  // รอให้ Firebase พร้อมทำงานก่อน
   while(!window._fbReady && tries++ < 20){ await new Promise(r=>setTimeout(r,100)); }
   
-  // 1. เช็กก่อนเลยว่าเข้าผ่านลิงก์ ?guest=1 หรือเปล่า
-  const urlParams = new URLSearchParams(window.location.search);
-  if(urlParams.get('guest') === '1'){
-    const lo = document.getElementById('appLoading'); if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
-    enterGuestMode(); // เข้าโหมดทดลองใช้ทันที
-    return; // หยุดการทำงานตรงนี้ ไม่ต้องไปเช็กล็อกอิน
-  }
-
-  // 2. ถ้าไม่ใช่ Guest ค่อยมาเช็กประวัติการล็อกอิน
+  const lo = document.getElementById('appLoading');
+  
+  // 1. เช็กประวัติว่าเคยล็อกอินค้างไว้ไหม
   try {
     const saved = localStorage.getItem('dh_user');
     if(saved){
       window._currentUser = saved;
       const userData = await dbGet('users/'+saved);
-      if(userData && (userData._pass || userData.email)){ bootApp(saved, userData); return; }
-      localStorage.removeItem('dh_user');
+      // ถ้าเจอประวัติ ให้ล็อกอินเข้าบัญชีเดิมอัตโนมัติ
+      if(userData && (userData._pass || userData.email)){ 
+        bootApp(saved, userData); 
+        if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
+        return; // ทำงานเสร็จสิ้น
+      }
+      localStorage.removeItem('dh_user'); // ถ้าบัญชีมีปัญหา ลบประวัติทิ้ง
     }
   } catch(e){ console.error('auto-login',e); }
   
-  // 3. ถ้าไม่ได้ล็อกอินไว้ ค่อยโชว์หน้า Login
-  const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'flex';
-  const lo = document.getElementById('appLoading'); if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
+  // 2. ถ้าไม่มีประวัติล็อกอิน ให้เข้า "หน้าหลัก" ทันที! (แทนที่จะโชว์หน้าล็อกอิน)
+  if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
+  enterGuestMode(); 
 });
 // ─── CHANGE PASSWORD ─────────────────────────────────
 function openChangePassword(){

@@ -1117,36 +1117,32 @@ async function doLogout(){
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
 }
-// ══════════════════════════════════════════════════════
-//  VISIT COUNTER
-// ══════════════════════════════════════════════════════
-async function incrementVisitCount(){
+// ─── VISITOR COUNT ─────────────────────────────────────
+async function incrementVisitorCount(){
   try {
-    await window._db.ref('site_stats/visits').transaction(function(current){
+    await window._db.ref('site_stats/visitors').transaction(function(current){
       return (current || 0) + 1;
     });
   } catch(e){
-    console.error('incrementVisitCount error:', e);
+    console.error('incrementVisitorCount error:', e);
   }
 }
 
 async function loadSiteStats(){
   try {
-    const snap = await window._db.ref('site_stats/visits').once('value');
-    const visits = snap.exists() ? (snap.val() || 0) : 0;
+    const snap = await window._db.ref('site_stats/visitors').once('value');
+    const visitors = snap.exists() ? (snap.val() || 0) : 0;
     const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : String(n);
     const eu = document.getElementById('statTotalUsers');
-    if(eu) eu.textContent = fmt(visits);
-    console.log('✅ visits loaded:', visits);
+    if(eu) eu.textContent = fmt(visitors);
+    console.log('✅ Site visitors loaded:', visitors);
   } catch(e){
     console.error('loadSiteStats error:', e);
     const eu = document.getElementById('statTotalUsers');
     if(eu) eu.textContent = '-';
   }
 }
-// ══════════════════════════════════════════════════════
-//  BOOT APP
-// ══════════════════════════════════════════════════════
+// ─── BOOT APP ─────────────────────────────────────────
 async function bootApp(username, userData){
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -1180,7 +1176,7 @@ async function bootApp(username, userData){
   renderPlaylist();
   refreshStreakAndCalendar();
   loadSpecialStats();
-  await incrementVisitCount();
+  await incrementVisitorCount();
   await loadSiteStats();
   _loadChedi();
   await checkDayReset(username);
@@ -1584,10 +1580,12 @@ async function openShareModal(){
   };
   
   const displayName = document.getElementById('profileName').textContent;
+  const groupName   = (await dbGet('users/'+window._currentUser+'/group_name')) || ''; // Get group name
   const themeName   = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const todayStr    = todayKey();
   
-  const newKey = JSON.stringify({...stats, displayName, themeName, todayStr});
+  // Update Cache Key to include groupName
+  const newKey = JSON.stringify({...stats, displayName, groupName, themeName, todayStr});
   
   if(newKey === _shareCacheKey && _previewDataUrl){
     document.getElementById('shareImgLoading').style.display  = 'none';
@@ -1604,7 +1602,8 @@ async function openShareModal(){
   document.getElementById('sharePreviewImg').style.display  = 'none';
   
   try {
-    const canvas = await _renderCardToCanvas(stats, displayName, themeName);
+    // Pass groupName to render function
+    const canvas = await _renderCardToCanvas(stats, displayName, groupName, themeName);
     _previewDataUrl  = canvas.toDataURL('image/png');
     _shareCacheKey   = newKey;
     const previewImg = document.getElementById('sharePreviewImg');
@@ -1653,7 +1652,8 @@ function _loadChedi(){
   });
 }
 
-async function _renderCardToCanvas(stats, displayName, themeName){
+// Added groupName parameter
+async function _renderCardToCanvas(stats, displayName, groupName, themeName){
   const [bgBase64, profileImg] = await Promise.all([_loadChedi(), _loadShareProfileImg()]);
   const W = 360, S = 3; const cw = W * S;
   
@@ -1681,7 +1681,12 @@ async function _renderCardToCanvas(stats, displayName, themeName){
   const date = new Intl.DateTimeFormat('th-TH',{ year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok' }).format(new Date());
   
   const ROW_H = 36 * S; 
-  const ch = Math.max((300 + (rows.length === 0 ? 1 : rows.length) * 36 + 80) * S, 400 * S);
+  // Base height, photo, name, date, etc.
+  let dynamicH = 260 + (rows.length === 0 ? 1 : rows.length) * 36 + 80;
+  // Increase height if group name exists
+  if (groupName) dynamicH += 20; 
+  
+  const ch = Math.max(dynamicH * S, 400 * S);
   
   const cv = document.createElement('canvas'); cv.width = cw; cv.height = ch;
   const ctx = cv.getContext('2d');
@@ -1700,8 +1705,8 @@ async function _renderCardToCanvas(stats, displayName, themeName){
   
   const cx = cw/2; let y = 28*S;
   
-  function txt(text, size, color, weight='normal', align='center'){
-    ctx.font = `${weight} ${size*S}px 'Noto Serif Thai', 'Sarabun', sans-serif`;
+  function txt(text, size, color, weight='normal', align='center', font="'Noto Serif Thai', 'Sarabun', sans-serif"){
+    ctx.font = `${weight} ${size*S}px ${font}`;
     ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'top';
     ctx.fillText(text, align==='center'?cx : align==='right'?cw-16*S:16*S, y);
   }
@@ -1742,6 +1747,12 @@ async function _renderCardToCanvas(stats, displayName, themeName){
   }
   ctx.restore(); y += photoSize + 12*S;
   txt(name, 20, '#F5E6C0', 'bold'); y += 26*S;
+  
+  // Draw groupName if exists
+  if (groupName) {
+    txt(groupName, 13, 'rgba(232,213,163,0.65)'); y += 18*S;
+  }
+  
   txt(date, 12, 'rgba(232,213,163,0.65)'); y += 20*S;
   
   const boxX = 16*S, boxW = cw - 32*S, boxPad = 12*S;
@@ -2026,7 +2037,7 @@ function enterGuestMode(){
   document.getElementById('profileName').textContent = 'ผู้เยี่ยมชม';
   document.getElementById('profileInitials').textContent = '🙏';
   const guestImg = document.getElementById('profileImg');
-  guestImg.src = 'https://raw.githubusercontent.com/ackajitto/dharma_prayer/main/chedi.jpg';
+  guestImg.src = 'chedi.jpg';
   guestImg.style.display = 'block'; document.getElementById('profileInitials').style.display = 'none';
   document.getElementById('statsToggle').style.display = 'flex';
   document.querySelectorAll('.pst-card').forEach(c=>c.style.display='');
@@ -2043,7 +2054,7 @@ function enterGuestMode(){
   updateDateTime(null, null);
   _cachedVideos = DEFAULT_VIDEOS; renderPlaylist();
   switchStatsMode('today');
-  incrementVisitCount().then(() => loadSiteStats());
+  incrementVisitorCount().then(() => loadSiteStats());
 }
 function shareToLine(){
   const url = encodeURIComponent('https://ackajitto.github.io/dharma_prayer/?guest=1');
@@ -2157,7 +2168,7 @@ window.downloadFromPreview = downloadFromPreview; window.openPreviewInTab = open
 window.openSettingsModal = openSettingsModal; window.closeSettingsModal = closeSettingsModal;
 window.saveNameFromSettings = saveNameFromSettings; window.savePasswordFromSettings = savePasswordFromSettings;
 window.recordSpecial = recordSpecial; window.scrollToVideo = scrollToVideo; window.switchStatsMode = switchStatsMode;
-window.enterGuestMode = enterGuestMode; window.incrementVisitCount = incrementVisitCount; window.shareWebsite = shareWebsite;
+window.enterGuestMode = enterGuestMode; window.incrementVisitorCount = incrementVisitorCount; window.shareWebsite = shareWebsite;
 window.shareToLine = shareToLine; window.exitGuestMode = exitGuestMode; window.confirmResetAll = confirmResetAll;
 window.closeResetConfirm = closeResetConfirm; window.doResetAll = doResetAll; window.refreshStatsDisplay = refreshStatsDisplay;
 window.scrollToPlayer = scrollToPlayer; window.markTodaySpecial = markTodaySpecial; window.markTodayMeditation = markTodayMeditation;

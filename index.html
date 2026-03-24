@@ -1618,38 +1618,13 @@ function renderPlaylist(){
 }
 // ─── SHARE ────────────────────────────────────────────
 const THEME_PALETTES = {
-  default: { bg:'#1a0800', deep:'#0d0400', gold:'#C9A84C', goldLight:'#E8D5A3', goldDark:'#8B6914', accentMorning:'rgba(100,50,0,0.35)', accentEvening:'rgba(15,15,70,0.4)', textMain:'#E8D5A3', textSub:'rgba(232,213,163,0.55)', numMorning:'#C9A84C', numEvening:'#c8d4ff', unitMorning:'rgba(232,213,163,0.4)', unitEvening:'rgba(180,190,255,0.35)', labelMorning:'rgba(232,213,163,0.5)', labelEvening:'rgba(180,190,255,0.5)', divider:'rgba(201,168,76,0.15)', statBorder:'rgba(201,168,76,0.2)', firstDate:'rgba(232,213,163,0.3)', footer:'rgba(232,213,163,0.6)', ornamenta:'rgba(201,168,76,0.08)', ornamentb:'rgba(201,168,76,0.05)', photoRing:'linear-gradient(135deg,#8B6914,#C9A84C,#E09A5A)', photoInner:'linear-gradient(135deg,#3d1a00,#5c2a00)', dividerBar:'rgba(201,168,76,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
-  forest:  { bg:'#051005', deep:'#010801', gold:'#7CB87A', goldLight:'#B8DDB6', goldDark:'#3A6B38', accentMorning:'rgba(20,80,20,0.4)', accentEvening:'rgba(5,40,10,0.5)', textMain:'#B8DDB6', textSub:'rgba(184,221,182,0.55)', numMorning:'#7CB87A', numEvening:'#A0E0A0', unitMorning:'rgba(184,221,182,0.4)', unitEvening:'rgba(160,224,160,0.35)', labelMorning:'rgba(184,221,182,0.5)', labelEvening:'rgba(160,224,160,0.5)', divider:'rgba(124,184,122,0.2)', statBorder:'rgba(124,184,122,0.25)', firstDate:'rgba(184,221,182,0.3)', footer:'rgba(184,221,182,0.6)', ornamenta:'rgba(124,184,122,0.07)', ornamentb:'rgba(124,184,122,0.04)', photoRing:'linear-gradient(135deg,#3A6B38,#7CB87A,#A8D8A6)', photoInner:'linear-gradient(135deg,#051005,#0A2010)', dividerBar:'rgba(124,184,122,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
-  ocean:   { bg:'#010D14', deep:'#000608', gold:'#5AB4D4', goldLight:'#A8D8EC', goldDark:'#1A6A8A', accentMorning:'rgba(10,60,100,0.4)', accentEvening:'rgba(5,20,60,0.5)', textMain:'#A8D8EC', textSub:'rgba(168,216,236,0.55)', numMorning:'#5AB4D4', numEvening:'#90D0F0', unitMorning:'rgba(168,216,236,0.4)', unitEvening:'rgba(144,208,240,0.35)', labelMorning:'rgba(168,216,236,0.5)', labelEvening:'rgba(144,208,240,0.5)', divider:'rgba(90,180,212,0.2)', statBorder:'rgba(90,180,212,0.25)', firstDate:'rgba(168,216,236,0.3)', footer:'rgba(168,216,236,0.6)', ornamenta:'rgba(90,180,212,0.07)', ornamentb:'rgba(90,180,212,0.04)', photoRing:'linear-gradient(135deg,#1A6A8A,#5AB4D4,#88CCE8)', photoInner:'linear-gradient(135deg,#010D14,#051A28)', dividerBar:'rgba(90,180,212,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
-  rose:    { bg:'#140008', deep:'#0A0005', gold:'#D48AAA', goldLight:'#ECC8D8', goldDark:'#8A3A5A', accentMorning:'rgba(100,20,60,0.4)', accentEvening:'rgba(60,5,40,0.5)', textMain:'#ECC8D8', textSub:'rgba(236,200,216,0.55)', numMorning:'#D48AAA', numEvening:'#F0A8C8', unitMorning:'rgba(236,200,216,0.4)', unitEvening:'rgba(240,168,200,0.35)', labelMorning:'rgba(236,200,216,0.5)', labelEvening:'rgba(240,168,200,0.5)', divider:'rgba(212,138,170,0.2)', statBorder:'rgba(212,138,170,0.25)', firstDate:'rgba(236,200,216,0.3)', footer:'rgba(236,200,216,0.6)', ornamenta:'rgba(212,138,170,0.07)', ornamentb:'rgba(212,138,170,0.04)', photoRing:'linear-gradient(135deg,#8A3A5A,#D48AAA,#ECA8C8)', photoInner:'linear-gradient(135deg,#140008,#280014)', dividerBar:'rgba(212,138,170,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
-  golden:  { bg:'#141000', deep:'#080800', gold:'#D4A820', goldLight:'#F0D870', goldDark:'#8A6A00', accentMorning:'rgba(100,80,0,0.4)', accentEvening:'rgba(60,50,0,0.5)', textMain:'#F0D870', textSub:'rgba(240,216,112,0.55)', numMorning:'#D4A820', numEvening:'#F0CC40', unitMorning:'rgba(240,216,112,0.4)', unitEvening:'rgba(240,204,64,0.35)', labelMorning:'rgba(240,216,112,0.5)', labelEvening:'rgba(240,204,64,0.5)', divider:'rgba(212,168,32,0.2)', statBorder:'rgba(212,168,32,0.25)', firstDate:'rgba(240,216,112,0.3)', footer:'rgba(240,216,112,0.6)', ornamenta:'rgba(212,168,32,0.08)', ornamentb:'rgba(212,168,32,0.05)', photoRing:'linear-gradient(135deg,#8A6A00,#D4A820,#F0CC40)', photoInner:'linear-gradient(135deg,#141000,#281E00)', dividerBar:'rgba(212,168,32,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
-  night:   { bg:'#04040E', deep:'#020209', gold:'#9B9BFF', goldLight:'#C8C8FF', goldDark:'#4A4AAA', accentMorning:'rgba(30,30,100,0.4)', accentEvening:'rgba(10,10,60,0.5)', textMain:'#C8C8FF', textSub:'rgba(200,200,255,0.55)', numMorning:'#9B9BFF', numEvening:'#B8B8FF', unitMorning:'rgba(200,200,255,0.4)', unitEvening:'rgba(184,184,255,0.35)', labelMorning:'rgba(200,200,255,0.5)', labelEvening:'rgba(184,184,255,0.5)', divider:'rgba(155,155,255,0.2)', statBorder:'rgba(155,155,255,0.25)', firstDate:'rgba(200,200,255,0.3)', footer:'rgba(200,200,255,0.6)', ornamenta:'rgba(155,155,255,0.07)', ornamentb:'rgba(155,155,255,0.04)', photoRing:'linear-gradient(135deg,#4A4AAA,#9B9BFF,#C0C0FF)', photoInner:'linear-gradient(135deg,#04040E,#08081C)', dividerBar:'rgba(155,155,255,0.5)', statBoxBg:'rgba(0,0,0,0.2)' },
+  default: { bg:'#1a0800', dividerBar:'rgba(201,168,76,0.5)' },
+  forest:  { bg:'#051005', dividerBar:'rgba(124,184,122,0.5)' },
+  ocean:   { bg:'#010D14', dividerBar:'rgba(90,180,212,0.5)' },
+  rose:    { bg:'#140008', dividerBar:'rgba(212,138,170,0.5)' },
+  golden:  { bg:'#141000', dividerBar:'rgba(212,168,32,0.5)' },
+  night:   { bg:'#04040E', dividerBar:'rgba(155,155,255,0.5)' },
 };
-function applyThemeToCard(p){
-  const card = document.getElementById("shareCard");
-  card.style.background = p.bg;
-  const titleEl = card.querySelector('[data-sc="title"]'); const subEl = card.querySelector('[data-sc="sub"]');
-  const divBar  = card.querySelector('[data-sc="divbar"]'); const nameEl = document.getElementById("scName");
-  const dateEl  = document.getElementById("scDate"); const photoInner = document.getElementById("scPhotoInner");
-  const photoRing = photoInner?.parentElement; const firstDateEl = document.getElementById("scFirstDate");
-  const footerBar = card.querySelector('[data-sc="footerbar"]');
-  if(titleEl) titleEl.style.color = p.textMain;
-  if(subEl)   subEl.style.color   = p.textSub;
-  if(divBar)  divBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
-  if(nameEl)  nameEl.style.color  = p.textMain;
-  if(dateEl)  dateEl.style.color  = p.unitMorning;
-  if(photoRing) photoRing.style.background = p.photoRing;
-  if(photoInner){ photoInner.style.background = p.photoInner; photoInner.style.color = p.textMain; }
-  const scCntM = document.getElementById("scCountMorning"); if(scCntM) scCntM.style.color = p.numMorning;
-  const scCntE = document.getElementById("scCountEvening"); if(scCntE) scCntE.style.color = p.numEvening;
-  const scMedM = document.getElementById("scMeditMorning"); if(scMedM) scMedM.style.color = p.numMorning;
-  const scMedE = document.getElementById("scMeditEvening"); if(scMedE) scMedE.style.color = p.numEvening;
-  if(firstDateEl) firstDateEl.style.color = p.firstDate;
-  if(footerBar)   footerBar.style.background = `linear-gradient(to right,transparent,${p.dividerBar},transparent)`;
-}
-// ══════════════════════════════════════════════════════
-//  ส่วนแก้ไขระบบแชร์ภาพ
-// ══════════════════════════════════════════════════════
 
 let _previewDataUrl  = null;
 let _shareCacheKey   = null;
@@ -1657,25 +1632,41 @@ let _shareCacheKey   = null;
 async function openShareModal(){
   document.getElementById('shareModal').style.display = 'flex';
   let todayData = {};
+  
   if(window._currentUser && !window._guestMode){
     try { todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {}; } catch(e){ todayData = {}; }
   }
   
   const sp = todayData.special || {};
-  // ✅ 1. เพิ่ม ID บทสวดให้ครบที่นี่
-  const ALL_SP_IDS = ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14'];
-  const stats = { cntM: todayData.cntM||0, cntE: todayData.cntE||0, medM: todayData.medM||0, medE: todayData.medE||0 };
   
-  ALL_SP_IDS.forEach(id => { stats[id] = sp[id]||0; });
+  // ✅ 1. ดึงข้อมูลจากฐานข้อมูลมาพักไว้ในตัวแปรนี้ให้ครบทุกบทสวด
+  const stats = { 
+    cntM: todayData.cntM || 0, 
+    cntE: todayData.cntE || 0, 
+    medM: todayData.medM || 0, 
+    medE: todayData.medE || 0, 
+    dv3: sp['dv3'] || 0, 
+    dv5: sp['dv5'] || 0, 
+    dv6: sp['dv6'] || 0, 
+    dv4: sp['dv4'] || 0,
+    dv8: sp['dv8'] || 0,
+    dv9: sp['dv9'] || 0,
+    dv10: sp['dv10'] || 0,
+    dv11: sp['dv11'] || 0,
+    dv12: sp['dv12'] || 0,
+    dv13: sp['dv13'] || 0,
+    dv14: sp['dv14'] || 0
+  };
   
   const displayName = document.getElementById('profileName').textContent;
   const themeName   = document.body.className.match(/theme-(\w+)/)?.[1] || 'default';
   const todayStr    = todayKey();
   
   const newKey = JSON.stringify({...stats, displayName, themeName, todayStr});
+  
   if(newKey === _shareCacheKey && _previewDataUrl){
     document.getElementById('shareImgLoading').style.display  = 'none';
-    document.getElementById('shareImgActions').style.display  = 'block';
+    document.getElementById('shareImgActions').style.display  = 'flex';
     document.getElementById('sharePreviewImg').style.display  = 'block';
     document.getElementById('sharePreviewImg').src = _previewDataUrl;
     return;
@@ -1687,18 +1678,9 @@ async function openShareModal(){
   document.getElementById('shareImgActions').style.display  = 'none';
   document.getElementById('sharePreviewImg').style.display  = 'none';
   
-  document.getElementById('scName').textContent     = displayName;
-  const scInitials = document.getElementById('scInitials');
-  if(scInitials) scInitials.textContent = displayName.charAt(0).toUpperCase();
-  document.getElementById('scCardLabel').textContent = '📅 ยอดสวดมนต์วันนี้';
-  document.getElementById('scDate').textContent = new Intl.DateTimeFormat('th-TH',{ year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok' }).format(new Date());
-  const firstEl = document.getElementById('scFirstDate'); if(firstEl) firstEl.textContent = '';
-  
-  applyThemeToCard(THEME_PALETTES[themeName] || THEME_PALETTES.default);
-  
   try {
-    // ✅ 2. ส่งตัวแปร stats เข้าไปวาดตรงๆ ไม่ต้องไปดึงจาก HTML แล้ว
-    const canvas = await _renderCardToCanvas(stats);
+    // ✅ 2. ส่งตัวแปร stats ที่ดึงมาครบๆ เข้าไปให้ฟังก์ชันวาดรูปโดยตรงเลย
+    const canvas = await _renderCardToCanvas(stats, displayName, themeName);
     _previewDataUrl  = canvas.toDataURL('image/png');
     _shareCacheKey   = newKey;
     const previewImg = document.getElementById('sharePreviewImg');
@@ -1707,8 +1689,8 @@ async function openShareModal(){
     document.getElementById('shareImgLoading').style.display = 'none';
     document.getElementById('shareImgActions').style.display = 'flex';
   } catch(e){
-    console.error('share card error:', e);
-    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาดในการโหลดรูปภาพ<br>กรุณาลองใหม่อีกครั้ง';
+    console.error('Share Error:', e);
+    document.getElementById('shareImgLoading').innerHTML = '⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่';
   }
 }
 
@@ -1735,7 +1717,7 @@ function _loadChedi(){
   if(_chediBase64) return Promise.resolve(_chediBase64);
   return new Promise((resolve)=>{
     const img = new Image(); 
-    img.crossOrigin = 'anonymous'; // ✅ ป้องกันภาพเจดีย์ติด CORS
+    img.crossOrigin = 'anonymous'; // ✅ แก้อาการภาพค้าง (CORS)
     img.onload = ()=>{ 
       const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight; 
       c.getContext('2d').drawImage(img,0,0); 
@@ -1747,13 +1729,12 @@ function _loadChedi(){
   });
 }
 
-// ✅ 3. รับตัวแปร stats เข้ามาใช้
-async function _renderCardToCanvas(stats){
-  stats = stats || {};
+// ✅ 3. ฟังก์ชันวาดรูป ที่ปรับปรุงใหม่ให้ดึงค่าจากตัวแปร ไม่ต้องง้อ HTML ที่ซ่อนอยู่
+async function _renderCardToCanvas(stats, displayName, themeName){
   const [bgBase64, profileImg] = await Promise.all([_loadChedi(), _loadShareProfileImg()]);
   const W = 360, S = 3; const cw = W * S;
   
-  // ✅ 4. เพิ่มรายชื่อบทสวดให้ครบถึง dv14 และดึงค่าจาก stats.key โดยตรง
+  // ✅ 4. ระบุบทสวดให้ครบถึง dv14 ในนี้เลย และดึงค่าจาก stats มาเช็ค
   const ALL_ROWS = [
     {key:'cntM',  icon:'🌅', label:'ทำวัตรเช้า',               unit:'ครั้ง', color:'#C9A84C'},
     {key:'cntE',  icon:'🌙', label:'ทำวัตรเย็น',               unit:'ครั้ง', color:'#c8d4ff'},
@@ -1769,15 +1750,18 @@ async function _renderCardToCanvas(stats){
     {key:'dv11',  icon:'🙏', label:'ธรรมนิยาม',                unit:'ครั้ง', color:'#E8D5A3'},
     {key:'dv12',  icon:'🙏', label:'มาติกา',                   unit:'ครั้ง', color:'#E8D5A3'},
     {key:'dv13',  icon:'🙏', label:'พระสะหัสสะนัย',             unit:'ครั้ง', color:'#E8D5A3'},
-    {key:'dv14',  icon:'🙏', label:'มงคลจักรวาลใหญ่',           unit:'ครั้ง', color:'#E8D5A3'},
+    {key:'dv14',  icon:'🙏', label:'มงคลจักรวาลใหญ่',           unit:'ครั้ง', color:'#E8D5A3'}
   ];
   
-  const rows = ALL_ROWS.map(r => ({...r, val: stats[r.key]||0})).filter(r => r.val > 0);
-  const name = document.getElementById('scName')?.textContent || '';
-  const date = document.getElementById('scDate')?.textContent || '';
+  // กรองเฉพาะอันที่มีเลขสวด > 0
+  const rows = ALL_ROWS.map(r => ({...r, val: stats[r.key] || 0})).filter(r => r.val > 0);
+  
+  const name = displayName || 'ผู้ใช้';
+  const date = new Intl.DateTimeFormat('th-TH',{ year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Bangkok' }).format(new Date());
   
   const ROW_H = 36 * S; 
-  const ch = Math.max((300 + rows.length * 36 + 80) * S, 400 * S);
+  // ยืดความสูงอัตโนมัติตามจำนวนบรรทัด
+  const ch = Math.max((300 + (rows.length === 0 ? 1 : rows.length) * 36 + 80) * S, 400 * S);
   
   const cv = document.createElement('canvas'); cv.width = cw; cv.height = ch;
   const ctx = cv.getContext('2d');
@@ -1791,7 +1775,7 @@ async function _renderCardToCanvas(stats){
   ctx.drawImage(bgImg, dx, dy, bw*scale, bh*scale);
   
   const grd = ctx.createLinearGradient(0,0,0,ch);
-  grd.addColorStop(0,'rgba(18,6,0,0.58)'); grd.addColorStop(0.4,'rgba(10,4,0,0.48)'); grd.addColorStop(1,'rgba(8,3,0,0.68)');
+  grd.addColorStop(0,'rgba(18,6,0,0.6)'); grd.addColorStop(0.4,'rgba(10,4,0,0.5)'); grd.addColorStop(1,'rgba(8,3,0,0.7)');
   ctx.fillStyle = grd; ctx.fillRect(0, 0, cw, ch);
   
   const cx = cw/2; let y = 28*S;
@@ -1841,24 +1825,30 @@ async function _renderCardToCanvas(stats){
   txt(date, 12, 'rgba(232,213,163,0.65)'); y += 20*S;
   
   const boxX = 16*S, boxW = cw - 32*S, boxPad = 12*S;
-  const boxH = (28 + rows.length*36 + 16)*S;
+  const boxH = (28 + (rows.length === 0 ? 1 : rows.length)*36 + 16)*S;
   roundRect(boxX, y, boxW, boxH, 14*S); ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.fill();
   ctx.strokeStyle = 'rgba(201,168,76,0.35)'; ctx.lineWidth = 1*S; ctx.stroke(); y += boxPad;
   
   ctx.font = `bold ${11*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.65)'; ctx.textAlign='center'; ctx.textBaseline='top';
   ctx.fillText('📅 ยอดสวดมนต์วันนี้', cx, y); y += 26*S;
   
-  rows.forEach((row, i) => {
-    const rowY = y;
-    if(i>0){ ctx.beginPath(); ctx.strokeStyle='rgba(201,168,76,0.15)'; ctx.lineWidth=1*S; ctx.moveTo(boxX+boxPad, rowY-1*S); ctx.lineTo(boxX+boxW-boxPad, rowY-1*S); ctx.stroke(); }
-    ctx.font = `${14*S}px serif`; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(row.icon, boxX+boxPad, rowY+16*S);
-    ctx.font = `${12*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.85)';
-    ctx.fillText(row.label, boxX+boxPad+22*S, rowY+16*S);
-    ctx.font = `bold ${20*S}px 'Noto Serif Thai',sans-serif`; ctx.fillStyle = row.color; ctx.textAlign='right';
-    ctx.fillText(String(row.val), boxX+boxW-boxPad-28*S, rowY+16*S);
-    ctx.font = `${11*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.45)';
-    ctx.fillText(row.unit, boxX+boxW-boxPad, rowY+20*S); y += ROW_H;
-  });
+  if(rows.length === 0){
+    ctx.font = `${14*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.4)'; ctx.textAlign='center';
+    ctx.fillText('ยังไม่มีรายการ', cx, y+10*S);
+    y += ROW_H;
+  } else {
+    rows.forEach((row, i) => {
+      const rowY = y;
+      if(i>0){ ctx.beginPath(); ctx.strokeStyle='rgba(201,168,76,0.15)'; ctx.lineWidth=1*S; ctx.moveTo(boxX+boxPad, rowY-1*S); ctx.lineTo(boxX+boxW-boxPad, rowY-1*S); ctx.stroke(); }
+      ctx.font = `${14*S}px serif`; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(row.icon, boxX+boxPad, rowY+16*S);
+      ctx.font = `${12*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.85)';
+      ctx.fillText(row.label, boxX+boxPad+22*S, rowY+16*S);
+      ctx.font = `bold ${20*S}px 'Noto Serif Thai',sans-serif`; ctx.fillStyle = row.color; ctx.textAlign='right';
+      ctx.fillText(String(row.val), boxX+boxW-boxPad-28*S, rowY+16*S);
+      ctx.font = `${11*S}px 'Sarabun',sans-serif`; ctx.fillStyle = 'rgba(232,213,163,0.45)';
+      ctx.fillText(row.unit, boxX+boxW-boxPad, rowY+20*S); y += ROW_H;
+    });
+  }
   
   y += boxPad; y += 12*S;
   line('rgba(201,168,76,0.5)'); y += 10*S;
@@ -1868,6 +1858,7 @@ async function _renderCardToCanvas(stats){
   
   return cv;
 }
+
 let _shareProfileImgEl = null; let _shareProfileImgSrc = '';
 async function _loadShareProfileImg(){
   const existingImg = document.getElementById('profileImg');
@@ -1875,7 +1866,7 @@ async function _loadShareProfileImg(){
   if(!src) return null;
   if(src === _shareProfileImgSrc && _shareProfileImgEl) return _shareProfileImgEl;
   return new Promise(resolve => {
-    const img = new Image(); img.crossOrigin = 'anonymous';
+    const img = new Image(); img.crossOrigin = 'anonymous'; // ✅ ป้องกัน CORS
     img.onload  = () => { _shareProfileImgEl = img; _shareProfileImgSrc = src; resolve(img); };
     img.onerror = () => resolve(null); img.src = src;
   });

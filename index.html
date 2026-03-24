@@ -1792,10 +1792,21 @@ document.addEventListener('keydown',e=>{
   }
 });
 // ─── AUTO LOGIN ───────────────────────────────────────
+// ─── AUTO LOGIN & GUEST MODE ───────────────────────────────────────
 try { if(localStorage.getItem('dh_user')){ const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; } } catch(e){}
 window.addEventListener('load', async () => {
   let tries = 0;
   while(!window._fbReady && tries++ < 20){ await new Promise(r=>setTimeout(r,100)); }
+  
+  // 1. เช็กก่อนเลยว่าเข้าผ่านลิงก์ ?guest=1 หรือเปล่า
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('guest') === '1'){
+    const lo = document.getElementById('appLoading'); if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
+    enterGuestMode(); // เข้าโหมดทดลองใช้ทันที
+    return; // หยุดการทำงานตรงนี้ ไม่ต้องไปเช็กล็อกอิน
+  }
+
+  // 2. ถ้าไม่ใช่ Guest ค่อยมาเช็กประวัติการล็อกอิน
   try {
     const saved = localStorage.getItem('dh_user');
     if(saved){
@@ -1805,9 +1816,10 @@ window.addEventListener('load', async () => {
       localStorage.removeItem('dh_user');
     }
   } catch(e){ console.error('auto-login',e); }
+  
+  // 3. ถ้าไม่ได้ล็อกอินไว้ ค่อยโชว์หน้า Login
   const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'flex';
   const lo = document.getElementById('appLoading'); if(lo){ lo.classList.add('fade-out'); setTimeout(()=>lo.remove(),450); }
-  if(newSearchParams(window.location.search).get('guest') === '1'){ setTimeout(()=>enterGuestMode(), 50); }
 });
 // ─── CHANGE PASSWORD ─────────────────────────────────
 function openChangePassword(){

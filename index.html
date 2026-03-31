@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <title>พุทธบูชา – สวดมนต์ทำวัตร</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,8 +23,28 @@
   --white:#FFFFFF;
   --shadow-gold:rgba(201,168,76,0.15);
 }
-html{scroll-behavior:smooth}
-body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text-dark);min-height:100vh;overflow-x:hidden;font-size:18px;}
+
+/* แก้ไข HTML ให้รองรับความสูงเต็มจอ */
+html {
+  scroll-behavior: smooth;
+  height: -webkit-fill-available;
+}
+
+/* แก้ไข Body เพิ่ม 100dvh และ env(safe-area) สำหรับ iPhone */
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  overflow-x: hidden;
+  font-size: 18px;
+}
+
 /* THEMES */
 body.theme-forest{--gold:#7CB87A;--gold-light:#B8DDB6;--gold-dark:#3A6B38;--gold-glow:rgba(124,184,122,0.18);--cream:#F0F5EE;--cream-dark:#D8EBD6;--cream-mid:#C4DCC2;--maroon:#1A4A1E;--maroon-mid:#2A6A2E;--maroon-light:#3A8A3E;--saffron:#4A8A2A;--saffron-light:#7AB85A;--deep:#051005;--deep-mid:#0A200A;--deep-warm:#0F3010;--text-dark:#051005;--text-mid:#1A3A1C;--text-light:#3A6B3C;--text-ghost:#7AAA7C;}
 body.theme-ocean{--gold:#5AB4D4;--gold-light:#A8D8EC;--gold-dark:#1A6A8A;--gold-glow:rgba(90,180,212,0.18);--cream:#EEF6FA;--cream-dark:#CEEAF5;--cream-mid:#B4D8EC;--maroon:#0A3A5A;--maroon-mid:#1A5A7A;--maroon-light:#2A7A9A;--saffron:#1A7A9A;--saffron-light:#4AAABA;--deep:#010D14;--deep-mid:#051A28;--deep-warm:#0A2A3A;--text-dark:#010D14;--text-mid:#0A2A3A;--text-light:#1A5A7A;--text-ghost:#5A9AAA;}
@@ -985,7 +1005,7 @@ const DEFAULT_VIDEOS = [
   {id:'dv9',  title:'เจริญพุทธมนต์ 12 ตำนาน',              url:'https://youtu.be/7HP-gFEv8Sc',              cat:'special'},
   {id:'dv10', title:'พาหุง, มหาการุณิโก',                  url:'https://youtu.be/CE_OBSxIKvM',              cat:'special'},
   {id:'dv11', title:'ธรรมนิยาม',                           url:'https://youtu.be/k4czDhbPn04',              cat:'special'},
-  {id:'dv12', title:'มาติกา',                              url:'https://youtu.be/tktb6Wk5HPM',              cat:'special'},
+  {id:'dv12', title:'มาติกา',                               url:'https://youtu.be/tktb6Wk5HPM',              cat:'special'},
   {id:'dv13', title:'พระสะหัสสะนัย',                       url:'https://youtu.be/AaSlY5XIfh0',              cat:'special'},
   {id:'dv14', title:'มงคลจักรวาลใหญ่',                     url:'https://youtu.be/cE7a2xo56Jc',              cat:'special'},
   {id:'dv15', title:'บทสวดรัตนสูตร -โพชฌงคปริตร -โอสถปริตร', url:'https://youtu.be/vPTB9N1ta48',              cat:'special'},

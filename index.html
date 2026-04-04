@@ -2346,24 +2346,24 @@ function updateProfileTotals(){
   document.getElementById('totalMedEvening').textContent = document.getElementById('meditEveningMin').textContent;
 }
 
-// ─── DAILY CHECK-IN (FIRE STREAK) ──────────────────────────────────
+// ─── // ─── DAILY CHECK-IN (FIRE STREAK) ──────────────────────────────────
 let _streakState = 'pending'; // 'pending', 'checked_in', 'needs_restore'
 let _restoresLeft = 3;
 
 function getDates() {
-    const t = new Date();
-    const today = t.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
-    const thisMonth = today.slice(0, 7);
-    
-    const y = new Date(t);
-    y.setDate(y.getDate() - 1);
-    const yesterday = y.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
-    
-    const dby = new Date(t);
-    dby.setDate(dby.getDate() - 2);
-    const dayBeforeYesterday = dby.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
-    
-    return { today, yesterday, dayBeforeYesterday, thisMonth };
+  const t = new Date();
+  const today = t.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+  const thisMonth = today.slice(0, 7);
+  
+  const y = new Date(t);
+  y.setDate(y.getDate() - 1);
+  const yesterday = y.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+  
+  const dby = new Date(t);
+  dby.setDate(dby.getDate() - 2);
+  const dayBeforeYesterday = dby.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+  
+  return { today, yesterday, dayBeforeYesterday, thisMonth };
 }
 
 async function loadDailyStreak() {
@@ -2398,7 +2398,50 @@ async function loadDailyStreak() {
      _streakState = 'pending';
   }
   
-  function updateStreakUI(streak, state, restoresLeft) {
+  updateStreakUI(streak, _streakState, _restoresLeft);
+}
+
+async function doDailyCheckIn() {
+  if (window._guestMode) { showToast('🔑 โหมดผู้เยี่ยมชม: ไม่สามารถสะสมไฟได้จ้ะ'); return; }
+  if (_streakState === 'checked_in') return;
+  
+  const btn = document.getElementById('btnCheckIn');
+  btn.textContent = '⏳...';
+  
+  const userData = await dbGet('users/' + window._currentUser);
+  let streak = userData.streak_count || 0;
+  const lastCheckIn = userData.last_checkin_date || "";
+  const d = getDates();
+  
+  let restoredMonth = userData.restore_month || "";
+  let restoreCount = userData.restore_count || 0;
+  if (restoredMonth !== d.thisMonth) { restoreCount = 0; }
+  
+  if (_streakState === 'needs_restore') {
+      if (restoreCount >= 3) {
+          showToast('⚠️ สิทธิ์กู้คืนครบ 3 ครั้งแล้วในเดือนนี้');
+          streak = 1; // เริ่มนับ 1 ใหม่
+          restoreCount = 3; 
+      } else {
+          restoreCount += 1;
+          streak += 1; // กู้คืนของเก่า
+          showToast('🔥 กู้คืนไฟสำเร็จ! (เหลือสิทธิ์ ' + (3 - restoreCount) + ' ครั้ง)');
+      }
+      await dbSet('users/' + window._currentUser + '/restore_count', restoreCount);
+      await dbSet('users/' + window._currentUser + '/restore_month', d.thisMonth);
+  } else {
+      streak += 1;
+      showToast('🔥 เช็คอินสำเร็จ! สะสมไฟได้ ' + streak + ' วันแล้ว');
+  }
+  
+  await dbSet('users/' + window._currentUser + '/streak_count', streak);
+  await dbSet('users/' + window._currentUser + '/last_checkin_date', d.today);
+  
+  _streakState = 'checked_in';
+  updateStreakUI(streak, _streakState, 3 - restoreCount);
+}
+
+function updateStreakUI(streak, state, restoresLeft) {
   const countEl = document.getElementById('dailyStreakCount');
   const flameEl = document.getElementById('streakFlameIcon');
   const cardEl = document.getElementById('streakCardContainer');
@@ -2411,7 +2454,7 @@ async function loadDailyStreak() {
   // รีเซ็ตคลาส
   flameEl.className = 'streak-flame';
   cardEl.className = '';
-  cardEl.style.cssText = ''; // ล้างคำสั่งที่เคยบังคับสีเทาทิ้งไปให้หมด! (ตัวการอยู่ตรงนี้จ้ะ)
+  cardEl.style.cssText = ''; 
 
   if (state === 'checked_in') {
     // เช็คอินแล้ว
@@ -2440,7 +2483,7 @@ async function loadDailyStreak() {
   
   cardEl.style.display = 'flex';
 }
-  
+
 // ─── EXPOSE GLOBALS ───────────────────────────────────
 window.doLogin = doLogin; window.doGoogleLogin = doGoogleLogin; window.doRegister = doRegister; window.doLogout = doLogout;
 window.toggleAuthMode = toggleAuthMode; window.recordCount = recordCount; window.recordMeditation = recordMeditation;

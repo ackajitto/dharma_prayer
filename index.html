@@ -165,31 +165,36 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   100% { box-shadow: 0 0 25px rgba(240, 152, 25, 0.4); }
 }
 .btn-checkin {
-  padding: 10px 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--saffron-light));
-  color: var(--text-dark);
-  font-size: 15px;
-  font-weight: 700;
-  font-family: 'Noto Serif Thai', serif;
-  box-shadow: 0 4px 15px var(--shadow-gold);
-  transition: all 0.2s;
-  white-space: nowrap;
+  padding: 13px 20px !important; /* ปรับให้ปุ่มอ้วนขึ้นเท่าปุ่มแชร์ */
+  border-radius: 14px !important;
+  border: none !important;
+  cursor: pointer !important;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--saffron-light)) !important; /* โทนเดียวกับปุ่มแชร์ */
+  color: var(--text-dark) !important; /* ตัวหนังสือสีเข้ม/ดำ */
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  font-family: 'Noto Serif Thai', serif !important;
+  box-shadow: 0 4px 24px var(--shadow-gold) !important;
+  transition: all 0.25s !important;
+  white-space: nowrap !important;
 }
-.btn-checkin:active { transform: scale(0.95); }
+.btn-checkin:hover {
+  box-shadow: 0 6px 32px var(--shadow-gold) !important;
+  transform: translateY(-1px) !important;
+}
+.btn-checkin:active { transform: scale(0.95) !important; }
+
 .btn-checkin.done {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
-  box-shadow: none;
-  cursor: default;
-  pointer-events: none;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  pointer-events: none !important;
 }
 .btn-checkin.restore {
-  background: linear-gradient(135deg, #E53935, #C62828);
-  color: white; /* ปุ่มกู้คืนสีแดง ใช้ตัวหนังสือสีขาวให้อ่านง่าย */
-  box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+  background: linear-gradient(135deg, #E53935, #C62828) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4) !important;
 }
 .streak-info { flex: 1; }
 .streak-num { font-family: 'Noto Serif Thai', serif; font-size: 32px; font-weight: 700; color: var(--gold-light); line-height: 1; }

@@ -139,6 +139,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   border-color: rgba(240, 152, 25, 0.3);
   animation: streak-glow 2s infinite alternate;
 }
+#streakCardContainer.needs-restore {
+  background: linear-gradient(135deg, rgba(229, 57, 53, 0.1), rgba(183, 28, 28, 0.05));
+  border-color: rgba(229, 57, 53, 0.3);
+  animation: none;
+}
 .streak-flame {
   font-size: 42px;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -149,6 +154,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   filter: grayscale(0%);
   opacity: 1;
   transform: scale(1.15);
+}
+.streak-flame.dead {
+  filter: grayscale(100%);
+  opacity: 0.3;
+  transform: scale(0.9);
 }
 @keyframes streak-glow {
   0% { box-shadow: 0 0 10px rgba(255, 81, 47, 0.1); }
@@ -174,6 +184,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   box-shadow: none;
   cursor: default;
   pointer-events: none;
+}
+.btn-checkin.restore {
+  background: linear-gradient(135deg, #E53935, #C62828);
+  box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
 }
 .streak-info { flex: 1; }
 .streak-num { font-family: 'Noto Serif Thai', serif; font-size: 32px; font-weight: 700; color: var(--gold-light); line-height: 1; }
@@ -556,20 +570,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             <button id="toggleTotal" onclick="switchStatsMode('total')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:transparent;color:var(--text-ghost);opacity:0.7;">📊 รวมทั้งหมด</button>
           </div>
           
-          <div id="streakCardContainer" style="display:none;">
-            <div class="streak-flame" id="streakFlameIcon">🔥</div>
-            <div class="streak-info">
-              <div style="display: flex; align-items: baseline; gap: 8px;">
-                <div class="streak-num" id="dailyStreakCount">0</div>
-                <div style="font-size: 14px; color: var(--gold-light); font-weight: 600;">วันต่อเนื่อง</div>
-              </div>
-              <div class="streak-sub" id="streakSubText">กดเช็คอินเพื่อจุดไฟ!</div>
-            </div>
-            <button id="btnCheckIn" class="btn-checkin" onclick="doDailyCheckIn()">
-              เช็คอิน 👆
-            </button>
-          </div>
-
           <div class="profile-stats-total">
             <div class="pst-card pst-morning" style="cursor:pointer;" onclick="scrollToVideo('morning')" title="ไปยังทำวัตรเช้า">
               <span class="pst-label">🌅 ทำวัตรเช้า</span>
@@ -675,6 +675,21 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           </button>
         </a>
       </div>
+      
+      <div id="streakCardContainer" style="display:none; margin-bottom: 12px;">
+        <div class="streak-flame" id="streakFlameIcon">🔥</div>
+        <div class="streak-info">
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <div class="streak-num" id="dailyStreakCount">0</div>
+            <div style="font-size: 14px; color: var(--gold-light); font-weight: 600;">วันต่อเนื่อง</div>
+          </div>
+          <div class="streak-sub" id="streakSubText">กดเช็คอินเพื่อจุดไฟ!</div>
+        </div>
+        <button id="btnCheckIn" class="btn-checkin" onclick="doDailyCheckIn()">
+          เช็คอิน 👆
+        </button>
+      </div>
+      
       <div style="background:var(--white);border-radius:14px;border:1px solid var(--cream-dark);margin-bottom:4px;overflow:hidden;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px 8px;">
           <button onclick="scrollToVideo('gbn_sd1')" style="padding:9px 8px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:700;font-family:'Sarabun',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;touch-action:manipulation;">
@@ -717,11 +732,6 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
       </div>
   </div>
-    <div class="section-divider" style="display:none">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-title">🙏 บันทึกการปฏิบัติ</div>
-      <div class="section-divider-line" style="background:linear-gradient(to left,var(--gold),transparent)"></div>
-    </div>
       
       <div class="record-zone" style="display:none">
         <div class="record-zone-card rz-morning">
@@ -2328,71 +2338,104 @@ function updateProfileTotals(){
 }
 
 // ─── DAILY CHECK-IN (FIRE STREAK) ──────────────────────────────────
+let _streakState = 'pending'; // 'pending', 'checked_in', 'needs_restore'
+let _restoresLeft = 3;
+
+function getDates() {
+    const t = new Date();
+    const today = t.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+    const thisMonth = today.slice(0, 7);
+    
+    const y = new Date(t);
+    y.setDate(y.getDate() - 1);
+    const yesterday = y.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+    
+    const dby = new Date(t);
+    dby.setDate(dby.getDate() - 2);
+    const dayBeforeYesterday = dby.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
+    
+    return { today, yesterday, dayBeforeYesterday, thisMonth };
+}
+
 async function loadDailyStreak() {
-  if (window._guestMode) {
-    updateStreakUI(0, false);
-    return;
-  }
-  
+  if (window._guestMode) { updateStreakUI(0, 'pending', 3); return; }
   const userData = await dbGet('users/' + window._currentUser);
   if (!userData) return;
   
   let streak = userData.streak_count || 0;
   const lastCheckIn = userData.last_checkin_date || "";
-  const today = todayKey(); 
+  const d = getDates();
   
-  if (lastCheckIn !== today) {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
-    
-    if (lastCheckIn !== yesterdayStr && lastCheckIn !== "") {
-      streak = 0; 
-      await dbSet('users/' + window._currentUser + '/streak_count', 0);
-    }
+  // Restore count logic
+  let restoredMonth = userData.restore_month || "";
+  let restoreCount = userData.restore_count || 0;
+  if (restoredMonth !== d.thisMonth) { restoreCount = 0; }
+  _restoresLeft = 3 - restoreCount;
+
+  if (lastCheckIn === d.today) {
+     _streakState = 'checked_in';
+  } else if (lastCheckIn === d.yesterday || lastCheckIn === "") {
+     _streakState = 'pending';
+     if(lastCheckIn === "" && streak > 0) streak = 0; // Edge case
+  } else if (lastCheckIn === d.dayBeforeYesterday && streak > 0) {
+     if (_restoresLeft > 0) {
+         _streakState = 'needs_restore';
+     } else {
+         streak = 0;
+         _streakState = 'pending';
+     }
+  } else {
+     streak = 0;
+     _streakState = 'pending';
   }
   
-  updateStreakUI(streak, lastCheckIn === today);
+  updateStreakUI(streak, _streakState, _restoresLeft);
 }
 
 async function doDailyCheckIn() {
-  if (window._guestMode) {
-    showToast('🔑 โหมดผู้เยี่ยมชม: ไม่สามารถสะสมไฟได้จ้ะ');
-    return;
-  }
+  if (window._guestMode) { showToast('🔑 โหมดผู้เยี่ยมชม: ไม่สามารถสะสมไฟได้จ้ะ'); return; }
+  if (_streakState === 'checked_in') return;
   
   const btn = document.getElementById('btnCheckIn');
-  if (btn.classList.contains('done')) return; 
-  
   btn.textContent = '⏳...';
   
-  const today = todayKey();
   const userData = await dbGet('users/' + window._currentUser);
   let streak = userData.streak_count || 0;
   const lastCheckIn = userData.last_checkin_date || "";
+  const d = getDates();
   
-  if (lastCheckIn === today) {
-    updateStreakUI(streak, true);
-    return;
+  let restoredMonth = userData.restore_month || "";
+  let restoreCount = userData.restore_count || 0;
+  if (restoredMonth !== d.thisMonth) { restoreCount = 0; }
+  
+  if (_streakState === 'needs_restore') {
+      if (restoreCount >= 3) {
+          showToast('⚠️ สิทธิ์กู้คืนครบ 3 ครั้งแล้วในเดือนนี้');
+          streak = 1; // เริ่มนับ 1 ใหม่
+          restoreCount = 3; 
+      } else {
+          restoreCount += 1;
+          streak += 1; // กู้คืนของเก่า
+    showToast('🔥 กู้คืนไฟสำเร็จ! (เหลือสิทธิ์ ' + (3 - restoreCount) + ' ครั้ง)');
+      }
+      // บันทึกสิทธิ์การกู้คืนลงฐานข้อมูล
+      await dbSet('users/' + window._currentUser + '/restore_count', restoreCount);
+      await dbSet('users/' + window._currentUser + '/restore_month', d.thisMonth);
+  } else {
+      // สถานะปกติ (pending) ไม่ต้องใช้สิทธิ์กู้คืน
+      streak += 1;
+      showToast('🔥 เช็คอินสำเร็จ! สะสมไฟได้ ' + streak + ' วันแล้ว');
   }
   
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toLocaleString('sv-SE', {timeZone: 'Asia/Bangkok'}).slice(0, 10);
-  
-  if (lastCheckIn !== yesterdayStr && lastCheckIn !== "") {
-    streak = 0; 
-  }
-  
-  streak += 1;
+  // บันทึกวันเช็คอินและยอดไฟล่าสุด
   await dbSet('users/' + window._currentUser + '/streak_count', streak);
-  await dbSet('users/' + window._currentUser + '/last_checkin_date', today);
+  await dbSet('users/' + window._currentUser + '/last_checkin_date', d.today);
   
-  updateStreakUI(streak, true);
-  showToast('🔥 เช็คอินสำเร็จ! สะสมไฟได้ ' + streak + ' วันแล้ว');
+  _streakState = 'checked_in';
+  updateStreakUI(streak, _streakState, 3 - restoreCount);
 }
 
-function updateStreakUI(streak, isCheckedInToday) {
+function updateStreakUI(streak, state, restoresLeft) {
   const countEl = document.getElementById('dailyStreakCount');
   const flameEl = document.getElementById('streakFlameIcon');
   const cardEl = document.getElementById('streakCardContainer');
@@ -2402,21 +2445,34 @@ function updateStreakUI(streak, isCheckedInToday) {
   if (!countEl) return;
   countEl.textContent = streak;
   
-  if (streak > 0) {
+  // รีเซ็ตคลาสก่อนเพื่อความชัวร์
+  flameEl.className = 'streak-flame';
+  cardEl.className = '';
+  // จัดการสไตล์ inline เบื้องต้นกันเหนียว
+  cardEl.style.cssText = 'background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.1);';
+
+  if (state === 'checked_in') {
+    // เช็คอินแล้ว
     flameEl.classList.add('active');
     cardEl.classList.add('active-fire');
-  } else {
-    flameEl.classList.remove('active');
-    cardEl.classList.remove('active-fire');
-  }
-  
-  if (isCheckedInToday) {
     btn.textContent = 'รับไฟแล้ว ✓';
-    btn.classList.add('done');
+    btn.className = 'btn-checkin done';
     subEl.textContent = 'พรุ่งนี้อย่าลืมมาจุดไฟต่อนะ!';
+  } else if (state === 'needs_restore') {
+    // ขาด 1 วัน ต้องกู้คืน
+    flameEl.classList.add('dead');
+    cardEl.classList.add('needs-restore');
+    btn.textContent = 'กู้คืน 💖';
+    btn.className = 'btn-checkin restore';
+    subEl.textContent = `ไฟกำลังจะดับ! รีบกู้คืนด่วน (เหลือ ${restoresLeft} สิทธิ์/ด.)`;
   } else {
+    // รอเช็คอินปกติ
+    if (streak > 0) {
+      flameEl.classList.add('active');
+      cardEl.classList.add('active-fire');
+    }
     btn.textContent = 'เช็คอิน 👆';
-    btn.classList.remove('done');
+    btn.className = 'btn-checkin';
     subEl.textContent = streak > 0 ? 'กดเช็คอินเพื่อรักษาไฟไว้!' : 'กดเช็คอินเพื่อเริ่มจุดไฟ!';
   }
   
@@ -2440,7 +2496,7 @@ window.closeResetConfirm = closeResetConfirm; window.doResetAll = doResetAll; wi
 window.scrollToPlayer = scrollToPlayer; window.markTodaySpecial = markTodaySpecial; window.markTodayMeditation = markTodayMeditation;
 window.adjustCount = adjustCount; window.closeCropModal = closeCropModal; window.saveCroppedPhoto = saveCroppedPhoto;
 window.updateCropTransform = updateCropTransform; window.refreshSettingsCounts = refreshSettingsCounts;
-window.doDailyCheckIn = doDailyCheckIn;
+window.doDailyCheckIn = doDailyCheckIn; window.loadDailyStreak = loadDailyStreak;
 let _currentLang = 'th';
 </script>
 </body>

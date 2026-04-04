@@ -144,9 +144,36 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   background: #fffafa;
   border-color: #E53935;
 }
-.streak-flame { font-size: 42px; transition: all 0.4s ease; filter: grayscale(100%); opacity: 0.3; }
-.streak-flame.active { filter: grayscale(0%); opacity: 1; transform: scale(1.15); }
-.streak-flame.dead { filter: grayscale(100%); opacity: 0.2; transform: scale(0.9); }
+/* --- เอฟเฟกต์ไฟดุ๊กดิ๊ก --- */
+.streak-flame { 
+  font-size: 42px; 
+  transition: all 0.4s ease; 
+  filter: grayscale(100%); 
+  opacity: 0.3; 
+  display: inline-block; /* สำคัญ: ต้องใส่เพื่อให้ Emoji หมุนได้ */
+  transform-origin: bottom center; /* จุดหมุนอยู่ที่ฐานของไฟ */
+}
+
+/* ตอนที่ไฟติด (กดเช็คอินแล้ว หรือมีสถิติอยู่) ให้ดุ๊กดิ๊ก */
+.streak-flame.active { 
+  filter: grayscale(0%); 
+  opacity: 1; 
+  animation: flame-flicker 1.2s ease-in-out infinite alternate; /* สั่งให้ขยับวนไปเรื่อยๆ */
+}
+
+.streak-flame.dead { 
+  filter: grayscale(100%); 
+  opacity: 0.2; 
+  transform: scale(0.9); 
+  animation: none; /* ตอนไฟดับ ไม่ต้องขยับ */
+}
+
+/* จังหวะการขยับของเปลวไฟ (เอียงซ้าย-ขวา และยืดหดนิดๆ) */
+@keyframes flame-flicker {
+  0% { transform: scale(1.1) rotate(-4deg); }
+  50% { transform: scale(1.18) rotate(4deg); }
+  100% { transform: scale(1.1) rotate(-2deg); }
+}
 
 /* --- ปุ่มเช็คอิน --- */
 .btn-checkin {

@@ -169,11 +169,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, #FF512F, #F09819);
-  color: white;
-  font-weight: bold;
-  font-family: 'Sarabun', sans-serif;
-  box-shadow: 0 4px 15px rgba(240, 152, 25, 0.4);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--saffron-light));
+  color: var(--text-dark);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Noto Serif Thai', serif;
+  box-shadow: 0 4px 15px var(--shadow-gold);
   transition: all 0.2s;
   white-space: nowrap;
 }
@@ -187,6 +188,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 }
 .btn-checkin.restore {
   background: linear-gradient(135deg, #E53935, #C62828);
+  color: white; /* ปุ่มกู้คืนสีแดง ใช้ตัวหนังสือสีขาวให้อ่านง่าย */
   box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
 }
 .streak-info { flex: 1; }

@@ -254,23 +254,26 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .edit-name-input{flex:1;min-width:130px;padding:9px 13px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;}
 .btn-save-name{padding:9px 18px;border-radius:11px;border:none;cursor:pointer;background:var(--gold-dark);color:var(--cream);font-size:14px;font-family:'Sarabun',sans-serif;font-weight:600;}
 .btn-cancel-name{padding:9px 14px;border-radius:11px;border:1px solid rgba(201,168,76,0.2);cursor:pointer;background:transparent;color:var(--text-ghost);font-size:14px;font-family:'Sarabun',sans-serif;}
-/* PROFILE STATS TOTAL */
+/* PROFILE STATS TOTAL (โทนถนอมสายตา) */
 .profile-stats-total{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-.pst-card{background:rgba(0,0,0,0.35);border-radius:14px;padding:16px 10px;text-align:center;border:1px solid rgba(255,255,255,0.1);transition:all .2s;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
-.pst-card:hover{background:rgba(0,0,0,0.5);border-color:rgba(255,255,255,0.3);transform:scale(1.03);}
-.pst-label{font-size:14px;font-weight:700;letter-spacing:.5px;display:block;margin-bottom:6px;text-shadow:0 1px 3px rgba(0,0,0,0.8);}
-.pst-num{font-family:'Noto Serif Thai',serif;font-size:36px;font-weight:700;line-height:1;text-shadow:0 2px 6px rgba(0,0,0,0.6);}
-.pst-unit{font-size:14px;color:rgba(255,255,255,0.8);font-weight:500;}
+.pst-card{background:rgba(0,0,0,0.25);border-radius:14px;padding:16px 10px;text-align:center;border:1px solid rgba(255,255,255,0.08);transition:all .2s;}
+.pst-card:hover{background:rgba(0,0,0,0.35);border-color:rgba(255,255,255,0.2);transform:scale(1.02);}
+.pst-label{font-size:14px;font-weight:600;letter-spacing:.3px;display:block;margin-bottom:6px;text-shadow:0 1px 2px rgba(0,0,0,0.4);}
+.pst-num{font-family:'Noto Serif Thai',serif;font-size:36px;font-weight:700;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,0.3);}
+.pst-unit{font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;}
 
-/* กำหนดสีแยกตามหมวดหมู่เพื่อให้อ่านง่าย */
-.pst-morning .pst-label { color: #FFD180; }
-.pst-morning .pst-num { color: #FFB74D; }
-.pst-evening .pst-label { color: #B3E5FC; }
-.pst-evening .pst-num { color: #81D4FA; }
-.pst-med .pst-label { color: #C8E6C9; }
-.pst-med .pst-num { color: #81C784; }
-.pst-special .pst-label { color: #FFF9C4; }
-.pst-special .pst-num { color: #FFF176; }
+/* สีแยกตามหมวดหมู่ (ปรับลดความสว่างลงให้เป็นสีพาสเทลตุ่นๆ) */
+.pst-morning .pst-label { color: #E0C097; } /* สีทราย/ทองตุ่น */
+.pst-morning .pst-num { color: #DCA776; }
+
+.pst-evening .pst-label { color: #B0C4DE; } /* สีเทาฟ้าอ่อน */
+.pst-evening .pst-num { color: #9ABCE0; }
+
+.pst-med .pst-label { color: #B8D0B9; } /* สีเขียวหยก/ใบไม้แห้ง */
+.pst-med .pst-num { color: #9CB49F; }
+
+.pst-special .pst-label { color: #E8DCC8; } /* สีครีมอ่อนนวลๆ */
+.pst-special .pst-num { color: #E2CDA1; }
 /* SETTINGS CARD */
 .settings-card{background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
 .settings-title{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:14px;}

@@ -187,12 +187,13 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .btn-checkin:active { transform: scale(0.95) !important; }
 
 .btn-checkin.done {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 2px solid rgba(255, 255, 255, 0.2) !important;
-  color: rgba(255, 255, 255, 0.5) !important;
-  box-shadow: none !important;
+  background: #FFFFFF !important; /* พื้นขาวเหมือนเดิม */
+  border: 2px solid var(--text-dark) !important; /* กรอบเข้มเหมือนเดิม */
+  color: var(--text-dark) !important; /* ตัวหนังสือเข้มเหมือนเดิม */
+  box-shadow: none !important; /* แค่เอาเงาออกให้รู้ว่ากดไปแล้ว */
   cursor: default !important;
-  pointer-events: none !important;
+  pointer-events: none !important; /* ล็อกไว้ไม่ให้กดซ้ำได้ */
+  opacity: 0.8 !important; /* ปรับให้สีดรอปลงนิดดดดเดียว จะได้รู้ว่ารับแล้ว แต่ยังอ่านชัดเป๊ะ */
 }
 .btn-checkin.restore {
   background: #FFFFFF !important;

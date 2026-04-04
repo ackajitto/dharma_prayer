@@ -121,10 +121,10 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .today-time{font-size:24px;font-weight:700;color:var(--gold);font-family:'Noto Serif Thai',serif;letter-spacing:1px;}
 .today-start{font-size:11px;color:var(--text-ghost);margin-top:1px;}
 
-/* ── /* ── STREAK CHECK-IN ── */
+/* ── STREAK CHECK-IN ── */
 #streakCardContainer {
-  background: var(--white); /* เปลี่ยนพื้นหลังเป็นสีขาว/สว่าง */
-  border: 1px solid var(--cream-dark); /* ขอบสีอ่อนๆ */
+  background: var(--white);
+  border: 1px solid var(--cream-dark);
   border-radius: 18px;
   padding: 16px 20px;
   margin-bottom: 12px;
@@ -135,44 +135,31 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   box-shadow: 0 2px 10px rgba(0,0,0,0.04);
 }
 #streakCardContainer.active-fire {
-  background: linear-gradient(135deg, #ffffff, #fffdf8); /* พื้นขาวอมส้มสว่างๆ */
-  border-color: rgba(240, 152, 25, 0.4);
-  box-shadow: 0 4px 15px rgba(240, 152, 25, 0.1);
-  animation: none; /* ปิดกระพริบจะได้ไม่ลายตา */
+  background: linear-gradient(135deg, var(--white), var(--cream)); /* ไล่สีพื้นหลังเนียนๆ */
+  border-color: var(--gold);
+  box-shadow: 0 4px 15px var(--shadow-gold);
+  animation: none;
 }
 #streakCardContainer.needs-restore {
-  background: #fffafa; /* พื้นขาวอมแดงตอนไฟจะดับ */
+  background: #fffafa;
   border-color: #E53935;
 }
-.streak-flame {
-  font-size: 42px;
-  transition: all 0.4s ease;
-  filter: grayscale(100%);
-  opacity: 0.3;
-}
-.streak-flame.active {
-  filter: grayscale(0%);
-  opacity: 1;
-  transform: scale(1.15);
-}
-.streak-flame.dead {
-  filter: grayscale(100%);
-  opacity: 0.2;
-  transform: scale(0.9);
-}
+.streak-flame { font-size: 42px; transition: all 0.4s ease; filter: grayscale(100%); opacity: 0.3; }
+.streak-flame.active { filter: grayscale(0%); opacity: 1; transform: scale(1.15); }
+.streak-flame.dead { filter: grayscale(100%); opacity: 0.2; transform: scale(0.9); }
 
-/* ส่วนของปุ่มเช็คอินพื้นขาว */
+/* --- ปุ่มเช็คอิน --- */
 .btn-checkin {
-  padding: 12px 20px !important;
+  padding: 10px 18px !important;
   border-radius: 14px !important;
-  border: 2px solid var(--text-dark) !important;
+  border: 2px solid var(--gold) !important; /* ขอบสีทอง/ฟ้าตามธีม */
   cursor: pointer !important;
-  background: #FFFFFF !important;
-  color: var(--text-dark) !important;
-  font-size: 16px !important;
+  background: var(--white) !important;
+  color: var(--gold-dark) !important; /* ตัวหนังสือสีเข้มตามธีม */
+  font-size: 15px !important;
   font-weight: 700 !important;
   font-family: 'Noto Serif Thai', serif !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 4px 12px var(--shadow-gold) !important;
   transition: all 0.2s !important;
   white-space: nowrap !important;
 }
@@ -182,14 +169,15 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 }
 .btn-checkin:active { transform: scale(0.95) !important; }
 
+/* --- ปุ่มตอนรับไฟแล้ว (คุมโทนให้กลืนกับกรอบ) --- */
 .btn-checkin.done {
-  background: #FFFFFF !important;
-  border: 2px solid var(--text-dark) !important;
-  color: var(--text-dark) !important;
+  background: var(--cream) !important; /* พื้นหลังสีครีมตุ่นๆ */
+  border: 2px solid var(--cream-dark) !important;
+  color: var(--text-mid) !important; /* ตัวหนังสือสีเทาเข้ม/น้ำตาลเข้ม */
   box-shadow: none !important;
   cursor: default !important;
   pointer-events: none !important;
-  opacity: 0.7 !important; /* ดรอปสีลงนิดเดียวให้รู้ว่ากดแล้ว */
+  opacity: 0.8 !important;
 }
 .btn-checkin.restore {
   background: #FFFFFF !important;
@@ -198,10 +186,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   box-shadow: 0 4px 15px rgba(229, 57, 53, 0.2) !important;
 }
 
+/* --- ข้อความด้านใน --- */
 .streak-info { flex: 1; }
-.streak-num { font-family: 'Noto Serif Thai', serif; font-size: 32px; font-weight: 700; color: var(--gold-dark); line-height: 1; } /* ตัวเลขสีเข้มขึ้น */
-.streak-sub { font-size: 13px; color: var(--text-mid); margin-top: 4px; font-weight: 500; } /* ข้อความสีเข้มขึ้น */
-  
+.streak-num { font-family: 'Noto Serif Thai', serif; font-size: 32px; font-weight: 700; color: var(--maroon); line-height: 1; } /* ตัวเลขสีเข้มเด่นๆ */
+.streak-label-text { font-size: 14px; color: var(--gold-dark); font-weight: 700; } /* เปลี่ยนสีคำว่า วันต่อเนื่อง */
+.streak-sub { font-size: 13px; color: var(--text-mid); margin-top: 4px; font-weight: 500; }
+
 /* RECORD BUTTONS - BIG PRIMARY ACTIONS */
 .record-zone{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 .record-zone-card{
@@ -685,12 +675,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </a>
       </div>
       
-      <div id="streakCardContainer" style="display:none; margin-bottom: 12px;">
+      <div id="streakCardContainer" style="display:none;">
         <div class="streak-flame" id="streakFlameIcon">🔥</div>
         <div class="streak-info">
           <div style="display: flex; align-items: baseline; gap: 8px;">
             <div class="streak-num" id="dailyStreakCount">0</div>
-            <div style="font-size: 14px; color: var(--gold-light); font-weight: 600;">วันต่อเนื่อง</div>
+            <div class="streak-label-text">วันต่อเนื่อง</div>
           </div>
           <div class="streak-sub" id="streakSubText">กดเช็คอินเพื่อจุดไฟ!</div>
         </div>

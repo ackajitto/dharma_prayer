@@ -14,14 +14,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--gold-glow:rgba(201,168,76,0.18);
-  --cream:#FAF6EF;--cream-dark:#F0E8D8;--cream-mid:#E8DCC8;
-  --maroon:#5C1A1A;--maroon-mid:#7A2828;--maroon-light:#9B3A3A;
-  --saffron:#C4762A;--saffron-light:#E09A5A;
-  --deep:#120800;--deep-mid:#2A1200;--deep-warm:#3D1A00;
-  --text-dark:#1E0C00;--text-mid:#5C3D2E;--text-light:#9B7D60;--text-ghost:#C4AB8E;
+  /* ธีมเริ่มต้น: สีฟ้า (Ocean) */
+  --gold:#5AB4D4;--gold-light:#A8D8EC;--gold-dark:#1A6A8A;--gold-glow:rgba(90,180,212,0.18);
+  --cream:#EEF6FA;--cream-dark:#CEEAF5;--cream-mid:#B4D8EC;
+  --maroon:#0A3A5A;--maroon-mid:#1A5A7A;--maroon-light:#2A7A9A;
+  --saffron:#1A7A9A;--saffron-light:#4AAABA;
+  --deep:#010D14;--deep-mid:#051A28;--deep-warm:#0A2A3A;
+  --text-dark:#010D14;--text-mid:#0A2A3A;--text-light:#1A5A7A;--text-ghost:#5A9AAA;
   --white:#FFFFFF;
-  --shadow-gold:rgba(201,168,76,0.15);
+  --shadow-gold:rgba(90,180,212,0.15);
 }
 
 /* แก้ไข HTML ให้รองรับความสูงเต็มจอ */
@@ -46,8 +47,9 @@ body {
 }
 
 /* THEMES */
+/* ธีมน้ำตาลเดิม (Classic) */
+body.theme-classic{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--gold-glow:rgba(201,168,76,0.18);--cream:#FAF6EF;--cream-dark:#F0E8D8;--cream-mid:#E8DCC8;--maroon:#5C1A1A;--maroon-mid:#7A2828;--maroon-light:#9B3A3A;--saffron:#C4762A;--saffron-light:#E09A5A;--deep:#120800;--deep-mid:#2A1200;--deep-warm:#3D1A00;--text-dark:#1E0C00;--text-mid:#5C3D2E;--text-light:#9B7D60;--text-ghost:#C4AB8E;--white:#FFFFFF;--shadow-gold:rgba(201,168,76,0.15);}
 body.theme-forest{--gold:#7CB87A;--gold-light:#B8DDB6;--gold-dark:#3A6B38;--gold-glow:rgba(124,184,122,0.18);--cream:#F0F5EE;--cream-dark:#D8EBD6;--cream-mid:#C4DCC2;--maroon:#1A4A1E;--maroon-mid:#2A6A2E;--maroon-light:#3A8A3E;--saffron:#4A8A2A;--saffron-light:#7AB85A;--deep:#051005;--deep-mid:#0A200A;--deep-warm:#0F3010;--text-dark:#051005;--text-mid:#1A3A1C;--text-light:#3A6B3C;--text-ghost:#7AAA7C;}
-body.theme-ocean{--gold:#5AB4D4;--gold-light:#A8D8EC;--gold-dark:#1A6A8A;--gold-glow:rgba(90,180,212,0.18);--cream:#EEF6FA;--cream-dark:#CEEAF5;--cream-mid:#B4D8EC;--maroon:#0A3A5A;--maroon-mid:#1A5A7A;--maroon-light:#2A7A9A;--saffron:#1A7A9A;--saffron-light:#4AAABA;--deep:#010D14;--deep-mid:#051A28;--deep-warm:#0A2A3A;--text-dark:#010D14;--text-mid:#0A2A3A;--text-light:#1A5A7A;--text-ghost:#5A9AAA;}
 body.theme-rose{--gold:#D48AAA;--gold-light:#ECC8D8;--gold-dark:#8A3A5A;--gold-glow:rgba(212,138,170,0.18);--cream:#FAF0F4;--cream-dark:#F0D8E4;--cream-mid:#E4C4D4;--maroon:#5A1A3A;--maroon-mid:#7A2A54;--maroon-light:#9A3A6A;--saffron:#9A3A6A;--saffron-light:#C46A9A;--deep:#140008;--deep-mid:#280014;--deep-warm:#3A001E;--text-dark:#140008;--text-mid:#3A0A1E;--text-light:#7A3A5A;--text-ghost:#B47A9A;}
 body.theme-golden{--gold:#D4A820;--gold-light:#F0D870;--gold-dark:#8A6A00;--gold-glow:rgba(212,168,32,0.2);--cream:#FAF6E0;--cream-dark:#F0E8B0;--cream-mid:#E4D880;--maroon:#5A4A00;--maroon-mid:#7A6400;--maroon-light:#9A8000;--saffron:#9A7800;--saffron-light:#C4A820;--deep:#141000;--deep-mid:#281E00;--deep-warm:#3C2E00;--text-dark:#141000;--text-mid:#3C2C00;--text-light:#7A6000;--text-ghost:#B89A40;}
 body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-glow:rgba(155,155,255,0.18);--cream:#F0F0FA;--cream-dark:#D8D8F0;--cream-mid:#C4C4E4;--maroon:#1A1A5A;--maroon-mid:#2A2A7A;--maroon-light:#3A3A9A;--saffron:#3A3A9A;--saffron-light:#6A6ACA;--deep:#04040E;--deep-mid:#08081C;--deep-warm:#10103A;--text-dark:#04040E;--text-mid:#10103A;--text-light:#3A3A7A;--text-ghost:#7A7AAA;}
@@ -59,29 +61,29 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 @keyframes streak-glow{0%,100%{box-shadow:0 0 12px rgba(201,168,76,0.4)}50%{box-shadow:0 0 28px rgba(201,168,76,0.7)}}
 @keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
 /* ── LOADING ── */
-#appLoading{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,#3d1a00,#1a0800,#0d0400);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .4s ease;}
+#appLoading{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,var(--deep-warm),var(--deep-mid),var(--deep));display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .4s ease;}
 #appLoading.fade-out{opacity:0;pointer-events:none}
 .loading-lotus{font-size:56px;animation:float 2s ease-in-out infinite;margin-bottom:16px}
 .loading-text{font-family:'Noto Serif Thai',serif;color:rgba(232,213,163,0.6);font-size:16px;letter-spacing:1px}
 .loading-dots::after{content:'';animation:dots 1.5s infinite}
 /* ── LOGIN ── */
-#loginScreen{position:fixed;inset:0;z-index:2000;background:radial-gradient(ellipse at 30% 20%,#3d1a00 0%,#1a0800 40%,#0d0400 100%);display:none;align-items:center;justify-content:center;animation:fadeIn .4s ease;}
+#loginScreen{position:fixed;inset:0;z-index:2000;background:radial-gradient(ellipse at 30% 20%,var(--deep-warm) 0%,var(--deep-mid) 40%,var(--deep) 100%);display:none;align-items:center;justify-content:center;animation:fadeIn .4s ease;}
 .login-bg-ornament{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
 .login-bg-ornament::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(201,168,76,0.08);top:-100px;left:-150px;}
 .login-bg-ornament::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;border:1px solid rgba(201,168,76,0.06);bottom:-80px;right:-80px;}
-.login-box{position:relative;z-index:1;background:rgba(255,248,235,0.05);border:1px solid rgba(201,168,76,0.25);border-radius:24px;padding:40px 36px;width:420px;max-width:94vw;backdrop-filter:blur(20px);animation:slideUp .5s ease .1s both;}
+.login-box{position:relative;z-index:1;background:rgba(255,248,235,0.05);border:1px solid var(--gold);border-radius:24px;padding:40px 36px;width:420px;max-width:94vw;backdrop-filter:blur(20px);animation:slideUp .5s ease .1s both;}
 .login-lotus{font-size:56px;display:block;text-align:center;margin-bottom:10px;animation:float 3s ease-in-out infinite;}
 .login-title{font-family:'Noto Serif Thai',serif;text-align:center;font-size:26px;font-weight:700;color:var(--gold-light);margin-bottom:4px;}
-.login-sub{text-align:center;color:rgba(232,213,163,0.5);font-size:15px;margin-bottom:28px;font-style:italic;}
+.login-sub{text-align:center;color:var(--text-ghost);font-size:15px;margin-bottom:28px;font-style:italic;}
 .form-group{margin-bottom:18px}
-.form-group label{display:block;color:rgba(232,213,163,0.7);font-size:13px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px;}
-.form-group input{width:100%;padding:14px 16px;background:rgba(255,248,235,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:13px;color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;outline:none;transition:border-color .2s,background .2s;}
-.form-group input:focus{border-color:rgba(201,168,76,0.6);background:rgba(255,248,235,0.1);}
-.form-group input::placeholder{color:rgba(232,213,163,0.2)}
-.btn-primary{width:100%;margin-top:8px;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));color:var(--text-dark);font-size:18px;font-weight:600;font-family:'Noto Serif Thai',serif;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(201,168,76,0.3);}
-.btn-primary:hover{opacity:.9;box-shadow:0 6px 32px rgba(201,168,76,0.45)}
+.form-group label{display:block;color:var(--text-ghost);font-size:13px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px;}
+.form-group input{width:100%;padding:14px 16px;background:rgba(255,248,235,0.07);border:1px solid var(--gold);border-radius:13px;color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;outline:none;transition:border-color .2s,background .2s;}
+.form-group input:focus{border-color:var(--gold);background:rgba(255,248,235,0.1);}
+.form-group input::placeholder{color:var(--text-ghost);opacity:0.5;}
+.btn-primary{width:100%;margin-top:8px;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));color:var(--text-dark);font-size:18px;font-weight:600;font-family:'Noto Serif Thai',serif;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px var(--shadow-gold);}
+.btn-primary:hover{opacity:.9;box-shadow:0 6px 32px var(--shadow-gold)}
 .btn-primary:active{transform:scale(.98)}
-.login-divider{text-align:center;margin:18px 0 4px;color:rgba(232,213,163,0.35);font-size:15px;}
+.login-divider{text-align:center;margin:18px 0 4px;color:var(--text-ghost);font-size:15px;}
 .login-divider span{color:var(--gold-light);cursor:pointer;text-decoration:underline;opacity:.8}
 .form-error{color:#ffaaaa;font-size:14px;margin-top:10px;min-height:18px;text-align:center;}
 /* ── APP SHELL ── */
@@ -92,8 +94,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .brand{display:flex;align-items:center;gap:10px;}
 .brand-lotus{font-size:30px;animation:float 4s ease-in-out infinite}
 .brand-text{font-family:'Noto Serif Thai',serif;font-size:21px;font-weight:700;color:var(--gold-light);}
-.brand-text small{display:block;font-size:11px;font-weight:300;color:rgba(232,213,163,0.4);letter-spacing:1.5px;font-family:'Sarabun',sans-serif;margin-top:-2px;}
-.btn-logout{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:8px 16px;color:rgba(232,213,163,0.7);font-size:14px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .2s;}
+.brand-text small{display:block;font-size:11px;font-weight:300;color:var(--text-ghost);letter-spacing:1.5px;font-family:'Sarabun',sans-serif;margin-top:-2px;}
+.btn-logout{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:8px 16px;color:var(--text-ghost);font-size:14px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .2s;}
 .btn-logout:hover{background:rgba(201,168,76,0.2);color:var(--gold-light)}
 .content{max-width:700px;margin:0 auto;padding:20px 16px 24px;}
 /* ── SECTION DIVIDER ── */
@@ -110,9 +112,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   box-shadow:0 4px 24px rgba(0,0,0,0.2);
   text-align:center;
 }
-.today-date{font-family:'Noto Serif Thai',serif;font-size:14px;color:rgba(232,213,163,0.6);margin-bottom:1px;}
+.today-date{font-family:'Noto Serif Thai',serif;font-size:14px;color:var(--text-ghost);margin-bottom:1px;}
 .today-time{font-size:24px;font-weight:700;color:var(--gold);font-family:'Noto Serif Thai',serif;letter-spacing:1px;}
-.today-start{font-size:11px;color:rgba(232,213,163,0.4);margin-top:1px;}
+.today-start{font-size:11px;color:var(--text-ghost);margin-top:1px;}
 /* STREAK */
 .streak-card{
   background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.06));
@@ -124,8 +126,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .streak-flame{font-size:36px;}
 .streak-info{flex:1}
 .streak-num{font-family:'Noto Serif Thai',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;}
-.streak-label{font-size:15px;color:rgba(232,213,163,0.9);margin-top:2px;font-weight:600;}
-.streak-sub{font-size:14px;color:rgba(232,213,163,0.75);margin-top:1px;}
+.streak-label{font-size:15px;color:var(--gold-light);margin-top:2px;font-weight:600;}
+.streak-sub{font-size:14px;color:var(--text-ghost);margin-top:1px;}
 /* RECORD BUTTONS - BIG PRIMARY ACTIONS */
 .record-zone{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 .record-zone-card{
@@ -135,7 +137,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .rz-morning{background:rgba(100,50,0,0.35);border:1px solid rgba(201,168,76,0.3);}
 .rz-evening{background:rgba(15,15,70,0.45);border:1px solid rgba(120,120,255,0.25);}
 .rz-header{font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.rz-morning .rz-header{color:var(--gold-light)}
+.rz-morning .rz-header{color:#F0D870}
 .rz-evening .rz-header{color:#c8d4ff}
 .rz-stat{background:rgba(0,0,0,0.25);border-radius:10px;padding:8px 10px;text-align:center;}
 .rz-stat-label{font-size:14px;letter-spacing:.3px;margin-bottom:2px;display:block;font-weight:500;}
@@ -143,6 +145,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .rz-evening .rz-stat-label{color:rgba(200,210,255,0.9)}
 .rz-stat-val{display:flex;align-items:baseline;justify-content:center;gap:3px;}
 .rz-num{font-family:'Noto Serif Thai',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;transition:transform .3s;}
+.rz-morning .rz-num{color:#F0D870}
 .rz-evening .rz-num{color:#c8d4ff}
 .rz-num.pop{animation:count-pop .35s ease}
 .rz-unit{font-size:13px;color:rgba(232,213,163,0.8);}
@@ -162,7 +165,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
   display:flex;align-items:center;gap:5px;flex-wrap:wrap;
   background:rgba(0,0,0,0.2);border-radius:11px;padding:9px 10px;
 }
-.med-zone-label{font-size:13px;color:rgba(232,213,163,0.45);margin-right:3px;}
+.med-zone-label{font-size:13px;color:var(--text-ghost);margin-right:3px;}
 .rz-evening .med-zone-label{color:rgba(180,190,255,0.45);}
 .med-step-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(100,220,180,0.25);background:rgba(100,220,180,0.1);color:rgba(180,255,220,0.8);font-size:16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:monospace;}
 .med-step-btn:hover{background:rgba(100,220,180,0.25)}
@@ -191,8 +194,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .wd-dot.done-b{background:linear-gradient(135deg,#4a1a00,#C47A20,#2a2a7a);color:#fff;border-color:transparent;}
 .wd-dot.today{border-color:var(--gold);font-weight:700;}
 /* SHARE BUTTON */
-.btn-share-today{width:100%;padding:14px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));color:var(--text-dark);font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 4px 24px rgba(201,168,76,0.3);transition:all .25s;}
-.btn-share-today:hover{box-shadow:0 6px 32px rgba(201,168,76,0.5);transform:translateY(-1px)}
+.btn-share-today{width:100%;padding:14px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));color:var(--text-dark);font-size:17px;font-weight:700;font-family:'Noto Serif Thai',serif;box-shadow:0 4px 24px var(--shadow-gold);transition:all .25s;}
+.btn-share-today:hover{box-shadow:0 6px 32px var(--shadow-gold);transform:translateY(-1px)}
 .btn-share-today:active{transform:scale(.97)}
 /* ── TAB 2: PLAYLIST ── */
 .playlist-zone{margin-bottom:16px;border-radius:16px;overflow:hidden;border:1px solid var(--cream-dark);background:var(--white);box-shadow:0 2px 10px rgba(0,0,0,.04);}
@@ -238,7 +241,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .profile-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none;}
 .profile-photo-wrap{position:relative;display:flex;flex-direction:column;align-items:center;}
 .profile-photo-ring{width:160px;height:160px;border-radius:18px;padding:3px;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--saffron-light));}
-.profile-photo-inner{width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg,#3d1a00,#5c2a00);display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(18,8,0,0.3);}
+.profile-photo-inner{width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg,var(--deep-warm),var(--maroon));display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(18,8,0,0.3);}
 .profile-initials{font-family:'Noto Serif Thai',serif;font-size:60px;font-weight:700;color:var(--gold-light);line-height:1;}
 .profile-upload-btn{margin-top:10px;border-radius:22px;background:var(--gold-dark);border:2px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;padding:8px 20px;transition:background .2s;color:var(--cream);font-family:'Sarabun',sans-serif;}
 .profile-upload-btn:hover{background:var(--gold)}
@@ -250,14 +253,14 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .edit-name-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;justify-content:center;}
 .edit-name-input{flex:1;min-width:130px;padding:9px 13px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;}
 .btn-save-name{padding:9px 18px;border-radius:11px;border:none;cursor:pointer;background:var(--gold-dark);color:var(--cream);font-size:14px;font-family:'Sarabun',sans-serif;font-weight:600;}
-.btn-cancel-name{padding:9px 14px;border-radius:11px;border:1px solid rgba(201,168,76,0.2);cursor:pointer;background:transparent;color:rgba(232,213,163,0.5);font-size:14px;font-family:'Sarabun',sans-serif;}
+.btn-cancel-name{padding:9px 14px;border-radius:11px;border:1px solid rgba(201,168,76,0.2);cursor:pointer;background:transparent;color:var(--text-ghost);font-size:14px;font-family:'Sarabun',sans-serif;}
 /* PROFILE STATS TOTAL */
 .profile-stats-total{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
 .pst-card{background:rgba(0,0,0,0.25);border-radius:14px;padding:14px;text-align:center;border:1px solid rgba(201,168,76,0.15);transition:all .2s;}
 .pst-card:hover{background:rgba(0,0,0,0.4);border-color:rgba(201,168,76,0.4);transform:scale(1.03);}
-.pst-label{font-size:12px;color:rgba(232,213,163,0.5);letter-spacing:.5px;display:block;margin-bottom:4px;}
+.pst-label{font-size:12px;color:var(--text-ghost);letter-spacing:.5px;display:block;margin-bottom:4px;}
 .pst-num{font-family:'Noto Serif Thai',serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1;}
-.pst-unit{font-size:13px;color:rgba(232,213,163,0.4);}
+.pst-unit{font-size:13px;color:var(--text-ghost);}
 /* SETTINGS CARD */
 .settings-card{background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
 .settings-title{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:14px;}
@@ -272,9 +275,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .theme-dot{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.15);}
 .theme-dot:hover{transform:scale(1.15)}
 .theme-dot.active{border-color:var(--text-dark);transform:scale(1.1);}
-.theme-dot[data-theme="default"]{background:linear-gradient(135deg,#5C1A1A,#C9A84C)}
+.theme-dot[data-theme="default"]{background:linear-gradient(135deg,#0A3A5A,#5AB4D4)}
+.theme-dot[data-theme="classic"]{background:linear-gradient(135deg,#5C1A1A,#C9A84C)}
 .theme-dot[data-theme="forest"]{background:linear-gradient(135deg,#1A4A1E,#7CB87A)}
-.theme-dot[data-theme="ocean"]{background:linear-gradient(135deg,#0A3A5A,#5AB4D4)}
 .theme-dot[data-theme="rose"]{background:linear-gradient(135deg,#5A1A3A,#D48AAA)}
 .theme-dot[data-theme="golden"]{background:linear-gradient(135deg,#5A4A00,#D4A820)}
 .theme-dot[data-theme="night"]{background:linear-gradient(135deg,#1A1A5A,#9B9BFF)}
@@ -291,12 +294,12 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .share-modal-title{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--maroon);}
 .share-close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);padding:4px 8px;border-radius:8px;transition:background .15s;}
 .share-close-btn:hover{background:var(--cream-dark)}
-.share-card-wrap{border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.18);margin-bottom:16px;display:flex;justify-content:center;background:#1a0800;}
+.share-card-wrap{border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.18);margin-bottom:16px;display:flex;justify-content:center;background:var(--deep);}
 .share-actions{display:flex;gap:10px;margin-bottom:10px}
-.btn-download-card{flex:1;padding:14px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:16px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;}
+.btn-download-card{flex:1;padding:14px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:16px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(10,58,90,0.3);transition:all .2s;}
 .share-hint{text-align:center;font-size:13px;color:var(--text-light);font-style:italic}
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--maroon);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);padding:12px 28px;border-radius:30px;font-size:15px;font-weight:500;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--maroon);border:1px solid rgba(90,180,212,.3);color:var(--gold-light);padding:12px 28px;border-radius:30px;font-size:15px;font-weight:500;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 /* CHANGE PASSWORD MODAL */
 .cp-input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--cream-mid);background:var(--cream);font-size:16px;font-family:'Sarabun',sans-serif;outline:none;margin-top:6px;transition:border-color .2s;}
@@ -386,14 +389,14 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
     <div class="login-title">สวดมนต์ถวายเป็นพุทธบูชา</div>
     <div class="login-sub">เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน</div>
     <div id="loginForm">
-      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid rgba(201,168,76,0.25);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;backdrop-filter:blur(4px);" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
+      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid var(--gold);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;backdrop-filter:blur(4px);" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
         เข้าสู่ระบบด้วย Google
       </button>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
-        <span style="color:rgba(232,213,163,0.35);font-size:13px;">หรือใช้อีเมล</span>
-        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+        <span style="color:var(--text-ghost);font-size:13px;opacity:0.6;">หรือใช้อีเมล</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
       </div>
       <div class="form-group"><label>อีเมล</label><input id="loginUser" type="email" placeholder="name@gmail.com" autocomplete="email"></div>
       <div class="form-group"><label>รหัสผ่าน</label><input id="loginPass" type="password" placeholder="กรอกรหัสผ่าน" autocomplete="current-password"></div>
@@ -401,21 +404,21 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <button class="btn-primary" onclick="doLogin()">🙏 เข้าสู่ระบบ</button>
       <div class="login-divider">ยังไม่มีบัญชี? <span onclick="toggleAuthMode(true)">สมัครสมาชิก</span></div>
       <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
-        <button onclick="enterGuestMode()" style="background:none;border:none;color:rgba(232,213,163,0.4);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;text-decoration:underline;padding:6px;">เข้าใช้แบบไม่ล็อกอิน</button>
-        <button onclick="shareWebsite()" style="background:none;border:1px solid rgba(201,168,76,0.3);border-radius:20px;color:rgba(232,213,163,0.6);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;padding:6px 16px;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseenter="this.style.borderColor='rgba(201,168,76,0.7)';this.style.color='var(--gold-light)'" onmouseleave="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(232,213,163,0.6)'">
+        <button onclick="enterGuestMode()" style="background:none;border:none;color:var(--text-ghost);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;text-decoration:underline;padding:6px;opacity:0.7;">เข้าใช้แบบไม่ล็อกอิน</button>
+        <button onclick="shareWebsite()" style="background:none;border:1px solid var(--gold);border-radius:20px;color:var(--gold-light);font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;padding:6px 16px;display:flex;align-items:center;gap:6px;transition:all .2s;opacity:0.8;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.8'">
           🔗 แชร์เว็บนี้
         </button>
       </div>
     </div>
     <div id="registerForm" style="display:none">
-      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid rgba(201,168,76,0.25);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
+      <button onclick="doGoogleLogin()" style="width:100%;margin-bottom:14px;padding:14px 16px;border-radius:13px;border:1px solid var(--gold);background:rgba(255,255,255,0.08);color:var(--gold-light);font-size:17px;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)'" onmouseleave="this.style.background='rgba(255,255,255,0.08)'">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
         สมัครด้วย Google
       </button>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
-        <span style="color:rgba(232,213,163,0.35);font-size:13px;">หรือสมัครด้วยอีเมล</span>
-        <div style="flex:1;height:1px;background:rgba(201,168,76,0.2);"></div>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+        <span style="color:var(--text-ghost);font-size:13px;opacity:0.6;">หรือสมัครด้วยอีเมล</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
       </div>
       <div class="form-group"><label>ชื่อแสดง</label><input id="regName" type="text" placeholder="ชื่อของท่าน"></div>
       <div class="form-group"><label>อีเมล</label><input id="regUser" type="email" placeholder="name@gmail.com" autocomplete="email"></div>
@@ -458,8 +461,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 <div class="profile-card">
   <div style="text-align:center;position:relative;z-index:1;">
     <div style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);letter-spacing:.5px;margin-bottom:3px;">สวดมนต์ถวายเป็นพุทธบูชา</div>
-    <div style="font-family:'Noto Serif Thai',serif;font-size:16px;color:rgba(232,213,163,0.55);letter-spacing:.3px;">บูชาธรรมมหาปูชนียาจารย์</div>
-    <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,0.4),transparent);margin:8px auto 0;"></div>
+    <div style="font-family:'Noto Serif Thai',serif;font-size:16px;color:var(--text-ghost);letter-spacing:.3px;opacity:0.8;">บูชาธรรมมหาปูชนียาจารย์</div>
+    <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:8px auto 0;opacity:0.4;"></div>
   </div>
   
         <div class="profile-photo-wrap">
@@ -473,9 +476,9 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         <input type="file" accept="image/*" id="profileFileInput" style="display:none" onchange="handleProfilePhoto(this)">
         <div class="profile-info">
           <div class="profile-name" id="profileName">ผู้ใช้</div>
-          <div id="statsToggle" style="display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0 4px;background:rgba(0,0,0,0.2);border-radius:30px;padding:3px;border:1px solid rgba(201,168,76,0.2);">
-            <button id="toggleToday" onclick="switchStatsMode('today')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--text-dark);box-shadow:0 2px 8px rgba(201,168,76,0.3);">📅 วันนี้</button>
-            <button id="toggleTotal" onclick="switchStatsMode('total')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:transparent;color:rgba(232,213,163,0.5);">📊 รวมทั้งหมด</button>
+          <div id="statsToggle" style="display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0 4px;background:rgba(0,0,0,0.2);border-radius:30px;padding:3px;border:1px solid rgba(255,255,255,0.1);">
+            <button id="toggleToday" onclick="switchStatsMode('today')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--text-dark);box-shadow:0 2px 8px var(--shadow-gold);">📅 วันนี้</button>
+            <button id="toggleTotal" onclick="switchStatsMode('total')" style="flex:1;padding:7px 16px;border-radius:26px;border:none;cursor:pointer;font-size:14px;font-family:'Noto Serif Thai',serif;font-weight:600;transition:all .2s;background:transparent;color:var(--text-ghost);opacity:0.7;">📊 รวมทั้งหมด</button>
           </div>
           <div class="profile-stats-total">
             <div class="pst-card" style="cursor:pointer;" onclick="scrollToVideo('morning')" title="ไปยังทำวัตรเช้า">
@@ -499,7 +502,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
               <span class="pst-unit"> นาที</span>
             </div>
             <div style="grid-column:span 2;margin-top:4px;">
-              <button id="btnToggleSpecial" onclick="toggleSpecialCards()" style="width:100%;padding:10px 14px;border-radius:13px;border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.1);color:var(--gold-light);font-size:15px;font-weight:700;font-family:'Noto Serif Thai',serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;">
+              <button id="btnToggleSpecial" onclick="toggleSpecialCards()" style="width:100%;padding:10px 14px;border-radius:13px;border:1px solid var(--gold);background:rgba(255,255,255,0.05);color:var(--gold-light);font-size:15px;font-weight:700;font-family:'Noto Serif Thai',serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;">
                 <span>🙏 บทสวดพิเศษต่างๆ</span>
                 <span id="specialToggleArrow" style="font-size:12px;transition:transform .3s;">▼</span>
               </button>
@@ -609,8 +612,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span style="font-size:13px;color:var(--text-light);white-space:nowrap;">🎨 ธีมสี</span>
           <div class="theme-dots-row">
             <div class="theme-dot active" data-theme="default" onclick="setTheme('default')"></div>
+            <div class="theme-dot" data-theme="classic" onclick="setTheme('classic')"></div>
             <div class="theme-dot" data-theme="forest" onclick="setTheme('forest')"></div>
-            <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')"></div>
             <div class="theme-dot" data-theme="rose" onclick="setTheme('rose')"></div>
             <div class="theme-dot" data-theme="golden" onclick="setTheme('golden')"></div>
             <div class="theme-dot" data-theme="night" onclick="setTheme('night')"></div>
@@ -693,14 +696,14 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
         </div>
         <div id="playerRecordMeditation" style="display:none;margin-top:10px;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div style="background:rgba(100,50,0,0.2);border:1px solid rgba(201,168,76,0.25);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
+            <div style="background:rgba(100,50,0,0.2);border:1px solid rgba(90,180,212,0.25);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
               <div style="font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--gold-light);text-align:center;">🌅 สมาธิเช้า</div>
               <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
                 <button class="med-step-btn" onclick="stepMed('morningMin',-5)">−</button>
                 <input id="medInputMorningMin" class="med-input" type="number" value="0" min="0" max="999">
                 <button class="med-step-btn" onclick="stepMed('morningMin',5)">＋</button>
               </div>
-              <div style="text-align:center;font-size:12px;color:rgba(232,213,163,0.4)">นาที</div>
+              <div style="text-align:center;font-size:12px;color:rgba(168,216,236,0.4)">นาที</div>
               <button class="btn-med-save btn-med-morning" style="width:100%;padding:9px;" onclick="recordMeditation('morning')">+ บันทึก</button>
             </div>
             <div style="background:rgba(15,15,70,0.3);border:1px solid rgba(120,120,255,0.2);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
@@ -733,7 +736,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
     <div style="position:relative;width:100%;padding-bottom:100%;background:#111;border-radius:16px;overflow:hidden;margin-bottom:14px;touch-action:none;" id="cropArea">
       <img id="cropImg" style="position:absolute;cursor:grab;user-select:none;transform-origin:0 0;" draggable="false">
       <div style="position:absolute;inset:0;pointer-events:none;">
-        <div style="position:absolute;inset:10%;border:2px solid rgba(201,168,76,0.8);border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);"></div>
+        <div style="position:absolute;inset:10%;border:2px solid rgba(90,180,212,0.8);border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);"></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
@@ -959,8 +962,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       <span class="share-modal-title">🙏 แบ่งปันบุญ</span>
       <button class="share-close-btn" onclick="closeShareModal()">✕</button>
     </div>
-    <div id="shareImgWrap" style="border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.25);margin-bottom:14px;background:#1a0800;min-height:180px;display:flex;align-items:center;justify-content:center;">
-      <div id="shareImgLoading" style="padding:32px;text-align:center;color:rgba(201,168,76,0.6);font-size:15px;font-family:'Sarabun',sans-serif;">
+    <div id="shareImgWrap" style="border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(18,8,0,0.25);margin-bottom:14px;background:var(--deep);min-height:180px;display:flex;align-items:center;justify-content:center;">
+      <div id="shareImgLoading" style="padding:32px;text-align:center;color:var(--text-ghost);font-size:15px;font-family:'Sarabun',sans-serif;">
         <div style="font-size:32px;margin-bottom:8px;animation:float 1.5s ease-in-out infinite;">🪷</div>
         กำลังสร้างภาพ...
       </div>
@@ -969,7 +972,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
     <div id="shareImgActions" style="display:none;">
       <div class="share-actions">
         <button class="btn-download-card" onclick="downloadFromPreview()" style="flex:1;">⬇️ บันทึกรูปภาพ</button>
-        <button class="btn-download-card" onclick="openPreviewInTab()" style="flex:1;background:linear-gradient(135deg,#5C1A1A,#C47A20);margin-left:0;">🔗 เปิดในแท็บใหม่</button>
+        <button class="btn-download-card" onclick="openPreviewInTab()" style="flex:1;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--text-dark);margin-left:0;">🔗 เปิดในแท็บ</button>
       </div>
       <div class="share-hint">กดบันทึกรูปหรือกด Hold (มือถือ) เพื่อบันทึก แล้วส่งต่อแบ่งปันบุญ 🙏</div>
     </div>
@@ -1425,7 +1428,7 @@ function renderSpecialStats(stats){
       <div>
         <div style="font-size:16px;font-weight:500;color:var(--text-dark)">${s.title}</div>
         ${s.lastDate ? '<div style="font-size:12px;color:var(--text-ghost);margin-top:2px">ล่าสุด: '+toBEShort(new Date(s.lastDate))+'</div>' : ''}
-      </div>
+        </div>
       <div style="font-family:\'Noto Serif Thai\',serif;font-size:28px;font-weight:700;color:var(--gold);min-width:48px;text-align:right">${s.count}<span style="font-size:13px;color:var(--text-ghost)"> ครั้ง</span></div>
     </div>`;
   });
@@ -1573,9 +1576,9 @@ function renderPlaylist(){
 
 // ─── SHARE ────────────────────────────────────────────
 const THEME_PALETTES = {
-  default: { bg:'#1a0800', dividerBar:'rgba(201,168,76,0.5)' },
+  default: { bg:'#010D14', dividerBar:'rgba(90,180,212,0.5)' },
+  classic: { bg:'#1a0800', dividerBar:'rgba(201,168,76,0.5)' },
   forest:  { bg:'#051005', dividerBar:'rgba(124,184,122,0.5)' },
-  ocean:   { bg:'#010D14', dividerBar:'rgba(90,180,212,0.5)' },
   rose:    { bg:'#140008', dividerBar:'rgba(212,138,170,0.5)' },
   golden:  { bg:'#141000', dividerBar:'rgba(212,168,32,0.5)' },
   night:   { bg:'#04040E', dividerBar:'rgba(155,155,255,0.5)' },
@@ -1852,7 +1855,7 @@ async function _loadShareProfileImg(){
   });
 }
 // ─── THEME ────────────────────────────────────────────
-const THEMES = ['default','forest','ocean','rose','golden','night'];
+const THEMES = ['default','classic','forest','rose','golden','night'];
 function setTheme(name){
   THEMES.forEach(t => document.body.classList.remove('theme-'+t));
   if(name !== 'default') document.body.classList.add('theme-'+name);
@@ -2029,10 +2032,10 @@ function switchStatsMode(mode){
   const btnToday = document.getElementById('toggleToday'); const btnTotal = document.getElementById('toggleTotal');
   if(mode === 'today'){
     btnToday.style.background = 'linear-gradient(135deg,var(--gold-dark),var(--gold))'; btnToday.style.color = 'var(--text-dark)'; btnToday.style.boxShadow = '0 2px 8px rgba(201,168,76,0.3)';
-    btnTotal.style.background = 'transparent'; btnTotal.style.color = 'rgba(232,213,163,0.5)'; btnTotal.style.boxShadow = 'none';
+    btnTotal.style.background = 'transparent'; btnTotal.style.color = 'rgba(168,216,236,0.5)'; btnTotal.style.boxShadow = 'none';
   } else {
     btnTotal.style.background = 'linear-gradient(135deg,var(--gold-dark),var(--gold))'; btnTotal.style.color = 'var(--text-dark)'; btnTotal.style.boxShadow = '0 2px 8px rgba(201,168,76,0.3)';
-    btnToday.style.background = 'transparent'; btnToday.style.color = 'rgba(232,213,163,0.5)'; btnToday.style.boxShadow = 'none';
+    btnToday.style.background = 'transparent'; btnToday.style.color = 'rgba(168,216,236,0.5)'; btnToday.style.boxShadow = 'none';
   }
   refreshStatsDisplay();
 }

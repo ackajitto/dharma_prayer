@@ -707,7 +707,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
       </div>
       
     <div id="streakCardContainer" style="display:none; margin-bottom: 12px; border-color: var(--gold); background: linear-gradient(135deg, var(--white), var(--cream)); box-shadow: 0 4px 20px var(--shadow-gold);">
-  <div class="streak-flame" id="streakFlameIcon">🔥</div>
+  <div id="streakFlameIcon" style="display:flex; gap:2px; align-items:flex-end;">🔥</div>
   <div class="streak-info">
     <div style="display: flex; align-items: baseline; gap: 8px;">
       <div class="streak-num" id="dailyStreakCount">0</div>
@@ -2408,39 +2408,51 @@ async function doDailyCheckIn() {
 function updateStreakUI(streak, state, restoresLeft) {
   const countEl = document.getElementById('dailyStreakCount');
   const flameEl = document.getElementById('streakFlameIcon');
-  const cardEl = document.getElementById('streakCardContainer');
-  const subEl = document.getElementById('streakSubText');
-  const btn = document.getElementById('btnCheckIn');
-  
+  const cardEl  = document.getElementById('streakCardContainer');
+  const subEl   = document.getElementById('streakSubText');
+  const btn     = document.getElementById('btnCheckIn');
+
   if (!countEl) return;
   countEl.textContent = streak;
-  
-  flameEl.className = 'streak-flame';
-  cardEl.className = '';
-  cardEl.style.cssText = ''; 
+
+  // คำนวณจำนวนไฟตามวัน
+  const flameCount  = streak >= 30 ? 3 : streak >= 7 ? 2 : 1;
+  const flameActive = (state === 'checked_in' || (state === 'pending' && streak > 0));
+  const flameDead   = (state === 'needs_restore');
+
+  // สร้างไฟเรียงกัน พร้อม animation delay สลับกัน
+  let flamesHtml = '';
+  for (let i = 0; i < flameCount; i++) {
+    let cls = 'streak-flame';
+    if (flameActive) cls += ' active';
+    else if (flameDead) cls += ' dead';
+    const delay = i * 0.25;
+    flamesHtml += `<span class="${cls}" style="display:inline-block; animation-delay:${delay}s">🔥</span>`;
+  }
+  flameEl.innerHTML = flamesHtml;
+  flameEl.style.cssText = 'display:flex; gap:2px; align-items:flex-end;';
+
+  // reset card style
+  cardEl.removeAttribute('class');
+  cardEl.style.cssText = 'display:flex; margin-bottom:12px; border:1px solid var(--gold); border-radius:18px; padding:16px 20px; align-items:center; gap:16px; background:linear-gradient(135deg,var(--white),var(--cream)); box-shadow:0 4px 20px var(--shadow-gold);';
 
   if (state === 'checked_in') {
-    flameEl.classList.add('active');
     cardEl.classList.add('active-fire');
     btn.textContent = 'เติมไฟแล้ว ✓';
-    btn.className = 'btn-checkin done';
-    subEl.textContent = 'พรุ่งนี้อย่าลืมมาเติมไฟต่อนะ!';
+    btn.className   = 'btn-checkin done';
+    if (subEl) subEl.textContent = 'พรุ่งนี้อย่าลืมมาเติมไฟต่อนะ!';
   } else if (state === 'needs_restore') {
-    flameEl.classList.add('dead');
     cardEl.classList.add('needs-restore');
     btn.textContent = 'กู้คืน 💖';
-    btn.className = 'btn-checkin restore';
-    subEl.textContent = `ไฟกำลังจะดับ! รีบกู้คืนด่วน (เหลือ ${restoresLeft} สิทธิ์/ด.)`;
+    btn.className   = 'btn-checkin restore';
+    if (subEl) subEl.textContent = `ไฟกำลังจะดับ! รีบกู้คืนด่วน (เหลือ ${restoresLeft} สิทธิ์/ด.)`;
   } else {
-    if (streak > 0) {
-      flameEl.classList.add('active');
-      cardEl.classList.add('active-fire');
-    }
+    if (streak > 0) cardEl.classList.add('active-fire');
     btn.textContent = 'เติมไฟ 👆';
-    btn.className = 'btn-checkin';
-    subEl.textContent = streak > 0 ? 'กดเพื่อเติมไฟให้ต่อเนื่อง!' : 'กดเพื่อเริ่มเติมไฟ!';
+    btn.className   = 'btn-checkin';
+    if (subEl) subEl.textContent = streak > 0 ? 'กดเพื่อเติมไฟให้ต่อเนื่อง!' : 'กดเพื่อเริ่มเติมไฟ!';
   }
-  
+
   cardEl.style.display = 'flex';
 }
 

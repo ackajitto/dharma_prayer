@@ -1111,8 +1111,10 @@ const DEFAULT_VIDEOS = [
   {id:'dv13', title:'พระสะหัสสะนัย',                       url:'https://youtu.be/AaSlY5XIfh0',              cat:'special'},
   {id:'dv14', title:'มงคลจักรวาลใหญ่',                     url:'https://youtu.be/cE7a2xo56Jc',              cat:'special'},
   {id:'dv15', title:'บทสวดรัตนสูตร -โพชฌงคปริตร -โอสถปริตร', url:'https://youtu.be/vPTB9N1ta48',              cat:'special'},
-  {id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก',              url:'https://us.gbnus.com/live/dhamma_low/playlist.m3u8',  cat:'live', isM3u8:true},
-  {id:'gbn_hd1', title:'GBN HD1 – ความชัดสูง',            url:'https://us.gbnus.com/live/dhamma_high/playlist.m3u8', cat:'live', isM3u8:true},
+ {id:'gbn_sd1', title:'GBN US – ช่องหลัก (dmc.tv)',    
+ url:'https://live.dmc.tv/embed/dmc', cat:'live', isIframe:true},
+{id:'gbn_hd1', title:'GBN Zoom072 – ช่องที่สอง',       
+ url:'https://live.dmc.tv/embed/zoom072', cat:'live', isIframe:true},
 ];
 function emailToKey(email){
   return email.toLowerCase()
@@ -1649,6 +1651,22 @@ function playVideo(v){
     badge.textContent = '📺 ถ่ายทอดสด'; badge.className = 'vi-badge player-cat-pill cat-live';
     scrollToPlayer(); renderPlaylist(); return;
   }
+   if(v.isIframe){
+    frameYT.style.display  = 'block';
+    frameHLS.style.display = 'none';
+    if(window._hls){ window._hls.destroy(); window._hls = null; }
+    document.getElementById('ytIframe').src = v.url;
+    document.getElementById('playerRecordBtn').style.display     = 'none';
+    document.getElementById('playerRecordMorning').style.display = 'none';
+    document.getElementById('playerRecordEvening').style.display = 'none';
+    document.getElementById('playerRecordMeditation').style.display = 'none';
+    document.getElementById('playerRecordPrad').style.display    = 'none';
+    document.getElementById('playerTitleText').textContent = v.title;
+    const badge = document.getElementById('playerCatBadge');
+    badge.textContent = '📺 ถ่ายทอดสด'; badge.className = 'vi-badge player-cat-pill cat-live';
+    scrollToPlayer(); renderPlaylist(); return;
+  }
+
   frameYT.style.display  = 'block'; frameHLS.style.display = 'none';
   if(window._hls){ window._hls.destroy(); window._hls = null; }
   const ytid=getYTId(v.url);

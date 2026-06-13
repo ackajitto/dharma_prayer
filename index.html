@@ -317,12 +317,15 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .vi-info{flex:1;padding:13px 14px;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px}
 .vi-title{font-size:16px;font-weight:500;color:var(--text-dark);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .vi-badge{display:inline-block;font-size:13px;padding:3px 11px;border-radius:20px;font-weight:600;width:fit-content;}
+
+/* CATEGORY BADGES */
 .cat-morning{background:#FFF8E1;color:#B8860B}
 .cat-evening{background:#E8EAF6;color:#303F9F}
 .cat-lp{background:#FCE4EC;color:#AD1457}
 .cat-grandma{background:#E8F5E9;color:#2E7D32}
 .cat-meditation{background:#E0F2F1;color:#00695C}
 .cat-special{background:#FFF8E7;color:#8B6914}
+.cat-prad{background:#FCE4EC;color:#AD1457}
 .cat-other{background:#F3E5F5;color:#6A1B9A}
 
 /* PLAYER */
@@ -369,6 +372,8 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 .pst-med .pst-num { color: #9CB49F; }
 .pst-special .pst-label { color: #E8DCC8; } 
 .pst-special .pst-num { color: #E2CDA1; }
+.pst-prad .pst-label { color: #D48AAA; } 
+.pst-prad .pst-num { color: #8A3A5A; }
 
 /* SETTINGS CARD */
 .settings-card{background:var(--white);border-radius:18px;border:1px solid var(--cream-dark);padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
@@ -468,6 +473,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           email: user.email,
           cnt_morning:0, cnt_evening:0,
           med_morning_min:0, med_evening_min:0,
+          cnt_prad:0,
           cnt_special:{},
           theme:'default',
           first_record_date: null,
@@ -620,6 +626,11 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
               <span class="pst-label">🧘 สมาธิเย็น</span>
               <span class="pst-num" id="totalMedEvening">0</span>
               <span class="pst-unit"> นาที</span>
+            </div>
+            <div class="pst-card pst-prad" style="cursor:pointer; grid-column: span 2;" onclick="scrollToVideo('jiNN1ZcrJDM')" title="ไปยังเวียนประทักษิณ">
+              <span class="pst-label">🔄 เวียนประทักษิณ</span>
+              <span class="pst-num" id="totalPrad">0</span>
+              <span class="pst-unit"> รอบ</span>
             </div>
             <div style="grid-column:span 2;margin-top:4px;">
               <button id="btnToggleSpecial" onclick="toggleSpecialCards()" style="width:100%;padding:12px 14px;border-radius:13px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#FFFFFF;font-size:16px;font-weight:700;font-family:'Noto Serif Thai',serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;text-shadow:0 1px 3px rgba(0,0,0,0.8);box-shadow:0 4px 12px rgba(0,0,0,0.15);">
@@ -840,6 +851,18 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
             </div>
           </div>
         </div>
+        <div id="playerRecordPrad" style="display:none;margin-top:10px;">
+          <div style="background:rgba(212,138,170,0.15);border:1px solid rgba(212,138,170,0.3);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;">
+            <div style="font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--text-dark);text-align:center;">🔄 บันทึกเวียนประทักษิณ</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
+              <button class="med-step-btn" style="border-color:rgba(212,138,170,0.4);color:var(--text-dark);" onclick="stepPrad(-1)">−</button>
+              <input id="pradInput" class="med-input" style="border-color:rgba(212,138,170,0.4);color:var(--text-dark);background:rgba(255,255,255,0.5);" type="number" value="0" min="0" max="999">
+              <button class="med-step-btn" style="border-color:rgba(212,138,170,0.4);color:var(--text-dark);" onclick="stepPrad(1)">＋</button>
+            </div>
+            <div style="text-align:center;font-size:12px;color:var(--text-ghost)">รอบ</div>
+            <button class="btn-med-save" style="width:100%;padding:9px;background:linear-gradient(135deg,#D48AAA,#8A3A5A);color:#fff;" onclick="recordPradakshina()">+ บันทึก</button>
+          </div>
+        </div>
         <button id="playerRecordBtn" style="display:none;width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--maroon),var(--maroon-light));color:var(--gold-light);font-size:17px;font-weight:600;font-family:'Noto Serif Thai',serif;box-shadow:0 3px 14px rgba(92,26,26,0.3);transition:all .2s;">
           🙏 บันทึกการสวดบทนี้
         </button>
@@ -943,6 +966,14 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span id="settingsCount_med_evening_min" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
           <button onclick="adjustCount('med_evening_min',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
           <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">นาที</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--cream-dark);">
+          <span style="font-size:16px;flex-shrink:0;">🔄</span>
+          <span style="flex:1;font-size:15px;color:var(--text-dark);">เวียนประทักษิณ</span>
+          <button onclick="adjustCount('cnt_prad',-1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#f0c0c0'" onmouseleave="this.style.background='var(--cream-dark)'">−</button>
+          <span id="settingsCount_cnt_prad" style="min-width:36px;text-align:center;font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--maroon);">0</span>
+          <button onclick="adjustCount('cnt_prad',1)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--cream-mid);background:var(--cream-dark);font-size:18px;cursor:pointer;font-weight:700;color:var(--maroon);transition:all .15s;" onmouseenter="this.style.background='#c0f0c0'" onmouseleave="this.style.background='var(--cream-dark)'">+</button>
+          <span style="font-size:12px;color:var(--text-ghost);min-width:28px;">รอบ</span>
         </div>
       </div>
     </div>
@@ -1050,16 +1081,16 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
 // ══════════════════════════════════════════════════════
 //  CONSTANTS
 // ══════════════════════════════════════════════════════
-const CAT_LABELS = { morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น', special:'บทสวดพิเศษ', lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย', meditation:'นั่งสมาธิ', live:'ถ่ายทอดสด', other:'อื่นๆ' };
+const CAT_LABELS = { morning:'ทำวัตรเช้า', evening:'ทำวัตรเย็น', special:'บทสวดพิเศษ', lp:'สรรเสริญหลวงปู่สด', grandma:'สรรเสริญคุณยาย', meditation:'นั่งสมาธิ', live:'ถ่ายทอดสด', prad:'เวียนประทักษิณ', other:'อื่นๆ' };
 function getCatLabels(){ return CAT_LABELS; }
 const ZONE_LABELS = { zone_morning:'ทำวัตรเช้า', zone_evening:'ทำวัตรเย็น', zone_special:'บทสวดพิเศษ', zone_live:'ถ่ายทอดสด GBN' };
 const ITEM_WORD = 'รายการ';
-const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',live:'📺',other:'✨'};
-const CAT_ORDER = ['morning','special','lp','grandma','meditation','evening','live','other'];
+const CAT_ICONS = {morning:'🌅',evening:'🌙',special:'🙏',lp:'🙏',grandma:'💛',meditation:'🧘',live:'📺',prad:'🔄',other:'✨'};
+const CAT_ORDER = ['morning','special','prad','lp','grandma','meditation','evening','live','other'];
 const ZONE_GROUPS = [
   { id:'zone_morning', icon:'🌅', color:'zone-header-morning', cats:['morning'] },
   { id:'zone_evening', icon:'🌙', color:'zone-header-evening', cats:['evening'] },
-  { id:'zone_special', icon:'🙏', color:'zone-header-special', cats:['special'], noSubGroup:true },
+  { id:'zone_special', icon:'🙏', color:'zone-header-special', cats:['special', 'prad'], noSubGroup:true },
   { id:'zone_live',    icon:'📺', color:'zone-header-live',    cats:['live'], noSubGroup:true, isLive:true },
 ];
 function getVideoTitle(v){ return v.title; }
@@ -1071,6 +1102,7 @@ const DEFAULT_VIDEOS = [
   {id:'dv6',  title:'ธัมมจักกัปปวัตตนสูตร',                 url:'https://youtu.be/sSZI1ewkEFc',              cat:'special'},
   {id:'dv4',  title:'สรรเสริญคุณยายอาจารย์ ขนนกยูง',       url:'https://youtu.be/q2oDyeaapZE',              cat:'special'},
   {id:'dv7',  title:'นำนั่งสมาธิ',                         url:'https://youtu.be/HhF18m41d2M',              cat:'special'},
+  {id:'jiNN1ZcrJDM', title:'ช่องนับยอดเวียนประทักษิณ',       url:'https://www.youtube.com/live/jiNN1ZcrJDM?si=qXZP51iWbfFQbq6_', cat:'prad'},
   {id:'dv8',  title:'เจริญพุทธมนต์ 7 ตำนาน',               url:'https://youtu.be/5P1AVECJFFs',              cat:'special'},
   {id:'dv9',  title:'เจริญพุทธมนต์ 12 ตำนาน',              url:'https://youtu.be/7HP-gFEv8Sc',              cat:'special'},
   {id:'dv10', title:'พาหุง, มหาการุณิโก',                  url:'https://youtu.be/CE_OBSxIKvM',              cat:'special'},
@@ -1167,7 +1199,7 @@ async function doRegister(){
     await dbSet('users/'+username, {
       _pass: btoa(pass), name, username, email: emailRaw,
       cnt_morning:0, cnt_evening:0,
-      med_morning_min:0, med_evening_min:0,
+      med_morning_min:0, med_evening_min:0, cnt_prad:0,
       cnt_special:{}, videos: DEFAULT_VIDEOS,
       theme:'default', first_record_date: null,
       joined_date: joinedDate, photo: null,
@@ -1243,6 +1275,8 @@ async function bootApp(username, userData){
   document.getElementById('countEvening').textContent = data.cnt_evening || 0;
   document.getElementById('meditMorningMin').textContent = data.med_morning_min || 0;
   document.getElementById('meditEveningMin').textContent = data.med_evening_min || 0;
+  document.getElementById('totalPrad').textContent = data.cnt_prad || 0;
+  
   _cachedVideos = DEFAULT_VIDEOS;
   setTheme(data.theme || 'default');
   updateDateTime(data.first_record_date || null, data.joined_date || null);
@@ -1411,7 +1445,7 @@ async function recordCount(type){
   const label = type==='morning'?'🌅 ทำวัตรเช้า':'🌙 ทำวัตรเย็น';
   showToast(label+' ครั้งที่ '+next);
 }
-// ─── MEDITATION ──────────────────────────────────────
+// ─── MEDITATION & PRADAKSHINA ─────────────────────────
 function stepMed(field, delta){
   const ids = {morningMin:'medInputMorningMin', eveningMin:'medInputEveningMin'};
   const el = document.getElementById(ids[field]);
@@ -1448,6 +1482,51 @@ async function recordMeditation(session){
   }
   
   showToast('🧘 บันทึก'+label+' +'+mn+' นาที (รวม '+next+' นาที)');
+}
+function stepPrad(delta){
+  const el = document.getElementById('pradInput');
+  let v = parseInt(el.value)||0; v = Math.max(0, v+delta); el.value = v;
+}
+async function recordPradakshina(){
+  if(window._guestMode){ showToast('🔑 ทดลองใช้งาน: ยอดจะไม่ถูกบันทึกถาวร'); }
+  const el = document.getElementById('pradInput');
+  const rounds = parseInt(el.value)||0;
+  if(rounds<=0){ showToast('⚠️ กรุณาใส่จำนวนรอบ'); return; }
+
+  let total = _countOverrides['cnt_prad'];
+  if(total === undefined){
+     if(!window._guestMode) {
+         total = await dbGet('users/'+window._currentUser+'/cnt_prad') || 0;
+     } else {
+         total = window._guestPradState || 0;
+     }
+  }
+  const nextTotal = total + rounds;
+  _countOverrides['cnt_prad'] = nextTotal;
+  if(window._guestMode) window._guestPradState = nextTotal;
+
+  const topEl = document.getElementById('totalPrad');
+  if(_statsMode === 'today'){
+     topEl.textContent = (parseInt(topEl.textContent)||0) + rounds;
+  } else {
+     topEl.textContent = nextTotal;
+  }
+  
+  el.value = 0;
+  _shareCacheKey = null;
+
+  if(!window._guestMode){
+    uSet('cnt_prad', nextTotal);
+    const key = todayKey(); const path = 'users/'+window._currentUser+'/history/'+key;
+    const existing = await dbGet(path) || {};
+    existing.prad = (existing.prad||0) + rounds;
+    await dbSet(path, existing);
+    
+    const fd = await dbGet(userPath('first_record_date'));
+    if(!fd){ const now=new Date().toISOString(); await uSet('first_record_date',now); updateDateTime(now); }
+  }
+  
+  showToast(`🔄 บันทึกเวียนประทักษิณ +${rounds} รอบ`);
 }
 // ─── SPECIAL RECORDING ────────────────────────────────
 async function recordSpecial(videoId, videoTitle){
@@ -1564,6 +1643,7 @@ function playVideo(v){
     document.getElementById('playerRecordMorning').style.display = 'none';
     document.getElementById('playerRecordEvening').style.display = 'none';
     document.getElementById('playerRecordMeditation').style.display = 'none';
+    document.getElementById('playerRecordPrad').style.display = 'none';
     document.getElementById('playerTitleText').textContent = v.title;
     const badge = document.getElementById('playerCatBadge');
     badge.textContent = '📺 ถ่ายทอดสด'; badge.className = 'vi-badge player-cat-pill cat-live';
@@ -1577,17 +1657,23 @@ function playVideo(v){
   document.getElementById('playerTitleText').textContent=getVideoTitle(v);
   const badge=document.getElementById('playerCatBadge');
   badge.textContent=CAT_ICONS[v.cat]+' '+getCatLabels()[v.cat]; badge.className='vi-badge player-cat-pill cat-'+v.cat;
+  
   const recBtn = document.getElementById('playerRecordBtn');
   const recMorning = document.getElementById('playerRecordMorning');
   const recEvening = document.getElementById('playerRecordEvening');
   const recMed = document.getElementById('playerRecordMeditation');
+  const recPrad = document.getElementById('playerRecordPrad');
+  
   if(recBtn) recBtn.style.display='none';
   if(recMorning) recMorning.style.display='none';
   if(recEvening) recEvening.style.display='none';
   if(recMed) recMed.style.display='none';
+  if(recPrad) recPrad.style.display='none';
+  
   if(v.cat==='morning' && recMorning){ recMorning.style.display='block'; }
   else if(v.cat==='evening' && recEvening){ recEvening.style.display='block'; }
   else if(v.id==='dv7' || v.cat==='meditation'){ if(recMed) recMed.style.display='block'; }
+  else if(v.cat==='prad'){ if(recPrad) recPrad.style.display='block'; }
   else if(recBtn && (v.cat==='special'||v.cat==='lp'||v.cat==='grandma')){ recBtn.style.display='block'; recBtn.onclick = ()=>recordSpecial(v.id, getVideoTitle(v)); }
   scrollToPlayer(); renderPlaylist();
 }
@@ -1666,7 +1752,7 @@ async function openShareModal(){
     try { todayData = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {}; } catch(e){ todayData = {}; }
     const sp = todayData.special || {};
     stats = { 
-      cntM: todayData.cntM || 0, cntE: todayData.cntE || 0, medM: todayData.medM || 0, medE: todayData.medE || 0, 
+      cntM: todayData.cntM || 0, cntE: todayData.cntE || 0, medM: todayData.medM || 0, medE: todayData.medE || 0, prad: todayData.prad || 0,
       dv3: sp['dv3'] || 0, dv5: sp['dv5'] || 0, dv6: sp['dv6'] || 0, dv4: sp['dv4'] || 0,
       dv8: sp['dv8'] || 0, dv9: sp['dv9'] || 0, dv10: sp['dv10'] || 0, dv11: sp['dv11'] || 0,
       dv12: sp['dv12'] || 0, dv13: sp['dv13'] || 0, dv14: sp['dv14'] || 0, dv15: sp['dv15'] || 0
@@ -1678,6 +1764,7 @@ async function openShareModal(){
       cntE: parseInt(document.getElementById('countEvening').textContent)||0,
       medM: parseInt(document.getElementById('meditMorningMin').textContent)||0,
       medE: parseInt(document.getElementById('meditEveningMin').textContent)||0,
+      prad: parseInt(document.getElementById('totalPrad')?.textContent)||0,
       dv3: parseInt(document.getElementById('totalSpecial_dv3')?.textContent)||0,
       dv5: parseInt(document.getElementById('totalSpecial_dv5')?.textContent)||0,
       dv6: parseInt(document.getElementById('totalSpecial_dv6')?.textContent)||0,
@@ -1778,6 +1865,7 @@ async function _renderCardToCanvas(stats, displayName, groupName, themeName){
     {key:'cntE',  icon:'🌙', label:'ทำวัตรเย็น',               unit:'ครั้ง', color:'#c8d4ff'},
     {key:'medM',  icon:'🧘', label:'สมาธิเช้า',                 unit:'นาที',  color:'#C9A84C'},
     {key:'medE',  icon:'🧘', label:'สมาธิเย็น',                 unit:'นาที',  color:'#c8d4ff'},
+    {key:'prad',  icon:'🔄', label:'เวียนประทักษิณ',           unit:'รอบ',   color:'#D48AAA'},
     {key:'dv3',   icon:'🙏', label:'สรรเสริญพระมงคลเทพมุนี',   unit:'ครั้ง', color:'#E8D5A3'},
     {key:'dv5',   icon:'🙏', label:'สรรเสริญพระธรรมกาย',       unit:'ครั้ง', color:'#E8D5A3'},
     {key:'dv6',   icon:'🙏', label:'ธัมมจักกัปปวัตตนสูตร',     unit:'ครั้ง', color:'#E8D5A3'},
@@ -2048,7 +2136,7 @@ async function openSettingsModal(){
 async function refreshSettingsCounts(){
   const todayRec = await dbGet('users/'+window._currentUser+'/history/'+todayKey()) || {};
   const sp = todayRec.special || {};
-  const items = { cnt_morning: todayRec.cntM||0, cnt_evening: todayRec.cntE||0, med_morning_min: todayRec.medM||0, med_evening_min: todayRec.medE||0,
+  const items = { cnt_morning: todayRec.cntM||0, cnt_evening: todayRec.cntE||0, med_morning_min: todayRec.medM||0, med_evening_min: todayRec.medE||0, cnt_prad: todayRec.prad||0,
     dv3:sp['dv3']||0, dv5:sp['dv5']||0, dv6:sp['dv6']||0, dv4:sp['dv4']||0,
     dv8:sp['dv8']||0, dv9:sp['dv9']||0, dv10:sp['dv10']||0, dv11:sp['dv11']||0, dv12:sp['dv12']||0, dv13:sp['dv13']||0, dv14:sp['dv14']||0, dv15:sp['dv15']||0 };
   Object.entries(items).forEach(([k,v])=>{ const el = document.getElementById('settingsCount_'+k); if(el) el.textContent = v; });
@@ -2060,11 +2148,11 @@ async function adjustCount(key, delta){
   const todayRec  = await dbGet(todayPath) || {};
   const isSpecial = ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14','dv15'].includes(key);
   if(isSpecial){ if(!todayRec.special) todayRec.special = {}; todayRec.special[key] = next; }
-  else { const m = { cnt_morning:'cntM', cnt_evening:'cntE', med_morning_min:'medM', med_evening_min:'medE' }; if(m[key]) todayRec[m[key]] = next; }
+  else { const m = { cnt_morning:'cntM', cnt_evening:'cntE', med_morning_min:'medM', med_evening_min:'medE', cnt_prad:'prad' }; if(m[key]) todayRec[m[key]] = next; }
   await dbSet(todayPath, todayRec);
   if(_statsMode === 'today'){
     const uiMap = { cnt_morning:['countMorning','totalMorning'], cnt_evening:['countEvening','totalEvening'],
-      med_morning_min:['meditMorningMin','totalMedMorning'], med_evening_min:['meditEveningMin','totalMedEvening'],
+      med_morning_min:['meditMorningMin','totalMedMorning'], med_evening_min:['meditEveningMin','totalMedEvening'], cnt_prad:['totalPrad'],
       dv3:['totalSpecial_dv3'], dv5:['totalSpecial_dv5'], dv6:['totalSpecial_dv6'], dv4:['totalSpecial_dv4'],
       dv8:['totalSpecial_dv8'], dv9:['totalSpecial_dv9'], dv10:['totalSpecial_dv10'], dv11:['totalSpecial_dv11'],
       dv12:['totalSpecial_dv12'], dv13:['totalSpecial_dv13'], dv14:['totalSpecial_dv14'], dv15:['totalSpecial_dv15'] };
@@ -2122,6 +2210,7 @@ async function refreshStatsDisplay(){
           cntE: parseInt(document.getElementById('countEvening').textContent)||0,
           medM: parseInt(document.getElementById('meditMorningMin').textContent)||0,
           medE: parseInt(document.getElementById('meditEveningMin').textContent)||0,
+          prad: parseInt(document.getElementById('totalPrad').textContent)||0,
           special: window._guestSpecialState || {}
         };
     }
@@ -2130,6 +2219,7 @@ async function refreshStatsDisplay(){
     document.getElementById('totalEvening').textContent    = todayData.cntE || 0;
     document.getElementById('totalMedMorning').textContent = todayData.medM || 0;
     document.getElementById('totalMedEvening').textContent = todayData.medE || 0;
+    document.getElementById('totalPrad').textContent       = todayData.prad || 0;
     ALL_SP.forEach(id=>{ const el=document.getElementById('totalSpecial_'+id); if(el) el.textContent = sp[id] ? (sp[id].count || sp[id]) : 0; });
   } else {
     const totals = await computeAllTimeTotals();
@@ -2137,16 +2227,17 @@ async function refreshStatsDisplay(){
     document.getElementById('totalEvening').textContent    = totals.cntE;
     document.getElementById('totalMedMorning').textContent = totals.medM;
     document.getElementById('totalMedEvening').textContent = totals.medE;
+    document.getElementById('totalPrad').textContent       = totals.prad;
     ALL_SP.forEach(id=>{ const el=document.getElementById('totalSpecial_'+id); if(el) el.textContent = totals[id]||0; });
   }
 }
 async function computeAllTimeTotals(){
-  if(window._guestMode) return {cntM:0,cntE:0,medM:0,medE:0};
+  if(window._guestMode) return {cntM:0,cntE:0,medM:0,medE:0,prad:0};
   const history = await dbGet('users/'+window._currentUser+'/history') || {};
-  const totals = {cntM:0,cntE:0,medM:0,medE:0,dv3:0,dv5:0,dv6:0,dv4:0,dv8:0,dv9:0,dv10:0,dv11:0,dv12:0,dv13:0,dv14:0,dv15:0};
+  const totals = {cntM:0,cntE:0,medM:0,medE:0,prad:0,dv3:0,dv5:0,dv6:0,dv4:0,dv8:0,dv9:0,dv10:0,dv11:0,dv12:0,dv13:0,dv14:0,dv15:0};
   Object.values(history).forEach(day=>{
     totals.cntM += day.cntM||0; totals.cntE += day.cntE||0;
-    totals.medM += day.medM||0; totals.medE += day.medE||0;
+    totals.medM += day.medM||0; totals.medE += day.medE||0; totals.prad += day.prad||0;
     const sp = day.special||{};
     ['dv3','dv5','dv6','dv4','dv8','dv9','dv10','dv11','dv12','dv13','dv14','dv15'].forEach(id=>{ totals[id] += sp[id]||0; });
   });
@@ -2166,17 +2257,18 @@ async function doResetAll(){
   try {
     await dbSet('users/'+window._currentUser+'/cnt_morning', 0); await dbSet('users/'+window._currentUser+'/cnt_evening', 0);
     await dbSet('users/'+window._currentUser+'/med_morning_min', 0); await dbSet('users/'+window._currentUser+'/med_evening_min', 0);
+    await dbSet('users/'+window._currentUser+'/cnt_prad', 0);
     await dbSet('users/'+window._currentUser+'/cnt_special', {}); await dbSet('users/'+window._currentUser+'/history', {});
     await dbSet('users/'+window._currentUser+'/first_record_date', null); await dbSet('users/'+window._currentUser+'/last_active_date', todayKey());
     Object.keys(_countOverrides).forEach(k=>delete _countOverrides[k]);
-    ['countMorning','countEvening','meditMorningMin','meditEveningMin','totalMorning','totalEvening','totalMedMorning','totalMedEvening','totalSpecial_dv3','totalSpecial_dv5','totalSpecial_dv6','totalSpecial_dv4','totalSpecial_dv8','totalSpecial_dv9','totalSpecial_dv10','totalSpecial_dv11','totalSpecial_dv12','totalSpecial_dv13','totalSpecial_dv14','totalSpecial_dv15','streakCount'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='0'; });
+    ['countMorning','countEvening','meditMorningMin','meditEveningMin','totalMorning','totalEvening','totalMedMorning','totalMedEvening','totalPrad','totalSpecial_dv3','totalSpecial_dv5','totalSpecial_dv6','totalSpecial_dv4','totalSpecial_dv8','totalSpecial_dv9','totalSpecial_dv10','totalSpecial_dv11','totalSpecial_dv12','totalSpecial_dv13','totalSpecial_dv14','totalSpecial_dv15','streakCount'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='0'; });
     renderSpecialStats({}); showToast('✅ รีเซ็ตยอดทั้งหมดแล้ว'); switchStatsMode('today');
   } catch(e){ showToast('⚠️ เกิดข้อผิดพลาด: '+e.message); }
 }
 // ─── GUEST MODE ──────────────────────────────────────
 function enterGuestMode(){
   window._currentUser = null; window._guestMode = true;
-  window._guestSpecialState = {}; 
+  window._guestSpecialState = {}; window._guestPradState = 0;
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('btnSettings').style.display = 'none';
@@ -2303,12 +2395,14 @@ async function refreshStreakAndCalendar(){
   }
   grid.innerHTML = html;
 }
-function updateProfileTotals(){
+function updateProfile
+  function updateProfileTotals(){
   if(_statsMode !== 'total') return;
   document.getElementById('totalMorning').textContent = document.getElementById('countMorning').textContent;
   document.getElementById('totalEvening').textContent = document.getElementById('countEvening').textContent;
   document.getElementById('totalMedMorning').textContent = document.getElementById('meditMorningMin').textContent;
   document.getElementById('totalMedEvening').textContent = document.getElementById('meditEveningMin').textContent;
+  // ส่วนของเวียนประทักษิณจะถูกจัดการยอดรวมไว้แล้วในฟังก์ชัน recordPradakshina
 }
 
 // ─── DAILY CHECK-IN (FIRE STREAK) ──────────────────────────────────
@@ -2474,6 +2568,10 @@ window.scrollToPlayer = scrollToPlayer; window.markTodaySpecial = markTodaySpeci
 window.adjustCount = adjustCount; window.closeCropModal = closeCropModal; window.saveCroppedPhoto = saveCroppedPhoto;
 window.updateCropTransform = updateCropTransform; window.refreshSettingsCounts = refreshSettingsCounts;
 window.doDailyCheckIn = doDailyCheckIn; window.loadDailyStreak = loadDailyStreak;
+
+// นำฟังก์ชันเวียนประทักษิณออกเป็น Global เพื่อให้ปุ่ม HTML เรียกใช้งานได้
+window.stepPrad = stepPrad;
+window.recordPradakshina = recordPradakshina;
 
 // Expose Wall of Fame 💎
 window.openWallOfFame = function() { document.getElementById('wofModal').style.display = 'flex'; };

@@ -1111,8 +1111,10 @@ const DEFAULT_VIDEOS = [
   {id:'dv13', title:'พระสะหัสสะนัย',                       url:'https://youtu.be/AaSlY5XIfh0',              cat:'special'},
   {id:'dv14', title:'มงคลจักรวาลใหญ่',                     url:'https://youtu.be/cE7a2xo56Jc',              cat:'special'},
   {id:'dv15', title:'บทสวดรัตนสูตร -โพชฌงคปริตร -โอสถปริตร', url:'https://youtu.be/vPTB9N1ta48',              cat:'special'},
-{id:'gbn_sd1', title:'GBN SD1 – ช่องหลัก', url:'https://www.youtube.com/embed/live_stream?channel=UCkOBMkm5jKl7KObvUbj-8_A', cat:'live', isIframe:true},
-{id:'gbn_hd1', title:'GBN HD1 – ความชัดสูง', url:'https://www.youtube.com/embed/live_stream?channel=UCQz6DmVPIKiZXM7k_KkZFnA', cat:'live', isIframe:true},
+ {id:'gbn_sd1', title:'GBN US – ช่องหลัก (dmc.tv)',    
+ url:'https://live.dmc.tv/embed/dmc', cat:'live', isIframe:true},
+{id:'gbn_hd1', title:'GBN Zoom072 – ช่องที่สอง',       
+ url:'https://live.dmc.tv/embed/zoom072', cat:'live', isIframe:true},
 ];
 function emailToKey(email){
   return email.toLowerCase()
@@ -1653,11 +1655,12 @@ function playVideo(v){
     frameYT.style.display  = 'block';
     frameHLS.style.display = 'none';
     if(window._hls){ window._hls.destroy(); window._hls = null; }
-    document.getElementById('ytIframe').src = v.url;
+    document.getElementById('ytIframe').src = v.url + '?autoplay=1&mute=0';
     document.getElementById('playerRecordBtn').style.display     = 'none';
     document.getElementById('playerRecordMorning').style.display = 'none';
     document.getElementById('playerRecordEvening').style.display = 'none';
     document.getElementById('playerRecordMeditation').style.display = 'none';
+    document.getElementById('playerRecordPrad').style.display    = 'none';
     document.getElementById('playerTitleText').textContent = v.title;
     const badge = document.getElementById('playerCatBadge');
     badge.textContent = '📺 ถ่ายทอดสด'; badge.className = 'vi-badge player-cat-pill cat-live';
@@ -1696,14 +1699,14 @@ function playVideo(v){
 const LIVE_WATCH = '▶ รับชมสด';
 function videoCardHtml(v){
   const displayTitle = getVideoTitle(v);
-if(v.cat === 'live'){
-  const isYT = v.url.includes('youtu'); const ytid = isYT ? getYTId(v.url) : ''; const thumb = ytid ? thumbUrl(ytid) : '';
-  return `<div class="video-item" style="cursor:pointer;" onclick="playVideo(${JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat,isM3u8:!!v.isM3u8,isIframe:!!v.isIframe}).replace(/"/g,'&quot;')})">
-    <div class="vi-num" style="background:linear-gradient(to bottom,#8B0000,#cc2222);color:#fff;">📺</div>
-    <div class="vi-thumb" style="background:#1a0808;">${thumb?`<img src="${thumb}" loading="lazy" alt="">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;">📺</div>'}
-      <div class="vi-play" style="background:rgba(200,0,0,0.2);"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="red"/></svg></div>
-    </div>
-    <div class="vi-info">
+  if(v.cat === 'live'){
+    const isYT = v.url.includes('youtu'); const ytid = isYT ? getYTId(v.url) : ''; const thumb = ytid ? thumbUrl(ytid) : '';
+    return `<div class="video-item" style="cursor:pointer;" onclick="playVideo(${JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat,isM3u8:!!v.isM3u8}).replace(/"/g,'&quot;')})">
+      <div class="vi-num" style="background:linear-gradient(to bottom,#8B0000,#cc2222);color:#fff;">📺</div>
+      <div class="vi-thumb" style="background:#1a0808;">${thumb?`<img src="${thumb}" loading="lazy" alt="">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;">📺</div>'}
+        <div class="vi-play" style="background:rgba(200,0,0,0.2);"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="red"/></svg></div>
+      </div>
+      <div class="vi-info">
         <div class="vi-title">${displayTitle}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#ff4444;font-weight:700;"><span style="width:7px;height:7px;border-radius:50%;background:#ff2222;display:inline-block;box-shadow:0 0 6px #ff2222;"></span>LIVE</span>

@@ -1697,7 +1697,7 @@ function playVideo(v){
 const LIVE_WATCH = '▶ รับชมสด';
 function videoCardHtml(v){
   const displayTitle = getVideoTitle(v);
-  if(v.cat === 'live'){
+ if(v.cat === 'live'){
     const isYT = v.url.includes('youtu'); const ytid = isYT ? getYTId(v.url) : ''; const thumb = ytid ? thumbUrl(ytid) : '';
     return `<div class="video-item" style="cursor:pointer;" onclick="playVideo(${JSON.stringify({id:v.id,title:v.title,url:v.url,cat:v.cat,isM3u8:!!v.isM3u8}).replace(/"/g,'&quot;')})">
       <div class="vi-num" style="background:linear-gradient(to bottom,#8B0000,#cc2222);color:#fff;">📺</div>
@@ -1708,7 +1708,7 @@ function videoCardHtml(v){
         <div class="vi-title">${displayTitle}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#ff4444;font-weight:700;"><span style="width:7px;height:7px;border-radius:50%;background:#ff2222;display:inline-block;box-shadow:0 0 6px #ff2222;"></span>LIVE</span>
-          <span onclick="event.stopPropagation()" style="display:inline-block;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;">${LIVE_WATCH}</span>
+          <span style="display:inline-block;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,#8B0000,#cc2222);color:#fff;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;">${LIVE_WATCH}</span>
         </div>
       </div>
     </div>`;

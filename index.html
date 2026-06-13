@@ -812,7 +812,7 @@ body.theme-night{--gold:#9B9BFF;--gold-light:#C8C8FF;--gold-dark:#4A4AAA;--gold-
           <span class="player-title" id="playerTitleText"></span>
         </div>
         <div class="player-frame" id="playerFrameYT">
-          <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media; fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe id="ytIframe" allowfullscreen allow="autoplay; encrypted-media; fullscreen; autoplay *" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="player-frame" id="playerFrameHLS" style="display:none;">
           <video id="hlsVideo" controls autoplay style="width:100%;height:100%;display:block;background:#000;" playsinline></video>
@@ -1655,7 +1655,7 @@ function playVideo(v){
     frameYT.style.display  = 'block';
     frameHLS.style.display = 'none';
     if(window._hls){ window._hls.destroy(); window._hls = null; }
-    document.getElementById('ytIframe').src = v.url;
+    document.getElementById('ytIframe').src = v.url + '?autoplay=1&mute=0';
     document.getElementById('playerRecordBtn').style.display     = 'none';
     document.getElementById('playerRecordMorning').style.display = 'none';
     document.getElementById('playerRecordEvening').style.display = 'none';

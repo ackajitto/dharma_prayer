@@ -1287,9 +1287,12 @@ async function loadSiteStats(){
   try {
     const snap = await window._db.ref('site_stats/visitors').once('value');
     const visitors = snap.exists() ? (snap.val() || 0) : 0;
-    const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : String(n);
+
+    const fmt = n => Number(n).toLocaleString('th-TH'); // ✅ แสดงเลขเต็ม
+
     const eu = document.getElementById('statTotalUsers');
     if(eu) eu.textContent = fmt(visitors);
+
     console.log('✅ Site visitors loaded:', visitors);
   } catch(e){
     console.error('loadSiteStats error:', e);
